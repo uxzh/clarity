@@ -30,7 +30,10 @@ export default function TopNavbar() {
   ];
 
   return (
-    <Navbar onMenuOpenChange={setIsMenuOpen} style={{ paddingBottom: "8rem" }}>
+    <Navbar
+      onMenuOpenChange={setIsMenuOpen}
+      style={{ marginBottom: "8rem", background: "transparent" }}
+    >
       <NavbarContent>
         <NavbarMenuToggle
           aria-label={isMenuOpen ? "Close menu" : "Open menu"}
@@ -38,7 +41,7 @@ export default function TopNavbar() {
         />
         <NavbarBrand>
           <Clarity style={{ width: 48, marginRight: 4 }} />
-          <p className="font-bold text-inherit">Clarity</p>
+          <p className="font-extrabold text-inherit">Clarity</p>
         </NavbarBrand>
       </NavbarContent>
 
@@ -64,8 +67,8 @@ export default function TopNavbar() {
           <Link href="#">Login</Link>
         </NavbarItem>
         <NavbarItem>
-          <Button as={Link} color="primary" href="#" variant="flat">
-            Sign Up
+          <Button as={Link} color="primary" href="#" variant="shadow">
+            Launch App
           </Button>
         </NavbarItem>
       </NavbarContent>
