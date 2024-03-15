@@ -1,6 +1,7 @@
 import React from "react";
 import { Button } from "@nextui-org/react";
 import { ButtonFlickeringLight } from "../components/buttons/HeroButton";
+import CheckmarksHero from "./../components/ui/checkmarksHero";
 
 export default function Hero() {
   return (
@@ -29,6 +30,7 @@ export default function Hero() {
             </span>{" "}
           </h1>
         </div>
+        <CheckmarksHero />
         <div className="flex justify-center mt-8 gap-4">
           <ButtonFlickeringLight />
           <Button color="primary" size="lg" variant="flat">

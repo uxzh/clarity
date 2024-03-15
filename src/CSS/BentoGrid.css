@@ -1,0 +1,13 @@
+.toolCard:hover {
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  scale: 1.05;
+  z-index: 1;
+  cursor: pointer;
+}
+.toolCard::after {
+  transition: all 0.3s ease;
+}
+.toolCard {
+  transition: all 0.3s ease;
+}

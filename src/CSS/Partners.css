@@ -1,0 +1,7 @@
+.gridpartners {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 24px;
+  align-items: center;
+  grid-auto-rows: 80px;
+}
