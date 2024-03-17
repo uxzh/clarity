@@ -1,0 +1,22 @@
+#bgbgbg {
+  position: absolute;
+  z-index: -1;
+  height: 40vh !important;
+  margin-top: 2vh;
+  inset: 0;
+  overflow: hidden;
+  height: 100%;
+  width: 100%;
+  background-image: radial-gradient(#e5e7eb 1px, transparent 1px);
+  background-size: 16px 16px;
+  -webkit-mask-image: radial-gradient(
+    ellipse 50% 50% at 50% 50%,
+    #000 60%,
+    transparent 100%
+  );
+  mask-image: radial-gradient(
+    ellipse 50% 50% at 50% 50%,
+    #000 60%,
+    transparent 100%
+  );
+}

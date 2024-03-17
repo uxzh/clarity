@@ -2,6 +2,7 @@ import React from "react";
 import { Button } from "@nextui-org/react";
 import { ButtonFlickeringLight } from "../components/buttons/HeroButton";
 import CheckmarksHero from "./../components/ui/checkmarksHero";
+import "../CSS/Hero.css";
 
 export default function Hero() {
   return (
@@ -12,6 +13,7 @@ export default function Hero() {
           width: "600px",
         }}
       >
+        <div id="bgbgbg"></div>
         <p className="text-center uppercase text-lg font-light">
           Not enough cashback?
         </p>
@@ -32,8 +34,15 @@ export default function Hero() {
         </div>
         <CheckmarksHero />
         <div className="flex justify-center mt-8 gap-4">
-          <ButtonFlickeringLight />
-          <Button color="primary" size="lg" variant="flat">
+          <Button
+            size="lg"
+            variant="bordered"
+            className="shadow-[0px_3px_0px_0px_#1a202c] "
+            style={{ border: "2px solid #1a202c" }}
+          >
+            Beta Registration
+          </Button>
+          <Button size="lg" variant="flat">
             Learn more
           </Button>
         </div>

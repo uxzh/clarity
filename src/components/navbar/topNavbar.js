@@ -64,11 +64,19 @@ export default function TopNavbar() {
       </NavbarContent>
       <NavbarContent justify="end">
         <NavbarItem className="hidden lg:flex">
-          <Link href="#">Login</Link>
+          <Link style={{ color: "black" }} href="#">
+            Login
+          </Link>
         </NavbarItem>
         <NavbarItem>
-          <Button as={Link} color="primary" href="#" variant="shadow">
-            Launch App
+          <Button
+            as={Link}
+            href="#"
+            style={{ border: "1px solid #1a202c" }}
+            variant="bordered"
+            className="shadow-[0px_3px_0px_0px_#1a202c] "
+          >
+            Beta Registration
           </Button>
         </NavbarItem>
       </NavbarContent>

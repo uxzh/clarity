@@ -3,7 +3,7 @@ export const ButtonFlickeringLight = () => {
     <>
       <button>
         <div className="light" />
-        Try for free
+        Beta Registration
       </button>
       <style jsx>{`
         button {

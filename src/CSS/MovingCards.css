@@ -1,0 +1,9 @@
+#movingCards {
+  background: rgb(237, 237, 237);
+  border-radius: 16px;
+  max-width: 1000px;
+  height: 600px; /* Adjust the height as needed */
+  margin: 0 auto;
+  overflow: hidden;
+  position: relative;
+}

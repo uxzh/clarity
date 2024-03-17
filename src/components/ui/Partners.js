@@ -24,7 +24,7 @@ export default function Partners() {
     <div className="mt-4">
       <div className="h-full max-w-6xl px-8 pb-12 mx-auto md:px-12 lg:px-32">
         <div className="px-6 mx-auto max-w-7xl lg:px-8">
-          <h2 className="text-lg font-semibold leading-8 text-center text-gray-900">
+          <h2 className="text-lg  leading-8 text-center text-gray-900">
             We work with your favorite banks.
           </h2>
           <div className="grid gridpartners">

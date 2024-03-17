@@ -1,0 +1,22 @@
+#cashback {
+  overflow: hidden;
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.2;
+  color: rgb(17, 17, 17);
+}
+
+span {
+  display: inline-block;
+  animation: reveal 1.5s cubic-bezier(0.77, 0, 0.175, 1) 0.5s;
+  animation-fill-mode: backwards;
+}
+
+@keyframes reveal {
+  0% {
+    transform: translate(0, 100%);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
