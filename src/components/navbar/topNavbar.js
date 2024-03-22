@@ -17,16 +17,16 @@ export default function TopNavbar() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
 
   const menuItems = [
-    "Profile",
-    "Dashboard",
-    "Activity",
-    "Analytics",
-    "System",
-    "Deployments",
-    "My Settings",
-    "Team Settings",
-    "Help & Feedback",
-    "Log Out",
+    "Beta Registration",
+    // "Dashboard",
+    // "Activity",
+    // "Analytics",
+    // "System",
+    // "Deployments",
+    // "My Settings",
+    // "Team Settings",
+    // "Help & Feedback",
+    // "Log Out",
   ];
 
   return (
@@ -45,7 +45,7 @@ export default function TopNavbar() {
         </NavbarBrand>
       </NavbarContent>
 
-      <NavbarContent className="hidden sm:flex gap-4" justify="center">
+      {/* <NavbarContent className="hidden sm:flex gap-4" justify="center">
         <NavbarItem>
           <Link color="foreground" href="#">
             Features
@@ -61,18 +61,19 @@ export default function TopNavbar() {
             Integrations
           </Link>
         </NavbarItem>
-      </NavbarContent>
+      </NavbarContent> */}
       <NavbarContent justify="end">
         <NavbarItem className="hidden lg:flex">
-          <Link style={{ color: "black" }} href="#">
+          {/* <Link style={{ color: "black" }} href="#">
             Login
-          </Link>
+          </Link> */}
         </NavbarItem>
         <NavbarItem>
           <Button
             as={Link}
-            href="#"
+            href="https://forms.gle/kcRvqnSBm1XSQVfa7"
             style={{ border: "1px solid #1a202c" }}
+            target="_blank"
             variant="bordered"
             className="shadow-[0px_3px_0px_0px_#1a202c] "
           >

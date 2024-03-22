@@ -1,5 +1,5 @@
 import React from "react";
-import { Button } from "@nextui-org/react";
+import { Button, Link } from "@nextui-org/react";
 import { ButtonFlickeringLight } from "../components/buttons/HeroButton";
 import CheckmarksHero from "./../components/ui/checkmarksHero";
 import "../CSS/Hero.css";
@@ -34,14 +34,17 @@ export default function Hero() {
         <CheckmarksHero />
         <div className="flex justify-center mt-8 gap-4">
           <Button
+            as={Link}
             size="lg"
+            href="https://forms.gle/kcRvqnSBm1XSQVfa7"
+            target="__blank"
             variant="bordered"
             className="shadow-[0px_3px_0px_0px_#1a202c] "
             style={{ border: "2px solid #1a202c" }}
           >
             Beta Registration
           </Button>
-          <Button size="lg" variant="flat">
+          <Button disabled={true} size="lg" variant="flat">
             Learn more
           </Button>
         </div>

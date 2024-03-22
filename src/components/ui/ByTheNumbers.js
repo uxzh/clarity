@@ -2,6 +2,7 @@ import {
   Button,
   Image,
   Input,
+  Link,
   Popover,
   PopoverContent,
   PopoverTrigger,
@@ -152,6 +153,9 @@ export default function ByTheNumbers() {
             </p>
             <div className="mt-4 text-center">
               <Button
+                as={Link}
+                href="https://forms.gle/kcRvqnSBm1XSQVfa7"
+                target="__blank"
                 className="shadow-[0px_3px_0px_0px_#1a202c] "
                 style={{ border: "2px solid #1a202c" }}
                 variant="bordered"
