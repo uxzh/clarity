@@ -14,7 +14,7 @@ import ByTheNumbers from "../components/ui/ByTheNumbers";
 
 export default function Main() {
   return (
-    <div>
+    <div id="app">
       <TopNavbar />
       <Hero />
       <Focus />

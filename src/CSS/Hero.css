@@ -20,3 +20,23 @@
     transparent 100%
   );
 }
+
+#herotext {
+  /* Default styles */
+  font-size: 64px;
+  max-width: 500px;
+
+  margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  #herotext {
+    font-size: 2.3rem;
+    max-width: 70vw; /* Adjust the font size as per your requirement */
+  }
+
+  #checkmarkshero {
+    max-width: 80vw;
+    font-size: 0.8rem;
+  }
+}

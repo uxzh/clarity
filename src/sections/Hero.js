@@ -19,17 +19,16 @@ export default function Hero() {
         </p>
         <div className="">
           <h1
-            className="text-4xl uppercase font-bold text-center"
+            className=" uppercase font-bold text-center"
+            id="herotext"
             style={{
               fontWeight: 900,
-              fontSize: "4.25em",
+
               lineHeight: "1em",
             }}
           >
             Make daily purchases
-            <span className="text-6xl uppercase">
-              <br /> & earn cash
-            </span>{" "}
+            <br /> & earn cash
           </h1>
         </div>
         <CheckmarksHero />

@@ -8,3 +8,6 @@
   box-sizing: border-box;
   font-family: "Inter", sans-serif;
 }
+#app {
+  overflow-x: hidden;
+}

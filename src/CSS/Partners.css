@@ -5,3 +5,10 @@
   align-items: center;
   grid-auto-rows: 80px;
 }
+
+@media screen and (max-width: 600px) {
+  .gridpartners {
+    transform: scale(0.8);
+    max-width: 350;
+  }
+}

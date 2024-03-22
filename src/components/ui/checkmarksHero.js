@@ -1,19 +1,24 @@
+import "../../CSS/Hero.css";
 export default function CheckmarksHero() {
   return (
-    <div className="flex justify-center space-x-8 py-4">
+    <div className="flex justify-center space-x-8 py-4" id="checkmarkshero">
       <div className="flex items-center space-x-2">
         <CheckIcon className="text-blue-500" />
-        <span className="text-sm font-medium text-gray-700">No cookies</span>
+        <span className="text-xs sm:text-sm font-medium text-gray-700">
+          No banking logins
+        </span>
       </div>
       <div className="flex items-center space-x-2">
         <CheckIcon className="text-blue-500" />
-        <span className="text-sm font-medium text-gray-700">
+        <span className="text-xs sm:text-sm font-medium text-gray-700">
           No data selling
         </span>
       </div>
       <div className="flex items-center space-x-2">
         <CheckIcon className="text-blue-500" />
-        <span className="text-sm font-medium text-gray-700">100% secure</span>
+        <span className="text-xs sm:text-sm font-medium text-gray-700">
+          100% secure
+        </span>
       </div>
     </div>
   );
