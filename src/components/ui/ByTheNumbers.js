@@ -9,13 +9,13 @@ import {
   Slider,
 } from "@nextui-org/react";
 import { useState } from "react";
-import Image1 from "../../lib/img/tools/boy-thinking.png";
+import Image1 from "../../lib/bgs/numbers-dont-lie.png";
 
 export default function ByTheNumbers() {
   const [annualIncome, setAnnualIncome] = useState(65000);
-  const twoPercent = (annualIncome * 0.02).toFixed();
-  const fivePercent = (annualIncome * 0.05).toFixed();
-  const cashbackRewards = `$${twoPercent} to $${fivePercent}+`;
+  const threePercent = (annualIncome * 0.03).toFixed();
+  const fourPercent = (annualIncome * 0.04).toFixed();
+  const cashbackRewards = `$${threePercent} to $${fourPercent}+`;
 
   const handleInputChange = (e) => {
     let value = Number(e.target.value);
@@ -53,8 +53,8 @@ export default function ByTheNumbers() {
         className="mt-24 relative bg-no-repeat" // Ensure the background image does not repeat
         style={{
           backgroundImage: `url(${Image1})`, // Set the background image using the imported image
-          backgroundPosition: "right 5vw bottom 10px", // Move the image to the right and bottom with some offset
-          backgroundSize: "250px", // Scale the image to be smaller, adjust the size as needed
+          backgroundPosition: "center bottom 10px", // Move the image to the right and bottom with some offset
+          backgroundSize: "900px", // Scale the image to be smaller, adjust the size as needed
         }}
       >
         <h2 className="uppercase text-slate-800 color text-2xl font-black w-full text-center mb-4">
@@ -133,7 +133,7 @@ export default function ByTheNumbers() {
               showTooltip
               step={5}
               color="foreground"
-              label="Annual Income"
+              label="Annual Spend"
               showSteps={true}
               getValue={(value) => value + "k USD"}
               maxValue={100}

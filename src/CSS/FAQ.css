@@ -1,0 +1,8 @@
+#faq-accordion {
+  box-shadow: 0px 5px 0px 0px #1a202c;
+  border: 1px solid #1a202c;
+}
+#faq-contact {
+  box-shadow: 0px 5px 0px 0px rgb(30, 112, 245);
+  border: 1px solid rgb(59 130 246);
+}
