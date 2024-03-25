@@ -41,7 +41,7 @@ export default function ByTheNumbers() {
         options, earns between 1 to 2 percent cashback on purchases. However,
         credit card issuers offer numerous deals with potential cashback rates
         exceeding 20 percent. Our rewards calculation method incorporates an
-        estimated additional cashback of 2 to 5 percent of the annual income,
+        estimated additional cashback of 2 to 5 percent of the annual spend,
         leveraging these deals offered by credit card companies and banks.
       </div>
     </div>
@@ -111,7 +111,7 @@ export default function ByTheNumbers() {
           </h1>
           <p className="text-center mb-12">
             Estimate how much you could have earned in cashback with a credit
-            card accelerator based on your annual income.
+            card accelerator based on your annual spend.
           </p>
 
           <Input
