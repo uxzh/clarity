@@ -15,7 +15,7 @@ export default function Main() {
       <Focus />
       <Services />
       <ByTheNumbers />
-      <FAQ />
+      {/* <FAQ /> */}
       <Footer />
     </div>
   );
