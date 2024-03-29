@@ -62,7 +62,12 @@ export default function ByTheNumbers() {
         </h2>
         <div
           className="w-full max-w-md p-6 m-4 bg-white shadow-[0px_5px_0px_0px_#1a202c] rounded-lg"
-          style={{ margin: "0 auto", border: "1px solid #1a202c" }}
+          style={{
+            margin: "0 auto",
+            border: "1px solid #1a202c",
+            maxWidth: 448,
+            width: "95vw",
+          }}
         >
           <h1 className="text-2xl font-bold text-center mb-4 flex items-center justify-center">
             Cashback Calculator{" "}

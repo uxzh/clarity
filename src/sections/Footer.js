@@ -2,7 +2,7 @@ import { ReactComponent as Logo } from "../lib/logo2.svg";
 
 export default function Footer() {
   return (
-    <footer key="1" className="bg-white py-6">
+    <footer key="1" className="bg-white py-6 mt-12">
       <div className="max-w-6xl mx-auto px-4">
         <div className="flex justify-center items-center space-x-4">
           {/* Full-width hr elements */}
@@ -18,11 +18,7 @@ export default function Footer() {
         <div className="flex justify-center space-x-4 mt-4">
           <FacebookIcon className="text-gray-600" />
           <InstagramIcon className="text-gray-600" />
-          <YoutubeIcon className="text-gray-600" />
-          <MusicIcon className="text-gray-600" />
           <LinkedinIcon className="text-gray-600" />
-          <SignalMediumIcon className="text-gray-600" />
-          <InstagramIcon className="text-gray-600" />
         </div>
         <div className="flex flex-col md:flex-row justify-between items-center mt-4">
           <div className="flex space-x-4 text-sm text-gray-600">
@@ -37,14 +33,14 @@ export default function Footer() {
             <a className="hover:text-gray-800" href="#">
               Security
             </a>
-            <span>|</span>
+            {/* <span>|</span>
             <a className="hover:text-gray-800" href="#">
               Website Accessibility
             </a>
-            <span>|</span>
-            <a className="hover:text-gray-800" href="#">
+            <span>|</span> */}
+            {/* <a className="hover:text-gray-800" href="#">
               Manage Cookies
-            </a>
+            </a> */}
           </div>
           <div className="text-sm text-gray-600 mt-4 md:mt-0">
             © {new Date().getFullYear()} Cards Clarity. All rights reserved.
