@@ -6,7 +6,7 @@ import cardsTrophey from "../lib/img/cards_trophey.png";
 
 const ExplainBlock = ({ title, description, imageSrc, reverse }) => {
   return (
-    <div className="mx-auto max-w-4xl">
+    <div className="mx-auto max-w-4xl" id="explanation">
       <div
         className={`grid grid-cols-1 md:grid-cols-2 gap-4 ${
           reverse ? "md:grid-flow-row-dense" : ""

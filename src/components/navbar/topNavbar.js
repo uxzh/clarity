@@ -35,10 +35,10 @@ export default function TopNavbar() {
       style={{ marginBottom: "8rem", background: "transparent" }}
     >
       <NavbarContent>
-        <NavbarMenuToggle
+        {/* <NavbarMenuToggle
           aria-label={isMenuOpen ? "Close menu" : "Open menu"}
           className="sm:hidden"
-        />
+        /> */}
         <NavbarBrand>
           <Clarity style={{ width: 48, marginRight: 4 }} />
           <p className="font-extrabold text-inherit">Clarity</p>

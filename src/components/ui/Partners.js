@@ -1,6 +1,7 @@
 import { Image } from "@nextui-org/react";
 import "../../CSS/Partners.css";
 import { useEffect, useState } from "react";
+import Amex from "../../lib/icons/amex.png";
 
 export default function Partners() {
   const [isMobile, setIsMobile] = useState(false);
@@ -36,8 +37,8 @@ export default function Partners() {
       alt: "Citibank",
     },
     {
-      src: "https://seeklogo.com/images/G/goldman-sachs-logo-B826CAF741-seeklogo.com.png",
-      alt: "Goldman Sachs",
+      src: Amex,
+      alt: "American Express",
     },
   ];
 

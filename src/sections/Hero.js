@@ -5,6 +5,16 @@ import CheckmarksHero from "./../components/ui/checkmarksHero";
 import "../CSS/Hero.css";
 
 export default function Hero() {
+  const handleLearnMoreClick = () => {
+    const explanationSection = document.getElementById("explanation");
+    if (explanationSection) {
+      explanationSection.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }
+  };
+
   return (
     <div style={{ display: "flex", justifyContent: "center" }}>
       <div
@@ -23,7 +33,6 @@ export default function Hero() {
             id="herotext"
             style={{
               fontWeight: 900,
-
               lineHeight: "1em",
             }}
           >
@@ -44,7 +53,7 @@ export default function Hero() {
           >
             Beta Registration
           </Button>
-          <Button disabled={true} size="lg" variant="flat">
+          <Button onClick={handleLearnMoreClick} size="lg" variant="flat">
             Learn more
           </Button>
         </div>
