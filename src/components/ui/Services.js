@@ -3,7 +3,10 @@ import ToolsCard from "./ToolsCard";
 import Image1 from "../../lib/img/tools/calculate.png";
 import Image2 from "../../lib/img/tools/girl.png";
 import Image3 from "../../lib/img/tools/transaction.png"; // Assuming this is the image for the savings account
-import Image4 from "../../lib/img/tools/chart.png"; // Assuming this is the image for the investment planning tools
+import Image4 from "../../lib/img/tools/chart.png";
+import ComingSoon from "../../lib/img/coming-soon.png";
+
+// Assuming this is the image for the investment planning tools
 import "../../CSS/Services.css";
 
 export default function Services() {
@@ -20,22 +23,22 @@ export default function Services() {
         <div className="card-container">
           <ToolsCard
             className="card"
-            src={Image1}
+            src={ComingSoon}
             title={"Personalized Budgeting Assistance"}
           />
           <ToolsCard
             className="card"
-            src={Image2}
+            src={ComingSoon}
             title={"Youth-Focused Savings Accounts"}
           />
           <ToolsCard
             className="card"
-            src={Image3}
+            src={ComingSoon}
             title={"Investment Education Resources"}
           />
           <ToolsCard
             className="card"
-            src={Image3}
+            src={ComingSoon}
             title={"Financial Objective Planning Tools"}
           />
         </div>
