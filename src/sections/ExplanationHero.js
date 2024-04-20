@@ -72,12 +72,12 @@ export default function ExplanationHero() {
               </li>
               <li className="flex items-center">
                 <Image src={Step3} className="text-green-400 mr-2 h-8" />
-                <span>Select the cards you have</span>
+                <span>Save like never before!</span>
               </li>
-              <li className="flex items-center">
+              {/* <li className="flex items-center">
                 <Image src={Step4} className="text-yellow-300 mr-2 h-8" />
                 <span>Get the best card for each purchase!</span>
-              </li>
+              </li> */}
             </ol>
             <Button
               as={Link}

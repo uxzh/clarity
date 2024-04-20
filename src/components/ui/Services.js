@@ -24,22 +24,22 @@ export default function Services() {
           <ToolsCard
             className="card"
             src={ComingSoon}
-            title={"Personalized Budgeting Assistance"}
+            title={"Credit Card Reviews"}
           />
           <ToolsCard
             className="card"
             src={ComingSoon}
-            title={"Youth-Focused Savings Accounts"}
+            title={"Points to Dollars Converter"}
           />
           <ToolsCard
             className="card"
             src={ComingSoon}
-            title={"Investment Education Resources"}
+            title={"Cashback Investment Calculator"}
           />
           <ToolsCard
             className="card"
             src={ComingSoon}
-            title={"Financial Objective Planning Tools"}
+            title={"Credit Card Comparison Tool"}
           />
         </div>
       </div>
