@@ -39,9 +39,14 @@ export default function TopNavbar() {
           aria-label={isMenuOpen ? "Close menu" : "Open menu"}
           className="sm:hidden"
         /> */}
-        <NavbarBrand>
+        <NavbarBrand href="/" as={Link}>
           <Clarity style={{ width: 48, marginRight: 4 }} />
-          <p className="font-extrabold text-inherit">Clarity</p>
+          <p
+            style={{ color: "black" }}
+            className="font-extrabold text-black text-inherit"
+          >
+            Clarity
+          </p>
         </NavbarBrand>
       </NavbarContent>
 
