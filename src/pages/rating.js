@@ -1,5 +1,5 @@
 import React from "react";
-import TopNavbar from "../components/navbar/topNavbar";
+import Navbar from "../components/navbar/activeNavbar";
 import { Card, CardBody, CardHeader, Image } from "@nextui-org/react";
 import Stars from "../components/REVIEW/rating/stars.tsx";
 
@@ -52,7 +52,7 @@ export default function Reviews() {
 
   return (
     <div id="review_div">
-      <TopNavbar />
+      <Navbar />
       {/* div horizontally centered using tailwind */}
       <div className="flex justify-center">
         <Card

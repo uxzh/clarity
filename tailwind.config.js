@@ -11,6 +11,9 @@ module.exports = {
       animation: {
         ["infinite-slider"]: "infiniteSlider 20s linear infinite",
       },
+      screens: {
+        xs: "425px",
+      },
       keyframes: {
         infiniteSlider: {
           "0%": { transform: "translateX(0)" },

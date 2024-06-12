@@ -10,11 +10,13 @@ import {
   Link,
   Button,
 } from "@nextui-org/react";
+import { useLocation } from "react-router-dom";
 //import logo as svg
 import { ReactComponent as Clarity } from "../../lib/logo2.svg";
 
 export default function ActiveNavbar() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+  const location = useLocation();
 
   const menuItems = [
     "Beta Registration",
@@ -32,7 +34,12 @@ export default function ActiveNavbar() {
   return (
     <Navbar
       onMenuOpenChange={setIsMenuOpen}
-      style={{ marginBottom: "8rem", background: "transparent" }}
+      style={{
+        marginBottom: "8rem",
+        background: "transparent",
+        overflow: "hidden",
+        isBlurred: false,
+      }}
     >
       <NavbarContent>
         <NavbarMenuToggle
@@ -51,18 +58,28 @@ export default function ActiveNavbar() {
       </NavbarContent>
 
       <NavbarContent className="hidden sm:flex gap-8" justify="center">
-        <NavbarItem>
-          <Link color="foreground" href="#">
+        <NavbarItem isActive={location.pathname === "/reviews"}>
+          <Link
+            color={location.pathname === "/reviews" ? "primary" : "foreground"}
+            href="/reviews"
+          >
             Review
           </Link>
         </NavbarItem>
-        <NavbarItem isActive>
-          <Link href="#" aria-current="page">
+        <NavbarItem isActive={location.pathname === "/rating"}>
+          <Link
+            color={location.pathname === "/rating" ? "primary" : "foreground"}
+            href="/rating"
+            aria-current="page"
+          >
             Rating
           </Link>
         </NavbarItem>
-        <NavbarItem>
-          <Link color="foreground" href="#">
+        <NavbarItem isActive={location.pathname === "/wallet"}>
+          <Link
+            color={location.pathname === "/wallet" ? "primary" : "foreground"}
+            href="/wallet"
+          >
             Wallet
           </Link>
         </NavbarItem>
