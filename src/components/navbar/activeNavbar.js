@@ -97,7 +97,7 @@ export default function ActiveNavbar() {
             style={{ border: "1px solid #1a202c" }}
             target="_blank"
             variant="bordered"
-            className="shadow-[0px_3px_0px_0px_#1a202c] "
+            className="shadow-[0px_3px_0px_0px_#1a202c] bg-white"
           >
             Beta Registration
           </Button>

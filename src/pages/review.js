@@ -9,6 +9,7 @@ import {
   CardFooter,
   Button,
 } from "@nextui-org/react";
+import { IconPlus } from "@tabler/icons-react";
 
 const creditCardData = [
   {
@@ -18,6 +19,14 @@ const creditCardData = [
     bankName: "Alaska Airlines",
     cardName: "Visa Signature®",
     ratingPosition: 1,
+    categories: {
+      travel: 3,
+      dining: 2.2,
+      transportation: 1,
+      entertainment: 1.3,
+      shopping: 1,
+      utilities: 1,
+    },
   },
   {
     imageLink:
@@ -26,6 +35,14 @@ const creditCardData = [
     bankName: "Chase JP Morgan",
     cardName: "Sapphire Preferred®",
     ratingPosition: 2,
+    categories: {
+      travel: 2.5,
+      dining: 3.1,
+      transportation: 1.8,
+      entertainment: 1.2,
+      shopping: 1.5,
+      utilities: 0.8,
+    },
   },
   {
     imageLink:
@@ -34,6 +51,14 @@ const creditCardData = [
     bankName: "Discover it",
     cardName: "Student Cash Back®",
     ratingPosition: 4,
+    categories: {
+      travel: 1.2,
+      dining: 2.8,
+      transportation: 2.1,
+      entertainment: 1.8,
+      shopping: 2.5,
+      utilities: 1.1,
+    },
   },
   {
     imageLink:
@@ -42,6 +67,14 @@ const creditCardData = [
     bankName: "Citi Bank",
     cardName: "Citi Simplicity®",
     ratingPosition: 5,
+    categories: {
+      travel: 1.5,
+      dining: 1.2,
+      transportation: 1.8,
+      entertainment: 1.1,
+      shopping: 1.3,
+      utilities: 1.6,
+    },
   },
   {
     imageLink:
@@ -50,6 +83,14 @@ const creditCardData = [
     bankName: "Capital One",
     cardName: "Venture Rewards®",
     ratingPosition: 3,
+    categories: {
+      travel: 2.8,
+      dining: 1.9,
+      transportation: 1.4,
+      entertainment: 2.2,
+      shopping: 1.6,
+      utilities: 0.9,
+    },
   },
 ];
 
@@ -65,6 +106,11 @@ const categoriesData = [
 export default function App() {
   const [selected, setSelected] = React.useState("cashback");
 
+  const handleAddCard = () => {
+    // Add your logic for handling the "Add Card" button click here
+    console.log("Add Card button clicked");
+  };
+
   // Sort the creditCardData array in descending order based on cashbackPercentage
   const sortedCreditCardData = [...creditCardData].sort(
     (a, b) => b.cashbackPercentage - a.cashbackPercentage
@@ -72,8 +118,8 @@ export default function App() {
 
   const CreditCardView = ({ creditCardData, index }) => {
     return (
-      <div className="flex justify-center mb-4">
-        <div className="flex items-center">
+      <div className="flex flex-col items-center mb-4">
+        <div className="flex justify-center">
           <CreditCard
             index={index}
             imageLink={creditCardData.imageLink}
@@ -82,6 +128,17 @@ export default function App() {
             cardName={creditCardData.cardName}
           />
         </div>
+        {index === sortedCreditCardData.length - 1 && (
+          <div className="mt-6">
+            <Button
+              startContent={<IconPlus stroke={2} />}
+              className="border-2"
+              color="white"
+            >
+              Add Card
+            </Button>
+          </div>
+        )}
       </div>
     );
   };

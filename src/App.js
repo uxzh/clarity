@@ -5,6 +5,7 @@ import MainPage from "./pages/main";
 import Wallet from "./pages/wallet";
 import Rating from "./pages/rating";
 import PageNotFound from "./pages/notFound";
+import Review from "./pages/cardPage";
 import "./output.css";
 
 export default function App() {
@@ -13,6 +14,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<MainPage />} />
         <Route path="/wallet" element={<Wallet />} />
+        <Route path="/review" element={<Review />} />
         <Route path="/rating" element={<Rating />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
