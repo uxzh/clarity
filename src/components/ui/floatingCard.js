@@ -7,7 +7,7 @@ const springValues = {
   mass: 2,
 };
 
-export const MouseFollowCaption = () => {
+export const FloatingCard = ({ imgSrc, creditCardName }) => {
   const x = useMotionValue(0);
   const y = useMotionValue(0);
   const rotateX = useSpring(useMotionValue(0), springValues);
@@ -64,34 +64,32 @@ export const MouseFollowCaption = () => {
   return (
     <>
       <figure
+        id="floatingCard"
         ref={ref}
-        className="relative flex h-[600px] w-full flex-col items-center justify-center overflow-hidden"
+        className="relative flex xs:h-[250px] md:h-[250px] w-full flex-col items-center justify-center overflow-hidden sm:w-[100%] my-4"
         style={{
           perspective: "800px",
+          overflow: "visible",
         }}
         onMouseMove={handleMouse}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
       >
-        <div className="absolute top-4 text-center text-sm sm:hidden">
+        {/* <div className="absolute top-4 text-center text-sm sm:hidden">
           This effect is not optimized for mobile. Check on desktop.
-        </div>
+        </div> */}
         <motion.img
-          src="https://imgur.com/wYpEo8a.png"
-          alt="random"
+          draggable={false}
+          src={imgSrc}
+          alt={creditCardName}
           style={{
             rotateX,
             rotateY,
             scale,
+            borderRadius: "16px",
           }}
-          className="h-[225px] w-[354px] object-cover will-change-transform"
+          className="xs:w-[100%] md:w-[90%] z-20 max-w-[380px] min-w-[280px] object-cover will-change-transform"
         />
-        {/* <motion.figcaption
-          className="pointer-events-none absolute left-0 top-0 hidden rounded-[4px] bg-white px-[10px] py-0.5 text-[10px] text-[#2d2d2d] opacity-0 sm:flex"
-          style={{ x, y, opacity, rotate: rotateFigcaption }}
-        >
-          Accelerate your cashback
-        </motion.figcaption> */}
       </figure>
     </>
   );

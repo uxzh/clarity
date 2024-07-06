@@ -1,0 +1,67 @@
+[
+  {
+    "_id": "review1",
+    "cardId": "card123",
+    "userId": "user1",
+    "rating": 4,
+    "title": "Technically a $45 annual fee card",
+    "content": "The preferred is 'technically' a $45 annual fee card, because you get a $50 hotel credit every year. So as long as you stay in a hotel once per year that you book through ultimate rewards... you get that $50.",
+    "createdAt": "2024-03-15T14:30:00.000Z",
+    "user": {
+      "name": "UsernameChallenged",
+      "avatar": "https://picsum.photos/seed/user1/50/50"
+    }
+  },
+  {
+    "_id": "review2",
+    "cardId": "card123",
+    "userId": "user2",
+    "rating": 4,
+    "title": "Effective annual fee is $45",
+    "content": "There is a $50 annual hotel credit which makes the effective annual fee $45. You have to book the hotel via the Chase travel portal to get the credit.",
+    "createdAt": "2024-03-20T09:45:00.000Z",
+    "user": {
+      "name": "Coldbrwer003",
+      "avatar": "https://picsum.photos/seed/user2/50/50"
+    }
+  },
+  {
+    "_id": "review3",
+    "cardId": "card123",
+    "userId": "user3",
+    "rating": 5,
+    "title": "Great intro travel card with perks",
+    "content": "The CSP is a great intro travel card with good travel partners and a low AF relative to more frequent flyer travel cards. Transfer points vs. booking through the travel portal. Also, to offset the AF, you do have the $50 hotel credit (when booking hotels through their travel portal,) and I have been able to take advantage of the quarterly instacart credit of $15. This is also a no foreign transaction fee card so you could take it with you on your international travels.",
+    "createdAt": "2024-04-02T16:20:00.000Z",
+    "user": {
+      "name": "areyoukeeningme",
+      "avatar": "https://picsum.photos/seed/user3/50/50"
+    }
+  },
+  {
+    "_id": "review4",
+    "cardId": "card123",
+    "userId": "user4",
+    "rating": 4,
+    "title": "Worth it for initial bonus and travel booking",
+    "content": "This card is worth it if you qualify for the initial bonus and you're comfortable using your points to book travel through the card's issuer. It doesn't matter which airline or hotel you use. As long as you book through the issuer's portal, you'll get the best rewards rate. There are plenty of other good cards without foreign fees to choose from if you're still on the fence.",
+    "createdAt": "2024-04-10T11:05:00.000Z",
+    "user": {
+      "name": "JKCreditCards",
+      "avatar": "https://picsum.photos/seed/user4/50/50"
+    }
+  },
+  {
+    "_id": "review5",
+    "cardId": "card123",
+    "userId": "user5",
+    "rating": 3,
+    "title": "Questioning the value over regular Chase cards",
+    "content": "What is the advantage of the Sapphire Preferred over the regular Chase cards? The Unlimited 1.5% and Flex both have the same Chase Travel 5%, 3% dining. So I'm struggling for the 'worth' of the sapphire and it's 1% on everyday purchases. Mainly access to using points with travel partners? No foreign trans fees? 2% 'any other travel'? Are there more/better travel protections than the other Chase cards?",
+    "createdAt": "2024-04-18T13:40:00.000Z",
+    "user": {
+      "name": "EveryExit1065",
+      "avatar": "https://picsum.photos/seed/user5/50/50"
+    }
+  }
+]

@@ -16,7 +16,10 @@ export default function Hero() {
   };
 
   return (
-    <div style={{ display: "flex", justifyContent: "center" }}>
+    <div
+      style={{ display: "flex", justifyContent: "center" }}
+      className="mt-[18vh]"
+    >
       <div
         style={{
           maxWidth: "80vw",
@@ -25,7 +28,7 @@ export default function Hero() {
       >
         <div id="bgbgbg"></div>
         <p className="text-center uppercase text-lg font-light">
-          Not enough cashback?
+          united together to make
         </p>
         <div className="">
           <h1
@@ -36,8 +39,8 @@ export default function Hero() {
               lineHeight: "1em",
             }}
           >
-            Make daily purchases
-            <br /> & earn cash
+            credit cards
+            <br /> great again
           </h1>
         </div>
         <CheckmarksHero />

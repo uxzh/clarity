@@ -1,9 +1,14 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import MainPage from "./pages/main";
+import Wallet from "./pages/wallet";
+import Rating from "./pages/rating";
 
-import Reviews from "./pages/reviews";
 import PageNotFound from "./pages/notFound";
+import Review from "./pages/cardPage";
+import ReviewSearch from "./pages/reviewSearch";
+import ActiveNavbar from "./components/navbar/activeNavbar";
+import Footer from "./components/footer/footer";
 import "./output.css";
 
 export default function App() {
@@ -11,8 +16,10 @@ export default function App() {
     <Router>
       <Routes>
         <Route path="/" element={<MainPage />} />
-        <Route path="/review" element={<Reviews />} />
-        <Route path="*" element={<PageNotFound />} /> {/* Catch-all route */}
+        <Route path="/wallet" element={<Wallet />} />
+        <Route path="/review" element={<Review />} />
+        <Route path="/rating" element={<Rating />} />
+        <Route path="*" element={<PageNotFound />} />
       </Routes>
     </Router>
   );

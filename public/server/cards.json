@@ -1,0 +1,86 @@
+[
+  {
+    "_id": "card123",
+    "cardName": "Chase Sapphire Preferred",
+    "bankName": "Chase J.P. Morgan",
+    "cardImageUrl": "https://creditcards.chase.com/K-Marketplace/images/cardart/sapphire_preferred_card.png",
+    "cashbackPercentages": {
+      "Travel": "3%",
+      "Dining": "4%",
+      "Groceries": "2%",
+      "Gas": "2%",
+      "Shopping": "2%",
+      "Other": "1%"
+    },
+    "perks": [
+      "Cell Phone Protection",
+      "Visa Concierge",
+      "Visa Signature Luxury Hotel Collection"
+    ],
+    "redemptionOptions": [
+      "Statement Credit",
+      "ATM Withdrawal (Wells Fargo ATMs)",
+      "Direct Deposit (Wells Fargo Accounts)",
+      "Mailed Check"
+    ],
+    "fees": [
+      { "name": "Annual Fee", "value": "$0" },
+      { "name": "Foreign Fee", "value": "0%" }
+    ],
+    "apr": {
+      "range": "14.99% - 24.99%",
+      "introApr": "0% Intro APR (15 mo)"
+    },
+    "rewards": [
+      { "name": "Cash Back", "value": "Up to 4%" },
+      { "name": "Sign-up Bonus", "value": "$200" }
+    ],
+    "creditScoreRequired": "700+",
+    "additionalBenefits": [
+      "Travel Insurance",
+      "Purchase Protection",
+      "Extended Warranty",
+      "Concierge Service"
+    ],
+    "reviewFromTheWeb": "Users generally praise the Chase Sapphire Preferred for its travel rewards, low annual fee, and sign-up bonus. They appreciate the point transfer options and travel protections, but some debate its long-term value. While excellent for frequent travelers, users suggest it may not suit those who travel less. Cardholders often recommend pairing it with other Chase cards to maximize benefits, emphasizing the importance of evaluating personal spending habits to determine its fit."
+  },
+  {
+    "_id": "card122",
+    "cardName": "American Express Gold Card",
+    "bankName": "American Express",
+    "cardImageUrl": "https://icm.aexp-static.com/Internet/Acquisition/US_en/AppContent/OneSite/category/cardarts/gold-card.png",
+    "cashbackPercentages": {
+      "Restaurants": "4X",
+      "Supermarkets": "4X",
+      "Travel": "3X",
+      "Other": "1X"
+    },
+    "perks": ["$120 Dining Credit", "$120 Uber Cash", "The Hotel Collection"],
+    "redemptionOptions": [
+      "Travel Bookings",
+      "Gift Cards",
+      "Statement Credits",
+      "Transfer to Travel Partners"
+    ],
+    "fees": [
+      { "name": "Annual Fee", "value": "$250" },
+      { "name": "Foreign Fee", "value": "0%" }
+    ],
+    "apr": {
+      "range": "18.99% - 25.99%",
+      "introApr": "N/A"
+    },
+    "rewards": [
+      { "name": "Membership Rewards Points", "value": "Up to 4X" },
+      { "name": "Welcome Bonus", "value": "60,000 points" }
+    ],
+    "creditScoreRequired": "670+",
+    "additionalBenefits": [
+      "Trip Delay Insurance",
+      "Baggage Insurance",
+      "Car Rental Loss and Damage Insurance",
+      "Global Assist Hotline"
+    ],
+    "reviewFromTheWeb": "The American Express Gold Card is highly regarded for its generous rewards on dining and groceries. Users appreciate the annual dining and Uber credits, which help offset the annual fee. The card is particularly popular among foodies and frequent travelers. However, some users find the annual fee high if they can't fully utilize the credits. The card's travel perks and point transfer options are praised, but some note that it may not be the best for luxury travel benefits compared to premium cards. Overall, it's considered an excellent choice for those who spend significantly on food and travel."
+  }
+]
