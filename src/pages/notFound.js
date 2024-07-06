@@ -2,6 +2,8 @@ import { Button, Link } from "@nextui-org/react";
 import MainButton from "../components/buttons/MainButton";
 import Lottie from "react-lottie";
 import animationData from "../components/lotties/404.json";
+import { useNavigate } from "react-router-dom";
+import { Icon } from "@iconify/react/dist/iconify.js";
 
 export default function PageNotFound() {
   const defaultOptions = {
@@ -11,6 +13,12 @@ export default function PageNotFound() {
     rendererSettings: {
       preserveAspectRatio: "xMidYMid slice",
     },
+  };
+
+  const navigate = useNavigate();
+
+  const handleGoBack = () => {
+    navigate(-1);
   };
 
   return (
@@ -26,11 +34,8 @@ export default function PageNotFound() {
               Sorry, we couldn't find the page you're looking for.
             </p>
             <div class="mt-8 flex justify-center flex-row items-center space-y-4 sm:flex-row sm:space-x-4 sm:space-y-0">
-              <MainButton
-                text="Back home"
-                link={"/"}
-                newtab=""
-                icon={
+              <Button
+                startContent={
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"
@@ -47,32 +52,18 @@ export default function PageNotFound() {
                     <path d="M19 12H5"></path>
                   </svg>
                 }
-              />
-              <Button
-                startContent={
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    class="mr-2 h-5 w-5"
-                  >
-                    <rect width="20" height="16" x="2" y="4" rx="2"></rect>
-                    <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
-                  </svg>
-                }
-                as={Link}
                 size="lg"
                 variant="flat"
-                href="mailto:cardsclarity@gmail.com"
+                onClick={handleGoBack}
               >
-                Contact us
+                Go back
               </Button>
+              <MainButton
+                text="Back home"
+                link={"/"}
+                newtab=""
+                icon={<Icon icon="fluent:home-12-regular" />}
+              />
             </div>
           </div>
         </main>

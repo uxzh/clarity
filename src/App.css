@@ -6,6 +6,13 @@
   text-align: center;
 }
 
+/* media query max width 768 px */
+@media (max-width: 768px) {
+  #floatingCard {
+    margin-bottom: 2rem;
+  }
+}
+
 .App-logo {
   height: 40vmin;
   pointer-events: none;

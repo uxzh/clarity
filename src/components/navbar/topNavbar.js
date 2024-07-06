@@ -32,7 +32,8 @@ export default function TopNavbar() {
   return (
     <Navbar
       onMenuOpenChange={setIsMenuOpen}
-      style={{ marginBottom: "8rem", background: "transparent" }}
+      className="xs:mb-[2rem] lg:mb-[8rem] "
+      style={{ background: "transparent" }}
     >
       <NavbarContent>
         {/* <NavbarMenuToggle

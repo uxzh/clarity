@@ -64,8 +64,9 @@ export const FloatingCard = ({ imgSrc, creditCardName }) => {
   return (
     <>
       <figure
+        id="floatingCard"
         ref={ref}
-        className="relative flex h-[250px] w-full flex-col items-center justify-center overflow-hidden"
+        className="relative flex xs:h-[250px] md:h-[250px] w-full flex-col items-center justify-center overflow-hidden sm:w-[100%] my-4"
         style={{
           perspective: "800px",
           overflow: "visible",
@@ -85,6 +86,7 @@ export const FloatingCard = ({ imgSrc, creditCardName }) => {
             rotateX,
             rotateY,
             scale,
+            borderRadius: "16px",
           }}
           className="xs:w-[100%] md:w-[90%] z-20 max-w-[380px] min-w-[280px] object-cover will-change-transform"
         />
