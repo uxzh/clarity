@@ -22,8 +22,7 @@ Cards Clarity is a comprehensive financial management tool designed to help indi
 - **🧪 Jest**: A JavaScript testing framework, used for writing and running tests to ensure code reliability.
 - **📦 Webpack**: A module bundler, used to bundle JavaScript files for usage in a browser.
 - **🔄 Babel**: A JavaScript compiler, used to convert ECMAScript 2015+ code into a backwards-compatible version of JavaScript.
-- **🔍 ESLint**: A static code analysis tool for identifying problematic patterns found in JavaScript code, used to maintain code quality.
-- **💅 Prettier**: An opinionated code formatter, used to ensure consistent code style.
+
 
 ## ✨ Features
 
