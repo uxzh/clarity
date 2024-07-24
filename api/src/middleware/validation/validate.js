@@ -6,7 +6,6 @@ const validate = (schema) => {
         await schema.validate(data, { abortEarly: false, stripUnknown: true });
       } catch (error) {
         const errors = {};
-        console.log(error);
         error.inner.forEach(err => {
           errors[err.path] = err.message;
         });

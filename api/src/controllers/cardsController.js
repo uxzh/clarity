@@ -10,7 +10,7 @@ class CardsController {
       }
       res.status(200).send(cards);
     } catch (e) {
-      res.status(500).json({ error: e });
+      res.status(500).send({ error: "Error fetching cards" });
     }
   }
 }

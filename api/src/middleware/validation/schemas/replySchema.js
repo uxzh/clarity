@@ -5,8 +5,6 @@ const schema = (isCreate) => yup.object().shape({
 
   reviewId: yup.string().required('Review ID is required'),
 
-  userId: yup.string().required('User ID is required'),
-
   content: yup.string().required('Content is required'),
 
 });

@@ -1,3 +1,5 @@
+const { ObjectId } = require("mongodb");
+
 let cards;
 
 class CardsDAO {
@@ -7,6 +9,15 @@ class CardsDAO {
       cards = await conn.db(process.env.DB_NAME).collection("cards");
     } catch (e) {
       console.error(`Unable to establish collection handles in cardsDAO: ${e}`);
+    }
+  }
+
+  static async getCardById(id) {
+    try {
+      return await cards.findOne({ _id: new ObjectId(id) });
+    } catch (e) {
+      console.error(`Unable to get card: ${e}`);
+      return { error: e };
     }
   }
 
