@@ -28,7 +28,7 @@ export default function Hero() {
       >
         <div id="bgbgbg"></div>
         <p className="text-center uppercase text-lg font-light">
-          united together to make
+          Not enough cashback?
         </p>
         <div className="">
           <h1
@@ -39,8 +39,8 @@ export default function Hero() {
               lineHeight: "1em",
             }}
           >
-            credit cards
-            <br /> great again
+            Make daily purchases
+            <br /> & earn cash
           </h1>
         </div>
         <CheckmarksHero />
