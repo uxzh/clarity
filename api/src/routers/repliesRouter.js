@@ -6,7 +6,10 @@ const { createReplySchema } = require('../middleware/validation/schemas/replySch
 
 const validate = require('../middleware/validation/validate');
 
-router.post('/', validate(createReplySchema), loginRequired,
- RepliesController.createReply);
+router.post('/',
+  loginRequired,
+  validate(createReplySchema), 
+  RepliesController.createReply
+);
 
 module.exports = router;

@@ -6,11 +6,21 @@ const { createLikeschema } = require('../middleware/validation/schemas/likeSchem
 const { createReviewSchema } = require('../middleware/validation/schemas/reviewSchema');
 const validate = require('../middleware/validation/validate');
 
-router.post('/', validate(createReviewSchema), loginRequired,
- ReviewsController.createReview);
+router.post('/',
+  loginRequired,
+  validate(createReviewSchema),
+  ReviewsController.createReview
+);
 
-router.post('/:id/like', validate(createLikeschema), loginRequired, ReviewsController.likeReview);
+router.post('/:id/like',
+  loginRequired,
+  validate(createLikeschema),
+  ReviewsController.likeReview
+);
 
-router.delete('/:id/like', loginRequired, ReviewsController.deleteLike);
+router.delete('/:id/like',
+  loginRequired,
+  ReviewsController.deleteLike
+);
 
 module.exports = router;
