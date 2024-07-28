@@ -41,7 +41,7 @@ class AuthController {
       }
       delete user.password;
 
-      const token = jwt.sign({ id: user._id });
+      const token = jwt.sign({ _id: user._id });
       user.token = token;
 
       // todo: send email verification
@@ -65,7 +65,7 @@ class AuthController {
       }
 
       delete user.password;
-      const token = jwt.sign({ id: user._id });
+      const token = jwt.sign({ _id: user._id });
       user.token = token;
 
       await UsersDAO.updateUserFields(user._id, { lastLogin: new Date() });
@@ -115,7 +115,7 @@ class AuthController {
         return res.status(500).send({ error: "Error signing up" });
       }
 
-      const token = jwt.sign({ id: user._id });
+      const token = jwt.sign({ _id: user._id });
       user.token = token;
       res.status(201).send(user);
     } catch (e) {
@@ -146,7 +146,7 @@ class AuthController {
         return res.status(404).send({ error: 'User not found' });
       }
 
-      const token = jwt.sign({ id: user._id });
+      const token = jwt.sign({ _id: user._id });
       user.token = token;
 
       await UsersDAO.updateUserFields(user._id, { lastLogin: new Date() });

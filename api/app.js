@@ -1,6 +1,6 @@
 const express = require("express");
 const cors = require("cors");
-const authorization = require("./src/middleware/authorization");
+const { auth } = require("./src/middleware/auth");
 
 const app = express();
 
@@ -8,7 +8,7 @@ app.use(cors());
 
 app.use(express.json());
 
-app.use(authorization);
+app.use(auth);
 
 app.use('/api/v1', require('./src/routers/apiRouter'));
 app.get("/", (req, res) => {

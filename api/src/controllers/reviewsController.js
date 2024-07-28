@@ -16,7 +16,7 @@ class ReviewsController {
 
       const review = {
         cardId,
-        userId: req.user.id,
+        userId: req.user._id,
         rating,
         title,
         content,
@@ -45,7 +45,7 @@ class ReviewsController {
         return res.status(404).send({ error: "Review not found" });
       }
 
-      const existingLike = await LikesDAO.getLikeByUserAndTarget(req.user.id, targetId);
+      const existingLike = await LikesDAO.getLikeByUserAndTarget(req.user._id, targetId);
       if (existingLike && !existingLike.error) {
         return res.status(400).send({ error: "Like already exists" });
       }
@@ -53,7 +53,7 @@ class ReviewsController {
       const like = {
         targetId,
         targetType: "review",
-        userId: req.user.id,
+        userId: req.user._id,
         isLike,
       };
 
@@ -72,7 +72,7 @@ class ReviewsController {
     try {
       const { id: targetId } = req.params;
 
-      const result = await LikesDAO.deleteLikeByUserAndTarget(req.user.id, targetId);
+      const result = await LikesDAO.deleteLikeByUserAndTarget(req.user._id, targetId);
       if (!result || result.error) {
         return res.status(500).send({ error: "Error deleting like" });
       }

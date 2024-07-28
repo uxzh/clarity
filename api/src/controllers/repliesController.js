@@ -16,7 +16,7 @@ class RepliesController {
 
       const reply = {
         reviewId,
-        userId: req.user.id,
+        userId: req.user._id,
         content,
         createdAt: date,
         updatedAt: date,

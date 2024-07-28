@@ -39,11 +39,14 @@ class UsersDAO {
     }
   }
 
-  static async updateUserFields(id, fields) {
+  static async updateUserFields({id, set, push}) {
     try {
       return await users.updateOne(
         { _id: new ObjectId(id) },
-        { $set: fields }
+        {
+          $set: set || {},
+          $push: push || {},
+        }
       );
     } catch (e) {
       console.error(`Unable to update user: ${e}`);
