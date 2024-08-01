@@ -1,4 +1,5 @@
 const bcrypt = require('bcrypt');
+const { validate } = require('deep-email-validator');
 
 const UsersDAO = require('../dao/usersDAO');
 const jwt = require('../lib/jwt');
@@ -19,6 +20,12 @@ class AuthController {
       existingUser = await UsersDAO.getUserByField("username", username);
       if (existingUser) {
         return res.status(400).send({ error: 'Username already in use' });
+      }
+
+      // deep email validation
+      const validationResult = await validate(email);
+      if (!validationResult.valid) {
+        return res.status(400).send({ error: 'Invalid email' });
       }
 
       const hashedPassword = await bcrypt.hash(password, 10);
@@ -46,7 +53,6 @@ class AuthController {
       const token = jwt.sign({ _id: user._id });
       user.token = token;
 
-      // todo: send email verification
       const verificationToken = jwt.sign({ email });
       const message = MAIL_TEMPLATES.confirmEmail(`${process.env.HOST}:${process.env.PORT}/api/v1/auth/verify-email/${verificationToken}`);
 
