@@ -3,6 +3,8 @@ const bcrypt = require('bcrypt');
 const UsersDAO = require('../dao/usersDAO');
 const jwt = require('../lib/jwt');
 const verifyGoogleToken = require('../lib/verifyGoogleToken');
+const { MailSender } = require('../lib/mail/mailSender');
+const { MAIL_TEMPLATES } = require('../lib/mail/templates');
 
 class AuthController {
   static async signup(req, res) {
@@ -45,6 +47,15 @@ class AuthController {
       user.token = token;
 
       // todo: send email verification
+      const verificationToken = jwt.sign({ email });
+      const message = MAIL_TEMPLATES.confirmEmail(`${process.env.HOST}:${process.env.PORT}/api/v1/auth/verify-email/${verificationToken}`);
+
+      try {
+        await MailSender.send(email, message);
+      } catch (error) {
+        console.error(error);
+      }
+
       res.status(201).send(user);
     } catch (e) {
       res.status(500).send({ error: "Error signing up" });
@@ -74,6 +85,32 @@ class AuthController {
     } catch (e) {
       res.status(500).send({ error: "Error logging in" });
     }
+  }
+
+  static async verifyEmail(req, res) {
+    try {
+      const { token } = req.params;
+      try {
+        const decodedValue = jwt.verify(token);
+        const user = await UsersDAO.getUserByField("email", decodedValue.email);
+        if (!user || user.error) {
+          return res.status(404).send({ error: 'User not found' });
+        }
+        if (user.emailVerified) {
+          return res.status(400).send({ error: 'Email already verified' });
+        }
+        
+        await UsersDAO.updateUserFields({
+          id: user._id,
+          set: { emailVerified: true },
+        });
+        return res.status(200).send({ message: 'Email verified' });
+      } catch(error) {
+        return res.status(401).send('User is not authorized to access this endpoint')
+      }
+    } catch (e) {
+      res.status(500).send({ error: "Error verifying email" });
+    }  
   }
 
   static async signupGoogle(req, res) {

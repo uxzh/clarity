@@ -15,6 +15,10 @@ router.post('/login',
   AuthController.login
 );
 
+router.get('/verify-email/:token',
+  AuthController.verifyEmail
+);
+
 router.post('/signup/google',
   AuthController.signupGoogle
 );
