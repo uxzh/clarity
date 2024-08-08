@@ -1,9 +1,10 @@
 const router = require('express').Router();
 
-const usernameSchema = require('../middleware/validation/schemas/usernameSchema');
+const { usernameSchema } = require('../middleware/validation/schemas/usernameSchema');
 const validate = require('../middleware/validation/validate');
 const UsersController = require('../controllers/usersController');
 const Permissions = require('../middleware/permissions');
+const { updateUserSchema } = require('../middleware/validation/schemas/userSchema');
 
 router.post('/check-username',
   Permissions.isAuthenticated,
@@ -11,9 +12,10 @@ router.post('/check-username',
   UsersController.checkUsernameExists
 );
 
-router.put('/:id/update-username',
+router.put('/:id',
   Permissions.isOwnerOrAdmin,
-  UsersController.updateUsername
+  validate(updateUserSchema),
+  UsersController.updateUser
 );
 
 module.exports = router;
