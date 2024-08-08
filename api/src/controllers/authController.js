@@ -49,6 +49,7 @@ class AuthController {
         return res.status(500).send({ error: "Error signing up" });
       }
       delete user.password;
+      delete user.role;
 
       const token = jwt.sign({ _id: user._id });
       user.token = token;
@@ -82,6 +83,8 @@ class AuthController {
       }
 
       delete user.password;
+      delete user.role;
+      delete user.previousUsernames;
       const token = jwt.sign({ _id: user._id });
       user.token = token;
 
@@ -160,6 +163,7 @@ class AuthController {
 
       const token = jwt.sign({ _id: user._id });
       user.token = token;
+      delete user.role;
       res.status(201).send(user);
     } catch (e) {
       res.status(500).send({ error: "Error signing up" });
@@ -191,6 +195,7 @@ class AuthController {
 
       const token = jwt.sign({ _id: user._id });
       user.token = token;
+      delete user.previousUsernames;
 
       await UsersDAO.updateUserFields(user._id, { lastLogin: new Date() });
 
