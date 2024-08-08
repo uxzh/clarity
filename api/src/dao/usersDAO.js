@@ -53,6 +53,15 @@ class UsersDAO {
       return { error: e };
     }
   }
+
+  static async deleteUserById(id) {
+    try {
+      return await users.deleteOne({ _id: new ObjectId(id) });
+    } catch (e) {
+      console.error(`Unable to delete user: ${e}`);
+      return { error: e };
+    }
+  }
 }
 
 module.exports = UsersDAO;

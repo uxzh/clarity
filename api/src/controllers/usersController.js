@@ -78,6 +78,21 @@ class UsersController {
       res.status(500).send({ error: "Error updating user" });
     }
   }
+
+  static async deleteUser(req, res) {
+    try {
+      const result = await UsersDAO.deleteUserById(req.params.id);
+      if (!result || result.error) {
+        return res.status(500).send({ error: "Error deleting user" });
+      }
+      if (result.deletedCount === 0) {
+        return res.status(404).send({ error: "User not found" });
+      }
+      res.status(204).send();
+    } catch (e) {
+      res.status(500).send({ error: "Error deleting user" });
+    }
+  }
 }
 
 module.exports = UsersController;

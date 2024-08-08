@@ -18,4 +18,9 @@ router.put('/:id',
   UsersController.updateUser
 );
 
+router.delete('/:id',
+  Permissions.isOwnerOrAdmin,
+  UsersController.deleteUser
+);
+
 module.exports = router;
