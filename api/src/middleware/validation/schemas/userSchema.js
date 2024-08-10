@@ -6,7 +6,6 @@ const updateUserSchema = yup.object().shape({
   password: yup.string().min(8, 'Password must be at least 8 characters').max(50, 'Password must be less than 50 characters'),
   
   confirmPassword: yup.string().test('Confirm Password', 'Confirm Password is required', (value, context) => {
-    console.log(value, Boolean(value), context);
     if (context.parent.password) return Boolean(value)
     else return true;
   }).min(8, 'Password must be at least 8 characters').max(50, 'Password must be less than 50 characters').test('Confirm Password', 'Passwords must match', (value, context) => {

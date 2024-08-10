@@ -10,9 +10,10 @@ const auth = async (req, res, next) => {
     }
     try {
         const decodedValue = jwt.verify(authorization.slice(7));
-        const user = await UsersDAO.getUserById(decodedValue._id);
+        const user = await UsersDAO.getOneById(decodedValue._id);
         if (user && !user.error) {
-          req.user = decodedValue;
+          const isAdmin = user.role === 'admin';
+          req.user = { ...user, ...decodedValue, isAdmin };
         }
         return next();
     } catch(error) {
