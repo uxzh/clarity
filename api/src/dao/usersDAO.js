@@ -12,7 +12,7 @@ class UsersDAO {
     }
   }
 
-  static async getUserById(id) {
+  static async getOneById(id) {
     try {
       return await users.findOne({ _id: new ObjectId(id) });
     } catch (e) {
@@ -21,7 +21,7 @@ class UsersDAO {
     }
   }
 
-  static async getUserByField(field, value) {
+  static async getOneByField(field, value) {
     try {
       return await users.findOne({ [field]: value });
     } catch (e) {
@@ -30,7 +30,7 @@ class UsersDAO {
     }
   }
 
-  static async createUser(user) {
+  static async createOne(user) {
     try {
       return await users.insertOne(user);
     } catch (e) {
@@ -39,7 +39,7 @@ class UsersDAO {
     }
   }
 
-  static async updateUserFields({id, set, push}) {
+  static async updateOne({id, set, push}) {
     try {
       return await users.updateOne(
         { _id: new ObjectId(id) },
@@ -54,7 +54,7 @@ class UsersDAO {
     }
   }
 
-  static async deleteUserById(id) {
+  static async deleteOne(id) {
     try {
       return await users.deleteOne({ _id: new ObjectId(id) });
     } catch (e) {

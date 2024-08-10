@@ -7,7 +7,7 @@ class ReviewsController {
     try {
       const { cardId, rating, title, content } = req.body;
 
-      const card = await CardsDAO.getCardById(cardId);
+      const card = await CardsDAO.getOneById(cardId);
       if (!card || card.error) {
         return res.status(404).send({ error: "Card not found" });
       }
@@ -24,7 +24,7 @@ class ReviewsController {
         updatedAt: date,
       };
 
-      const result = await ReviewsDAO.createReview(review);
+      const result = await ReviewsDAO.createOne(review);
       if (!result || result.error) {
         return res.status(500).send({ error: "Error creating review" });
       }
@@ -35,12 +35,24 @@ class ReviewsController {
     }
   }
 
+  static async deleteReview(req, res) {
+    try {
+      const { id } = req.params;
+
+      const review = await ReviewsDAO.getOneById(id);
+      res.status(204).send();
+
+    } catch (e) {
+      res.status(500).send({ error: "Error deleting review" });
+    }
+  }
+
   static async likeReview(req, res) {
     try {
       const { isLike } = req.body;
       const { id: targetId } = req.params;
 
-      const review = await ReviewsDAO.getReviewById(targetId);
+      const review = await ReviewsDAO.getOneById(targetId);
       if (!review || review.error) {
         return res.status(404).send({ error: "Review not found" });
       }
@@ -57,7 +69,7 @@ class ReviewsController {
         isLike,
       };
 
-      const result = await LikesDAO.createLike(like);
+      const result = await LikesDAO.createOne(like);
       if (!result || result.error) {
         return res.status(500).send({ error: "Error creating like" });
       }

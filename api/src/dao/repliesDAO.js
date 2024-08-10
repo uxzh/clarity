@@ -10,7 +10,7 @@ class RepliesDAO {
     }
   }
 
-  static async createReply(reply) {
+  static async createOne(reply) {
     try {
       return await replies.insertOne(reply);
     } catch (e) {

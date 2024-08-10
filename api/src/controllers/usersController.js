@@ -6,7 +6,7 @@ class UsersController {
   static async checkUsernameExists(req, res) {
     try {
       const { username } = req.body;
-      const user = await UsersDAO.getUserByField("username", username);
+      const user = await UsersDAO.getOneByField("username", username);
       if (user && !user.error) {
         return res.status(200).send({ exists: true });
       }
@@ -24,7 +24,7 @@ class UsersController {
       }
       let user;
       if (req.user.isAdmin) {
-        user = await UsersDAO.getUserById(req.params.id);
+        user = await UsersDAO.getOneById(req.params.id);
         if (!user || user.error) {
           return res.status(404).send({ error: "User not found" });
         }
@@ -38,7 +38,7 @@ class UsersController {
       
       // username
       if (username && user.username !== username) {
-        const existingUser = await UsersDAO.getUserByField("username", username);
+        const existingUser = await UsersDAO.getOneByField("username", username);
         if (existingUser && !existingUser.error) {
           return res.status(400).send({ error: "Username already exists" });
         }
@@ -68,7 +68,7 @@ class UsersController {
       if (Object.keys(setData).length === 0) {
         return res.status(400).send({ error: "No fields to update" });
       }
-      await UsersDAO.updateUserFields({
+      await UsersDAO.updateOne({
         id: req.user._id,
         set: setData,
         push: pushData,
@@ -81,7 +81,7 @@ class UsersController {
 
   static async deleteUser(req, res) {
     try {
-      const result = await UsersDAO.deleteUserById(req.params.id);
+      const result = await UsersDAO.deleteOne(req.params.id);
       if (!result || result.error) {
         return res.status(500).send({ error: "Error deleting user" });
       }

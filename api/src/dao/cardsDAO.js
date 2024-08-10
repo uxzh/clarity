@@ -2,6 +2,8 @@ const { ObjectId } = require("mongodb");
 
 let cards;
 
+const CARDS_PER_PAGE = 20;
+
 class CardsDAO {
   static async injectDB(conn) {
     if (cards) return;
@@ -12,7 +14,7 @@ class CardsDAO {
     }
   }
 
-  static async getCardById(id) {
+  static async getOneById(id) {
     try {
       return await cards.findOne({ _id: new ObjectId(id) });
     } catch (e) {
@@ -21,9 +23,19 @@ class CardsDAO {
     }
   }
 
-  static async getCards() {
+  static async getMany({
+     page = 0,
+     perPage = CARDS_PER_PAGE,
+     sort = 'createdAt',
+  } = {}) {
     try {
-      return await cards.find().toArray();
+      console.log(page, perPage)
+      return await cards
+        .find()
+        .sort({ [sort]: -1 })
+        .skip(perPage * page)
+        .limit(perPage)
+        .toArray();
     } catch (e) {
       console.error(`Unable to get cards: ${e}`);
       return { error: e };

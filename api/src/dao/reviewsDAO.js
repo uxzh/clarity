@@ -12,7 +12,7 @@ class ReviewsDAO {
     }
   }
 
-  static async getReviewById(id) {
+  static async getOneById(id) {
     try {
       return await reviews.findOne({ _id: new ObjectId(id) });
     } catch (e) {
@@ -21,7 +21,7 @@ class ReviewsDAO {
     }
   }
 
-  static async createReview(review) {
+  static async createOne(review) {
     try {
       return await reviews.insertOne(review);
     } catch (e) {

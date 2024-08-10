@@ -19,7 +19,7 @@ class LikesDAO {
     }
   }
 
-  static async createLike(like) {
+  static async createOne(like) {
     try {
       return await likes.insertOne(like);
     } catch (e) {

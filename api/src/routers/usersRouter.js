@@ -5,6 +5,7 @@ const validate = require('../middleware/validation/validate');
 const UsersController = require('../controllers/usersController');
 const Permissions = require('../middleware/permissions');
 const { updateUserSchema } = require('../middleware/validation/schemas/userSchema');
+const { models } = require('../lib/models');
 
 router.post('/check-username',
   Permissions.isAuthenticated,
@@ -13,13 +14,13 @@ router.post('/check-username',
 );
 
 router.put('/:id',
-  Permissions.isOwnerOrAdmin,
+  Permissions.isOwnerOrAdmin(models.users),
   validate(updateUserSchema),
   UsersController.updateUser
 );
 
 router.delete('/:id',
-  Permissions.isOwnerOrAdmin,
+  Permissions.isOwnerOrAdmin(models.users),
   UsersController.deleteUser
 );
 
