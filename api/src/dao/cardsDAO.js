@@ -29,7 +29,6 @@ class CardsDAO {
      sort = 'createdAt',
   } = {}) {
     try {
-      console.log(page, perPage)
       return await cards
         .find()
         .sort({ [sort]: -1 })

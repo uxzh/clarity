@@ -29,6 +29,26 @@ class ReviewsDAO {
       return { error: e };
     }
   }
+
+  static async getManyByField({
+    field,
+    value,
+    sort = "createdAt",
+    page = 0,
+    perPage = 20,
+  } = {}) {
+    try {
+      return await reviews
+        .find({ [field]: value })
+        .sort({ [sort]: -1 })
+        .skip(perPage * page)
+        .limit(perPage)
+        .toArray();
+    } catch (e) {
+      console.error(`Unable to get reviews: ${e}`);
+      return { error: e };
+    }
+  }
 }
 
 module.exports = ReviewsDAO;
