@@ -17,7 +17,7 @@ const auth = async (req, res, next) => {
         }
         return next();
     } catch(error) {
-      return res.status(401).send('User is not authorized to access this endpoint')
+      return next();
     }
   } catch (error) {
     return res.status(500).send({ error });
