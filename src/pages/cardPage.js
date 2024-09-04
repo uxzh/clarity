@@ -132,7 +132,7 @@ function Review() {
                 id="floatingCard"
                 imgSrc={cardData.cardImageUrl}
                 creditCardName={cardData.cardName}
-                className="sm:w-[380px]"
+                className="sm:w-[380px] lg:h-[200px]"
               />
               <div>
                 <div className="pl-1">
