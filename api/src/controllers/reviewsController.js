@@ -3,6 +3,19 @@ const LikesDAO = require("../dao/likesDAO");
 const ReviewsDAO = require("../dao/reviewsDAO");
 
 class ReviewsController {
+  static async getReview(req, res) {
+    try {
+      const { id } = req.params
+      const review = await ReviewsDAO.getOneByIdWithLikes(id)
+      if (!review || review.error) {
+        return res.status(404).send({ error: "Review not found" });
+      }
+      return res.status(200).send(review)
+    } catch(e) {
+      res.status(500).send({ error: "Error getting review" });
+    }
+  }
+
   static async createReview(req, res) {
     try {
       const { cardId, rating, title, content } = req.body;

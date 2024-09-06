@@ -7,6 +7,10 @@ const { createLikeschema } = require('../middleware/validation/schemas/likeSchem
 const { createReviewSchema } = require('../middleware/validation/schemas/reviewSchema');
 const validate = require('../middleware/validation/validate');
 
+router.get('/:id',
+  ReviewsController.getReview
+)
+
 router.post('/',
   Permissions.isEmailVerified,
   validate(createReviewSchema),

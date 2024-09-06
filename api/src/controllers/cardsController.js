@@ -38,6 +38,16 @@ class CardsController {
       res.status(500).send({ error: "Error fetching reviews" });
     }
   }
+
+  static async getTopCards(req, res) {
+    try {
+      const cards = await CardsDAO.getTopCards()
+      res.status(200).send(cards);
+    } catch (e) {
+      console.log(e)
+      res.status(500).send({ error: "Error fetching top cards" });
+    } 
+  }
 }
 
 module.exports = CardsController;

@@ -1,4 +1,3 @@
-// comm
 const DB = require("./db");
 
 const COLLECTIONS = [

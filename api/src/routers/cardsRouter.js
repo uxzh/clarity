@@ -19,7 +19,10 @@ router.get('/', CardsController.getCards);
 //   CardsController.deleteCard
 // );
 
+router.get('/top-cards', CardsController.getTopCards);
+
 router.get('/:id/reviews', CardsController.getReviews);
+
 
 
 
