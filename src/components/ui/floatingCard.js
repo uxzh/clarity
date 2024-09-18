@@ -62,35 +62,33 @@ export const FloatingCard = ({ imgSrc, creditCardName }) => {
   }
 
   return (
-    <>
-      <figure
-        id="floatingCard"
-        ref={ref}
-        className="relative flex xs:h-[250px] md:h-[250px] w-full flex-col items-center justify-center overflow-hidden sm:w-[100%] my-4"
-        style={{
-          perspective: "800px",
-          overflow: "visible",
-        }}
-        onMouseMove={handleMouse}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
-      >
-        {/* <div className="absolute top-4 text-center text-sm sm:hidden">
+    <figure
+      id="floatingCard"
+      ref={ref}
+      className="relative flex xs:h-[250px] md:h-[220px] w-full flex-col items-center justify-center overflow-hidden sm:w-[100%] mt-2"
+      style={{
+        perspective: "800px",
+        overflow: "visible",
+      }}
+      onMouseMove={handleMouse}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
+      {/* <div className="absolute top-4 text-center text-sm sm:hidden">
           This effect is not optimized for mobile. Check on desktop.
         </div> */}
-        <motion.img
-          draggable={false}
-          src={imgSrc}
-          alt={creditCardName}
-          style={{
-            rotateX,
-            rotateY,
-            scale,
-            borderRadius: "16px",
-          }}
-          className="xs:w-[100%] md:w-[90%] z-20 max-w-[380px] min-w-[280px] object-cover will-change-transform"
-        />
-      </figure>
-    </>
+      <motion.img
+        draggable={false}
+        src={imgSrc}
+        alt={creditCardName}
+        style={{
+          rotateX,
+          rotateY,
+          scale,
+          borderRadius: "16px",
+        }}
+        className="xs:w-[100%] md:w-[90%] z-20 max-w-[360px] min-w-[260px] object-cover will-change-transform"
+      />
+    </figure>
   );
 };

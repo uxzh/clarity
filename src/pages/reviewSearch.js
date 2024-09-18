@@ -141,10 +141,10 @@ function ReviewSearch() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-8 mt-2 px-4 w-full max-w-6xl mx-auto">
         {bestCard && <CardComponent card={bestCard} title="Best Rated Card" />}
         {worstCard && (
-          <CardComponent card={worstCard} title="Worst Rated Card" />
+          <CardComponent card={worstCard} title="Most Controversial Card" />
         )}
         {popularCard && (
-          <CardComponent card={popularCard} title="Most Popular Card" />
+          <CardComponent card={popularCard} title="Most Discussed Card" />
         )}
       </div>
     );

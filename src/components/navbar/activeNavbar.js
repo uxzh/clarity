@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Navbar,
   NavbarBrand,
@@ -11,9 +11,11 @@ import {
 import { useLocation } from "react-router-dom";
 import { ReactComponent as Clarity } from "../../lib/logo2.svg";
 import MobileMenu from "./mobileMenu";
+import SignUpModal from "../ui/signing/SignUpModal";
 
 export default function ActiveNavbar() {
   const location = useLocation();
+  const [isSignUpModalOpen, setIsSignUpModalOpen] = useState(false);
 
   const getLinkStyles = (path) => {
     if (location.pathname === path) {
@@ -22,9 +24,17 @@ export default function ActiveNavbar() {
     return "text-foreground";
   };
 
+  const openSignUpModal = () => {
+    setIsSignUpModalOpen(true);
+  };
+
+  const closeSignUpModal = () => {
+    setIsSignUpModalOpen(false);
+  };
+
   return (
     <>
-      <Navbar className="sm:mb-2 lg:mb-[8rem] sm:flex">
+      <Navbar className="sm:mb-2 lg:mb-[8rem] sm:flex" isBlurred={false}>
         <NavbarContent>
           <NavbarBrand href="/" as={Link} className="max-h-7">
             <Clarity style={{ width: 48, marginRight: 4, maxHeight: 30 }} />
@@ -63,26 +73,22 @@ export default function ActiveNavbar() {
           </NavbarItem>
         </NavbarContent>
         <NavbarContent justify="end">
-          <NavbarItem className="hidden lg:flex">
-            <Link style={{ color: "black" }} href="#">
-              Login
-            </Link>
-          </NavbarItem>
           <NavbarItem>
             <Button
-              as={Link}
-              href="https://forms.gle/kcRvqnSBm1XSQVfa7"
               style={{ border: "1px solid #1a202c" }}
-              target="_blank"
               variant="bordered"
               className="shadow-[0px_3px_0px_0px_#1a202c] bg-white"
+              onPress={openSignUpModal}
             >
-              Beta Registration
+              Sign In
             </Button>
           </NavbarItem>
         </NavbarContent>
       </Navbar>
       <MobileMenu />
+      {isSignUpModalOpen && (
+        <SignUpModal isOpen={isSignUpModalOpen} onClose={closeSignUpModal} />
+      )}
     </>
   );
 }

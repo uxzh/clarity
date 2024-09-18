@@ -42,7 +42,7 @@ const ReviewsSection = React.memo(
                 variant="flat"
                 isClearable
                 aria-label="Search"
-                className="w-[60%] md:w-72 ml-[-18px]"
+                className="w-[60%] md:w-72 ml-[-18px] pr-2"
                 labelPlacement="outside"
                 placeholder="Search reviews"
                 startContent={<Icon icon="solar:magnifer-linear" />}
