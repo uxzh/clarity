@@ -30,6 +30,8 @@ const getDB = async () => {
   }
   try {
     const client = getMongoClient();
+    console.log(process.env);
+
     // await client.connect();
     db = await client.db(process.env.DB_NAME);
     return db;
