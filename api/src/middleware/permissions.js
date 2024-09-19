@@ -1,5 +1,6 @@
 const UsersDAO = require("../dao/usersDAO");
-const { modelToDAO, models } = require("../lib/models");
+const { models } = require("../lib/models");
+const { modelToDAO } = require("../lib/modelsToDAO");
 
 class Permissions {
   static async _getOwner(id, model) {

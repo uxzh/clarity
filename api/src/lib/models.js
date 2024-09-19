@@ -1,20 +1,11 @@
-const RepliesDAO = require("../dao/repliesDAO");
-const ReviewsDAO = require("../dao/reviewsDAO");
-const UsersDAO = require("../dao/usersDAO");
-
 const models = {
   users: 'users',
+  cards: 'cards',
   reviews: 'reviews',
   replies: 'reviews',
+  likes: 'likes',
 }
-
-const modelToDAO = {
-  [models.users]: UsersDAO,
-  [models.reviews]: ReviewsDAO,
-  [models.replies]: RepliesDAO,
-};
 
 module.exports = {
   models,
-  modelToDAO,
 }

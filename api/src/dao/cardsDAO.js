@@ -1,14 +1,15 @@
 const { ObjectId } = require("mongodb");
+const { models } = require("../lib/models");
 
 let cards;
 
 const CARDS_PER_PAGE = 20;
 
 class CardsDAO {
-  static async injectDB(conn) {
+  static async injectDB(db) {
     if (cards) return;
     try {
-      cards = await conn.db(process.env.DB_NAME).collection("cards");
+      cards = await db.collection(models.cards);
     } catch (e) {
       console.error(`Unable to establish collection handles in cardsDAO: ${e}`);
     }

@@ -1,12 +1,13 @@
 const { ObjectId } = require("mongodb");
+const { models } = require("../lib/models");
 
 let users;
 
 class UsersDAO {
-  static async injectDB(conn) {
+  static async injectDB(db) {
     if (users) return;
     try {
-      users = await conn.db(process.env.DB_NAME).collection("users");
+      users = await db.collection(models.users);
     } catch (e) {
       console.error(`Unable to establish collection handles in usersDAO: ${e}`);
     }

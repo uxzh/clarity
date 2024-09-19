@@ -1,10 +1,12 @@
+const { models } = require("../lib/models");
+
 let replies;
 
 class RepliesDAO {
-  static async injectDB(conn) {
+  static async injectDB(db) {
     if (replies) return;
     try {
-      replies = await conn.db(process.env.DB_NAME).collection("replies");
+      replies = await db.collection(models.replies);
     } catch (e) {
       console.error(`Unable to establish collection handles in RepliesDAO: ${e}`);
     }

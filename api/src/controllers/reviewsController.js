@@ -6,12 +6,14 @@ class ReviewsController {
   static async getReview(req, res) {
     try {
       const { id } = req.params
-      const review = await ReviewsDAO.getOneByIdWithLikes(id)
+      // const review = await ReviewsDAO.getOneByIdWithLikes(id)
+      const review = await ReviewsDAO.getOneById(id)
       if (!review || review.error) {
         return res.status(404).send({ error: "Review not found" });
       }
       return res.status(200).send(review)
     } catch(e) {
+      console.error(e)
       res.status(500).send({ error: "Error getting review" });
     }
   }

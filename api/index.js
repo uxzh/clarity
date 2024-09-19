@@ -1,5 +1,3 @@
-const { MongoClient, ServerApiVersion } = require('mongodb');
-
 require("dotenv").config();
 
 const app = require('./app');
@@ -8,27 +6,28 @@ const CardsDAO = require('./src/dao/cardsDAO');
 const ReviewsDAO = require('./src/dao/reviewsDAO');
 const LikesDAO = require('./src/dao/likesDAO');
 const RepliesDAO = require('./src/dao/repliesDAO');
+const { getDB } = require('./src/lib/connectToDB');
 
-const PORT = process.env.PORT
+const run = async () => {
+  const db = await getDB();
 
-MongoClient.connect(
-  process.env.MONGO_URI, {
-    serverApi: {
-      version: ServerApiVersion.v1,
-      strict: true,
-      deprecationErrors: true,
-    }
+  await UsersDAO.injectDB(db);
+  await CardsDAO.injectDB(db);
+  await ReviewsDAO.injectDB(db); 
+  await RepliesDAO.injectDB(db);
+  await LikesDAO.injectDB(db);
+
+  if (process.env.NODE_ENV === 'development') {
+    const PORT = process.env.PORT;
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+    });
   }
-).then(async client => {
-  await UsersDAO.injectDB(client);
-  await CardsDAO.injectDB(client);
-  await ReviewsDAO.injectDB(client);
-  await RepliesDAO.injectDB(client);
-  await LikesDAO.injectDB(client);
+}
 
-  app.listen(PORT);
-  console.log(`Server running on port ${PORT}`);
-}).catch(err => {
-  console.error(err);
+run().catch(e => {
+  console.error(e);
   process.exit(1);
-});
+})
+
+module.exports = app;

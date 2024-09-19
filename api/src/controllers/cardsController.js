@@ -17,6 +17,7 @@ class CardsController {
       }
       res.status(200).send(cards);
     } catch (e) {
+      console.error(e)
       res.status(500).send({ error: "Error fetching cards" });
     }
   }
@@ -35,6 +36,7 @@ class CardsController {
       }
       res.status(200).send(reviews);
     } catch (e) {
+      console.error(e)
       res.status(500).send({ error: "Error fetching reviews" });
     }
   }
@@ -44,7 +46,7 @@ class CardsController {
       const cards = await CardsDAO.getTopCards()
       res.status(200).send(cards);
     } catch (e) {
-      console.log(e)
+      console.error(e)
       res.status(500).send({ error: "Error fetching top cards" });
     } 
   }
