@@ -1,5 +1,6 @@
 const { ObjectId } = require("mongodb");
 const { models } = require("../lib/models");
+const { getDB } = require("../lib/connectToDB");
 
 let cards;
 
@@ -31,6 +32,7 @@ class CardsDAO {
   } = {}) {
     try {
       console.log('getMany')
+      const cards = getDB().collection(models.cards); // test
       return await cards
         .find()
         .sort({ [sort]: -1 })

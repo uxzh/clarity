@@ -24,7 +24,7 @@ const getMongoClient = () => {
   }
 }
 
-const getDB = async () => {
+const getDB = () => {
   if (db) {
     return db;
   }
@@ -33,7 +33,7 @@ const getDB = async () => {
     console.log(client);
 
     // await client.connect();
-    db = await client.db(process.env.DB_NAME);
+    db = client.db(process.env.DB_NAME);
     return db;
   } catch (e) {
     console.error(e);

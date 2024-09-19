@@ -10,7 +10,7 @@ const { getDB } = require('./src/lib/connectToDB');
 
 const run = async () => {
   console.log('run')
-  const db = await getDB();
+  const db = getDB();
 
   console.log('injecting db')
   await UsersDAO.injectDB(db);
