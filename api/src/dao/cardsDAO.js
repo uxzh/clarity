@@ -30,6 +30,7 @@ class CardsDAO {
      sort = 'createdAt',
   } = {}) {
     try {
+      console.log('getMany')
       return await cards
         .find()
         .sort({ [sort]: -1 })

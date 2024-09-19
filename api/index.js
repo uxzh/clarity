@@ -9,8 +9,10 @@ const RepliesDAO = require('./src/dao/repliesDAO');
 const { getDB } = require('./src/lib/connectToDB');
 
 const run = async () => {
+  console.log('run')
   const db = await getDB();
 
+  console.log('injecting db')
   await UsersDAO.injectDB(db);
   await CardsDAO.injectDB(db);
   await ReviewsDAO.injectDB(db); 
