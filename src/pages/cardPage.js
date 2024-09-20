@@ -11,6 +11,7 @@ import CardDetails from "../components/CARDPAGE/CardDetails";
 import { useDisclosure } from "@nextui-org/react";
 import FeedbackModal from "../components/FEEDBACK/feedbackModal";
 import ReviewSearch from "./reviewSearch";
+import { Spinner } from "@nextui-org/react";
 
 function Review() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -105,7 +106,12 @@ function Review() {
     setSelectedTab(key);
   }, []);
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading)
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <Spinner />
+      </div>
+    );
   if (!cardId || error) return <ReviewSearch />;
   if (!cardData) return null;
 
