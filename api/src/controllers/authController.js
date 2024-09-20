@@ -12,12 +12,12 @@ class AuthController {
     try {
       const { email, password, username } = req.body;
       
-      let existingUser = await UsersDAO.getUserByField("email", email);
+      let existingUser = await UsersDAO.getOneByField("email", email);
       if (existingUser) {
         return res.status(400).send({ error: 'User already exists' });
       }
 
-      existingUser = await UsersDAO.getUserByField("username", username);
+      existingUser = await UsersDAO.getOneByField("username", username);
       if (existingUser) {
         return res.status(400).send({ error: 'Username already in use' });
       }
@@ -44,11 +44,12 @@ class AuthController {
         lastLogin: createdAt,
       };
 
-      const { error } = await UsersDAO.createUser(user);
+      const { error } = await UsersDAO.createOne(user);
       if (error) {
         return res.status(500).send({ error: "Error signing up" });
       }
       delete user.password;
+      delete user.role;
 
       const token = jwt.sign({ _id: user._id });
       user.token = token;
@@ -71,7 +72,7 @@ class AuthController {
   static async login(req, res) {
     try {
       const { email, password } = req.body;
-      const user = await UsersDAO.getUserByField("email", email);
+      const user = await UsersDAO.getOneByField("email", email);
       if (!user) {
         return res.status(404).send({ error: 'User not found' });
       }
@@ -82,10 +83,12 @@ class AuthController {
       }
 
       delete user.password;
+      delete user.role;
+      delete user.previousUsernames;
       const token = jwt.sign({ _id: user._id });
       user.token = token;
 
-      await UsersDAO.updateUserFields(user._id, { lastLogin: new Date() });
+      await UsersDAO.updateOne(user._id, { lastLogin: new Date() });
 
       res.status(200).send(user);
     } catch (e) {
@@ -98,7 +101,7 @@ class AuthController {
       const { token } = req.params;
       try {
         const decodedValue = jwt.verify(token);
-        const user = await UsersDAO.getUserByField("email", decodedValue.email);
+        const user = await UsersDAO.getOneByField("email", decodedValue.email);
         if (!user || user.error) {
           return res.status(404).send({ error: 'User not found' });
         }
@@ -106,7 +109,7 @@ class AuthController {
           return res.status(400).send({ error: 'Email already verified' });
         }
         
-        await UsersDAO.updateUserFields({
+        await UsersDAO.updateOne({
           id: user._id,
           set: { emailVerified: true },
         });
@@ -131,7 +134,7 @@ class AuthController {
       }
 
       const profile = verificationResponse?.payload;
-      let existingUser = await UsersDAO.getUserByField("email", profile?.email);
+      let existingUser = await UsersDAO.getOneByField("email", profile?.email);
       if (existingUser) {
         return res.status(400).send({ error: 'User already exists' });
       }
@@ -153,13 +156,14 @@ class AuthController {
         lastLogin: createdAt,
       };
 
-      const { error } = await UsersDAO.createUser(user);
+      const { error } = await UsersDAO.createOne(user);
       if (error) {
         return res.status(500).send({ error: "Error signing up" });
       }
 
       const token = jwt.sign({ _id: user._id });
       user.token = token;
+      delete user.role;
       res.status(201).send(user);
     } catch (e) {
       res.status(500).send({ error: "Error signing up" });
@@ -181,7 +185,7 @@ class AuthController {
       const profile = verificationResponse?.payload;
       const { email } = profile;
 
-      const user = await UsersDAO.getUserByField("email", email);
+      const user = await UsersDAO.getOneByField("email", email);
       if (!user) {
         return res.status(404).send({ error: 'User not found' });
       }
@@ -191,8 +195,9 @@ class AuthController {
 
       const token = jwt.sign({ _id: user._id });
       user.token = token;
+      delete user.previousUsernames;
 
-      await UsersDAO.updateUserFields(user._id, { lastLogin: new Date() });
+      await UsersDAO.updateOne(user._id, { lastLogin: new Date() });
 
       res.status(200).send(user);
     } catch (e) {

@@ -1,6 +1,18 @@
 const UsersDAO = require("../dao/usersDAO");
+const { models } = require("../lib/models");
+const { modelToDAO } = require("../lib/modelsToDAO");
 
 class Permissions {
+  static async _getOwner(id, model) {
+    const fieldName = model === models.users ? '_id' : 'userId';
+    const dao = modelToDAO[model];
+    const item = await dao.getOneById(id);
+    if (!item || item.error) {
+      return null;
+    }
+    return await UsersDAO.getOneById(item[fieldName]);
+  }
+
   static isAuthenticated(req, res, next) {
     try {
       if (!req.user) {
@@ -12,37 +24,37 @@ class Permissions {
     }
   }
 
-  static isOwner(req, res, next) {
-    try {
-      const id = req.params.id;
-      if (req.user._id !== id) {
-        return res.status(403).send('User is not authorized to access this endpoint');
-      }
-      return next();
-    } catch (error) {
-      return res.status(500).send({ error });
-    }
-  }
-
-  static async _injectUserData(req, res, next) {
-    try {
-      const user = await UsersDAO.getUserById(req.user._id);
-      if (user && !user.error) {
-        const isAdmin = user.role === 'admin';
-        delete user.role;
-        req.user = { ...req.user, ...user, isAdmin };
-      }
-      return next();
-    } catch (error) {
-      return res.status(500).send({ error });
-    }
-  }
-
-  static async isAdmin(req, res, next) {
+  static async isOwner(model) {
     return [
       Permissions.isAuthenticated,
-      Permissions._injectUserData,
-      () => {
+      async (req, res, next) => {
+        try {
+          const id = req.params.id;
+          if (model === models.users) {
+            if (req.user._id !== id) {
+              return res.status(403).send('User is not authorized to access this endpoint');
+            }
+            return next();
+          }
+
+          const owner = await Permissions._getOwner(id, model);
+          if (!owner || owner.error) {
+            return res.status(404).send({ error: 'User not found' });
+          }
+          if (req.user._id !== owner._id) {
+            return res.status(403).send('User is not authorized to access this endpoint');
+          }
+          return next();
+        } catch (error) {
+          return res.status(500).send({ error });
+        }
+      }
+    ];
+  }
+
+  static isAdmin = [
+    Permissions.isAuthenticated,
+    () => {
       try {
         if (!req.user.isAdmin) {
           return res.status(403).send('User is not authorized to access this endpoint');
@@ -51,16 +63,45 @@ class Permissions {
       } catch (error) {
         return res.status(500).send({ error });
       }
-    }];
+    }
+  ]
+
+  static isOwnerOrAdmin(model) { 
+    return [
+      Permissions.isAuthenticated,
+      async (req, res, next) => {
+        try {
+          if (req.user.isAdmin) {
+            return next();
+          }
+
+          const id = req.params.id;
+          if (model === models.users && req.user._id === id) {
+            return next();
+          }
+          
+          const owner = await Permissions._getOwner(id, model);
+          if (!owner || owner.error) {
+            return res.status(404).send({ error: 'User not found' });
+          }
+
+          if (req.user._id !== owner._id) {
+            return res.status(403).send('User is not authorized to access this endpoint');
+          }
+          return next();
+        } catch (error) {
+          console.error(error);
+          return res.status(500).send({ error });
+        }
+      }
+    ];
   }
 
-  static isOwnerOrAdmin = [
+  static isEmailVerified = [
     Permissions.isAuthenticated,
-    Permissions._injectUserData,
-    (req, res, next) => {
+    async (req, res, next) => {
       try {
-        const id = req.params.id;
-        if (req.user._id !== id && !req.user.isAdmin) {
+        if (!req.user.emailVerified) {
           return res.status(403).send('User is not authorized to access this endpoint');
         }
         return next();

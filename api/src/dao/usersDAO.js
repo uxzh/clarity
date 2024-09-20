@@ -1,18 +1,19 @@
 const { ObjectId } = require("mongodb");
+const { models } = require("../lib/models");
 
 let users;
 
 class UsersDAO {
-  static async injectDB(conn) {
+  static async injectDB(db) {
     if (users) return;
     try {
-      users = await conn.db(process.env.DB_NAME).collection("users");
+      users = await db.collection(models.users);
     } catch (e) {
       console.error(`Unable to establish collection handles in usersDAO: ${e}`);
     }
   }
 
-  static async getUserById(id) {
+  static async getOneById(id) {
     try {
       return await users.findOne({ _id: new ObjectId(id) });
     } catch (e) {
@@ -21,7 +22,7 @@ class UsersDAO {
     }
   }
 
-  static async getUserByField(field, value) {
+  static async getOneByField(field, value) {
     try {
       return await users.findOne({ [field]: value });
     } catch (e) {
@@ -30,7 +31,7 @@ class UsersDAO {
     }
   }
 
-  static async createUser(user) {
+  static async createOne(user) {
     try {
       return await users.insertOne(user);
     } catch (e) {
@@ -39,7 +40,7 @@ class UsersDAO {
     }
   }
 
-  static async updateUserFields({id, set, push}) {
+  static async updateOne({id, set, push}) {
     try {
       return await users.updateOne(
         { _id: new ObjectId(id) },
@@ -50,6 +51,15 @@ class UsersDAO {
       );
     } catch (e) {
       console.error(`Unable to update user: ${e}`);
+      return { error: e };
+    }
+  }
+
+  static async deleteOne(id) {
+    try {
+      return await users.deleteOne({ _id: new ObjectId(id) });
+    } catch (e) {
+      console.error(`Unable to delete user: ${e}`);
       return { error: e };
     }
   }
