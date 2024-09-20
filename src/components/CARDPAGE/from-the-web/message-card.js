@@ -6,7 +6,7 @@ import { cn } from "./cn";
 
 const MessageCard = React.forwardRef(
   ({ avatar, message, className, messageClassName, ...props }, ref) => {
-    const [isExpanded, setIsExpanded] = useState(false);
+    const [isExpanded, setIsExpanded] = useState(true);
 
     const toggleExpand = () => {
       setIsExpanded(!isExpanded);
