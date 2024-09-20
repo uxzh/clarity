@@ -10,17 +10,23 @@ import ReviewSearch from "./pages/reviewSearch";
 import ActiveNavbar from "./components/navbar/activeNavbar";
 import Footer from "./components/footer/footer";
 import "./output.css";
+import { AuthProvider } from "./contexts/AuthContext";
+import { DataProvider } from "./contexts/DataContext";
 
 export default function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<MainPage />} />
-        <Route path="/wallet" element={<Wallet />} />
-        <Route path="/review" element={<Review />} />
-        <Route path="/rating" element={<Rating />} />
-        <Route path="*" element={<PageNotFound />} />
-      </Routes>
-    </Router>
+    <AuthProvider>
+      <DataProvider>
+        <Router>
+          <Routes>
+            <Route path="/" element={<MainPage />} />
+            <Route path="/wallet" element={<Wallet />} />
+            <Route path="/review" element={<Review />} />
+            <Route path="/rating" element={<Rating />} />
+            <Route path="*" element={<PageNotFound />} />
+          </Routes>
+        </Router>
+      </DataProvider>
+    </AuthProvider>
   );
 }

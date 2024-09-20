@@ -103,9 +103,9 @@ class CardsDAO {
           }
         }
       ]
-      return await cards
+      return (await cards
         .aggregate(agg)
-        .toArray()
+        .toArray())[0];
     } catch (e) {
       console.error(`Unable to get top cards: ${e}`)
     }

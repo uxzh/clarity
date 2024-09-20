@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { Input, Button, Link } from "@nextui-org/react";
 import TopNavbar from "../components/navbar/activeNavbar";
@@ -9,6 +9,8 @@ import {
   CardContainer,
   CardItem,
 } from "../components/SEARCHCARD/floating/floatingCard.tsx";
+import { AuthContext } from "../contexts/AuthContext.jsx";
+import { DataContext } from "../contexts/DataContext.js";
 
 const OptimizedImage = React.memo(({ src, alt, className }) => {
   const [imageSrc, setImageSrc] = useState(
@@ -52,25 +54,25 @@ const CardComponent = React.memo(({ card, title }) => {
           translateZ="60"
           className="text-neutral-500 text-lg mt-2 dark:text-neutral-300"
         >
-          {card.name}
+          {card.cardName}
         </CardItem>
         <CardItem translateZ="100" className="w-full mt-4 relative">
           <div className="aspect-[1.586/1] w-full">
             <OptimizedImage
-              src={card.image}
-              alt={card.name}
+              src={card.cardImageUrl}
+              alt={card.cardName}
               className="w-full h-full object-contain rounded-xl"
             />
           </div>
           <div className="absolute bottom-2 right-2 bg-white dark:bg-black px-2 py-1 rounded-md text-lg font-bold">
-            {card.rating.toFixed(1)} ⭐
+            {card.averageRating?.toFixed(1)} ⭐
           </div>
         </CardItem>
         <div className="flex justify-between items-center mt-4">
           <CardItem
             translateZ={20}
             as={Link}
-            href={`/review?cardId=${encodeURIComponent(card.name)}`}
+            href={`/review?cardId=${encodeURIComponent(card.cardName)}`}
             className="px-6 py-2 rounded-xl bg-black dark:bg-white dark:text-black text-white text-sm font-bold"
           >
             Go to Card
@@ -86,39 +88,21 @@ const CardComponent = React.memo(({ card, title }) => {
 
 function ReviewSearch() {
   const [searchTerm, setSearchTerm] = useState("");
-  const [bestCard, setBestCard] = useState(null);
-  const [worstCard, setWorstCard] = useState(null);
-  const [popularCard, setPopularCard] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
+  const { api } = useContext(AuthContext)
+  const { topCards, setTopCards } = useContext(DataContext);
+  const bestCard = topCards?.bestRatingCard || null;
+  const worstCard = topCards?.worstRatingCard || null;
+  const popularCard = topCards?.mostReviewedCard || null;
+  
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
       try {
-        // Simulate API call
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-        setBestCard({
-          name: "Chase Sapphire Preferred",
-          rating: 4.8,
-          image:
-            "https://creditcards.chase.com/K-Marketplace/images/cardart/sapphire_preferred_card.png",
-          reviewCount: 62,
-        });
-        setWorstCard({
-          name: "Generic Bank Basic Card",
-          rating: 2.1,
-          image:
-            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSqnEkjjmUFXzjDYsxoVRLCqRD8LG2PvMj3C9l3Ng6O9gFAvemSfCvR0JrLQsthAdv8EqA&usqp=CAU",
-          reviewCount: 72,
-        });
-        setPopularCard({
-          name: "American Express Gold",
-          rating: 4.5,
-          image:
-            "https://he.americanexpress.co.il/globalassets/CardsImages/191_403_-1/Benefit_AMEX_Business_gold_2024.png",
-          reviewCount: 128,
-        });
+        const { data } = await api.getTopCards();
+        setTopCards(data);
       } catch (error) {
         console.error("Error fetching card data:", error);
       } finally {
