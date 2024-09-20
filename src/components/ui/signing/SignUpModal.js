@@ -19,9 +19,12 @@ export default function SignUpModal({ isOpen, onClose }) {
   const [isFormVisible, setIsFormVisible] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [username, setUsername] = useState("");
   const [errors, setErrors] = useState({});
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] =
+    useState(false);
   const [rememberMe, setRememberMe] = useState(false);
 
   const variants = {
@@ -67,6 +70,8 @@ export default function SignUpModal({ isOpen, onClose }) {
 
   const togglePasswordVisibility = () =>
     setIsPasswordVisible(!isPasswordVisible);
+  const toggleConfirmVisibility = () =>
+    setIsConfirmPasswordVisible(!isConfirmPasswordVisible);
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="lg">
@@ -116,25 +121,18 @@ export default function SignUpModal({ isOpen, onClose }) {
                         onChange={(e) => setPassword(e.target.value)}
                         isInvalid={!!errors.password}
                         errorMessage={errors.password}
-                        endContent={
-                          <button
-                            type="button"
-                            onClick={togglePasswordVisibility}
-                          >
-                            {isPasswordVisible ? (
-                              <Icon
-                                className="pointer-events-none text-2xl text-default-400"
-                                icon="solar:eye-closed-linear"
-                              />
-                            ) : (
-                              <Icon
-                                className="pointer-events-none text-2xl text-default-400"
-                                icon="solar:eye-bold"
-                              />
-                            )}
-                          </button>
-                        }
                       />
+                      {isSignUp && (
+                        <Input
+                          label="Confirm Password"
+                          placeholder="Confirm your password"
+                          variant="bordered"
+                          value={confirmPassword}
+                          onChange={(e) => setConfirmPassword(e.target.value)}
+                          type={isConfirmPasswordVisible ? "text" : "password"}
+                          className="mb-4"
+                        />
+                      )}
                       <div className="flex items-center justify-between px-1 py-2">
                         <Checkbox
                           size="sm"
