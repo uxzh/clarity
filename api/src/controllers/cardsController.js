@@ -5,7 +5,6 @@ const ReviewsDAO = require("../dao/reviewsDAO");
 class CardsController {
   static async getCards(req, res) {
     try {
-      console.log('getCards')
       const { filters, page, perPage } = req.query;
       const cards = await CardsDAO.getMany({
         filters,

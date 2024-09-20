@@ -12,7 +12,6 @@ const run = async () => {
   console.log('run')
   const db = getDB();
 
-  console.log('injecting db')
   await UsersDAO.injectDB(db);
   await CardsDAO.injectDB(db);
   await ReviewsDAO.injectDB(db); 

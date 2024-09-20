@@ -30,8 +30,6 @@ const getDB = () => {
   }
   try {
     const client = getMongoClient();
-    console.log(client);
-
     // await client.connect();
     db = client.db(process.env.DB_NAME);
     return db;
