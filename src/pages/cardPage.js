@@ -10,7 +10,7 @@ import ReviewsSection from "../components/CARDPAGE/ReviewsSection";
 import CardDetails from "../components/CARDPAGE/CardDetails";
 import { useDisclosure } from "@nextui-org/react";
 import FeedbackModal from "../components/FEEDBACK/feedbackModal";
-import ReviewSearch from "./reviewSearch";
+import ReviewSearch from "./searchForCard";
 import { Spinner } from "@nextui-org/react";
 
 function Review() {

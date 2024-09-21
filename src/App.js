@@ -6,10 +6,8 @@ import Rating from "./pages/rating";
 
 import PageNotFound from "./pages/notFound";
 import Review from "./pages/cardPage";
-import ReviewSearch from "./pages/reviewSearch";
-import ActiveNavbar from "./components/navbar/activeNavbar";
-import Footer from "./components/footer/footer";
-import "./output.css";
+import ReviewSearch from "./pages/searchForCard";
+
 import { AuthProvider } from "./contexts/AuthContext";
 import { DataProvider } from "./contexts/DataContext";
 
