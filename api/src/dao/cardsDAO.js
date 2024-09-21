@@ -25,11 +25,45 @@ class CardsDAO {
   }
 
   static async getMany({
-     page = 0,
-     perPage = CARDS_PER_PAGE,
-     sort = 'createdAt',
-  } = {}) {
+    page = 0,
+    perPage = CARDS_PER_PAGE,
+    sort = 'createdAt',
+    searchTerm = '',
+  }) {
     try {
+      if (searchTerm) {
+        return await cards
+          .aggregate([
+            {
+              '$search': {
+                'index': 'cards-search',
+                'text': {
+                  'query': searchTerm,
+                  'path': ['cardName', 'bankName'],
+                  'fuzzy': {
+                    'maxEdits': 2
+                  }
+                }
+              }
+            }, 
+            {
+              '$addFields': {
+                'score': {
+                  '$meta': 'searchScore'
+                }
+              }
+            },
+            {
+              '$sort': {
+                'score': -1
+              }
+            }, 
+          ])
+          .skip(perPage * page)
+          .limit(perPage)
+          .toArray();
+      }
+
       return await cards
         .find()
         .sort({ [sort]: -1 })
