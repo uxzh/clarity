@@ -41,9 +41,9 @@ function ReviewSearch() {
     fetchData();
   }, [api, setTopCards]);
 
-  const handleSearch = (selectedCard) => {
-    if (selectedCard) {
-      navigate(`/review?cardId=${encodeURIComponent(selectedCard)}`);
+  const handleSearch = (cardId) => {
+    if (cardId) {
+      navigate(`/review?cardId=${encodeURIComponent(cardId)}`);
     }
   };
 
@@ -177,7 +177,7 @@ function ReviewSearch() {
               >
                 {(item) => (
                   <AutocompleteItem
-                    key={item.cardName}
+                    key={item._id}
                     textValue={item.cardName}
                   >
                     <div className="flex items-center">
