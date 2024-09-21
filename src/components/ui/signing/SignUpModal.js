@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo, useCallback } from "react";
 import {
   Modal,
   ModalContent,
@@ -8,218 +8,265 @@ import {
   Button,
   Input,
   Link,
-  Divider,
   Checkbox,
 } from "@nextui-org/react";
 import { AnimatePresence, m, domAnimation, LazyMotion } from "framer-motion";
 import { Icon } from "@iconify/react";
 
-export default function SignUpModal({ isOpen, onClose }) {
-  const [isSignUp, setIsSignUp] = useState(false);
-  const [isFormVisible, setIsFormVisible] = useState(false);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [username, setUsername] = useState("");
+const useForm = (initialState) => {
+  const [formData, setFormData] = useState(initialState);
   const [errors, setErrors] = useState({});
-  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-  const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] =
-    useState(false);
-  const [rememberMe, setRememberMe] = useState(false);
 
-  const variants = {
-    visible: { opacity: 1, y: 0 },
-    hidden: { opacity: 0, y: 10 },
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
-
-  const orDivider = (
-    <div className="flex items-center gap-4 py-2">
-      <Divider className="flex-1" />
-      <p className="shrink-0 text-tiny text-default-500">OR</p>
-      <Divider className="flex-1" />
-    </div>
-  );
 
   const validateForm = () => {
     const newErrors = {};
-    if (!email) newErrors.email = "Email is required";
-    else if (!/\S+@\S+\.\S+/.test(email)) newErrors.email = "Email is invalid";
+    if (!formData.email) newErrors.email = "Email is required";
+    else if (!/\S+@\S+\.\S+/.test(formData.email))
+      newErrors.email = "Email is invalid";
 
-    if (!password) newErrors.password = "Password is required";
-    else if (password.length < 8)
+    if (!formData.password) newErrors.password = "Password is required";
+    else if (formData.password.length < 8)
       newErrors.password = "Password must be at least 8 characters";
 
-    if (isSignUp && !username) newErrors.username = "Username is required";
+    if (formData.isSignUp) {
+      if (!formData.username) newErrors.username = "Username is required";
+      if (!formData.confirmPassword)
+        newErrors.confirmPassword = "Confirm password is required";
+      else if (formData.password !== formData.confirmPassword)
+        newErrors.confirmPassword = "Passwords do not match";
+    }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (validateForm()) {
-      console.log("Form submitted", { email, password, username, rememberMe });
-      onClose();
-    }
+  return { formData, handleChange, errors, validateForm };
+};
+
+const ButtonSection = ({ isSignUp, setIsFormVisible }) => (
+  <m.div
+    key="buttons"
+    initial="hidden"
+    animate="visible"
+    exit="hidden"
+    variants={variants}
+    transition={{ duration: 0.3 }}
+  >
+    <Button
+      color="default"
+      variant="bordered"
+      startContent={<Icon icon="flat-color-icons:google" />}
+      className="w-full mb-3"
+      onPress={() => setIsFormVisible(true)}
+    >
+      {isSignUp ? "Sign Up with Google" : "Sign In with Google"}
+    </Button>
+    <Button
+      color="primary"
+      className="w-full"
+      onPress={() => setIsFormVisible(true)}
+    >
+      {isSignUp ? "Sign Up with Email" : "Sign In with Email"}
+    </Button>
+  </m.div>
+);
+
+const FormSection = ({
+  isSignUp,
+  formData,
+  handleChange,
+  errors,
+  handleSubmit,
+}) => (
+  <m.form
+    key="form"
+    initial="hidden"
+    animate="visible"
+    exit="hidden"
+    variants={variants}
+    transition={{ duration: 0.3 }}
+    onSubmit={handleSubmit}
+  >
+    {isSignUp && (
+      <Input
+        label="Username"
+        name="username"
+        placeholder="Enter your username"
+        value={formData.username}
+        onChange={handleChange}
+        className="mb-3"
+        errorMessage={errors.username}
+      />
+    )}
+    <Input
+      label="Email"
+      name="email"
+      placeholder="Enter your email"
+      value={formData.email}
+      onChange={handleChange}
+      className="mb-3"
+      errorMessage={errors.email}
+    />
+    <Input
+      label="Password"
+      name="password"
+      placeholder="Enter your password"
+      value={formData.password}
+      onChange={handleChange}
+      className="mb-3"
+      type={formData.isPasswordVisible ? "text" : "password"}
+      errorMessage={errors.password}
+      endContent={
+        <button
+          className="focus:outline-none"
+          type="button"
+          onClick={() =>
+            handleChange({
+              target: {
+                name: "isPasswordVisible",
+                value: !formData.isPasswordVisible,
+              },
+            })
+          }
+        >
+          <Icon icon={formData.isPasswordVisible ? "mdi:eye-off" : "mdi:eye"} />
+        </button>
+      }
+    />
+    {isSignUp && (
+      <Input
+        label="Confirm Password"
+        name="confirmPassword"
+        placeholder="Confirm your password"
+        value={formData.confirmPassword}
+        onChange={handleChange}
+        className="mb-3"
+        type={formData.isConfirmPasswordVisible ? "text" : "password"}
+        errorMessage={errors.confirmPassword}
+        endContent={
+          <button
+            className="focus:outline-none"
+            type="button"
+            onClick={() =>
+              handleChange({
+                target: {
+                  name: "isConfirmPasswordVisible",
+                  value: !formData.isConfirmPasswordVisible,
+                },
+              })
+            }
+          >
+            <Icon
+              icon={
+                formData.isConfirmPasswordVisible ? "mdi:eye-off" : "mdi:eye"
+              }
+            />
+          </button>
+        }
+      />
+    )}
+    <div className="flex justify-between items-center">
+      <Checkbox
+        isSelected={formData.rememberMe}
+        onValueChange={(value) =>
+          handleChange({ target: { name: "rememberMe", value } })
+        }
+      >
+        Remember me
+      </Checkbox>
+      {!isSignUp && (
+        <Link href="#" size="sm">
+          Forgot password?
+        </Link>
+      )}
+    </div>
+    <Button color="primary" className="w-full mt-4" type="submit">
+      {isSignUp ? "Sign Up with Email" : "Sign In with Email"}
+    </Button>
+  </m.form>
+);
+
+const variants = {
+  visible: { opacity: 1, y: 0 },
+  hidden: { opacity: 0, y: 10 },
+};
+
+export default function SignUpModal({ isOpen, onClose }) {
+  const [isSignUp, setIsSignUp] = useState(false);
+  const [isFormVisible, setIsFormVisible] = useState(false);
+
+  const initialFormState = {
+    email: "",
+    password: "",
+    confirmPassword: "",
+    username: "",
+    isPasswordVisible: false,
+    isConfirmPasswordVisible: false,
+    rememberMe: false,
   };
 
-  const toggleMode = () => {
-    setIsSignUp(!isSignUp);
-    setErrors({});
-  };
+  const { formData, handleChange, errors, validateForm } =
+    useForm(initialFormState);
 
-  const togglePasswordVisibility = () =>
-    setIsPasswordVisible(!isPasswordVisible);
-  const toggleConfirmVisibility = () =>
-    setIsConfirmPasswordVisible(!isConfirmPasswordVisible);
+  const toggleSignUp = useCallback(() => {
+    setIsSignUp((prev) => !prev);
+    setIsFormVisible(false);
+  }, []);
+
+  const handleSubmit = useCallback(
+    (e) => {
+      e.preventDefault();
+      if (validateForm()) {
+        console.log("Form submitted", formData);
+        onClose();
+      }
+    },
+    [formData, validateForm, onClose]
+  );
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size="lg">
-      <ModalContent>
-        {(onClose) => (
-          <>
-            <ModalHeader className="flex flex-col gap-1">
-              {isSignUp ? "Sign Up 📝" : "Log In 👋"}
-            </ModalHeader>
-            <ModalBody>
-              <AnimatePresence initial={false} mode="popLayout">
-                <LazyMotion features={domAnimation}>
-                  {isFormVisible ? (
-                    <m.form
-                      animate="visible"
-                      className="flex flex-col gap-y-3"
-                      exit="hidden"
-                      initial="hidden"
-                      variants={variants}
-                      onSubmit={handleSubmit}
-                    >
-                      <Input
-                        autoFocus
-                        label="Email Address"
-                        type="email"
-                        variant="bordered"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        isInvalid={!!errors.email}
-                        errorMessage={errors.email}
-                      />
-                      {isSignUp && (
-                        <Input
-                          label="Username"
-                          variant="bordered"
-                          value={username}
-                          onChange={(e) => setUsername(e.target.value)}
-                          isInvalid={!!errors.username}
-                          errorMessage={errors.username}
-                        />
-                      )}
-                      <Input
-                        label="Password"
-                        type={isPasswordVisible ? "text" : "password"}
-                        variant="bordered"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        isInvalid={!!errors.password}
-                        errorMessage={errors.password}
-                      />
-                      {isSignUp && (
-                        <Input
-                          label="Confirm Password"
-                          placeholder="Confirm your password"
-                          variant="bordered"
-                          value={confirmPassword}
-                          onChange={(e) => setConfirmPassword(e.target.value)}
-                          type={isConfirmPasswordVisible ? "text" : "password"}
-                          className="mb-4"
-                        />
-                      )}
-                      <div className="flex items-center justify-between px-1 py-2">
-                        <Checkbox
-                          size="sm"
-                          isSelected={rememberMe}
-                          onValueChange={setRememberMe}
-                        >
-                          Remember me
-                        </Checkbox>
-                        <Link className="text-default-500" href="#" size="sm">
-                          Forgot password?
-                        </Link>
-                      </div>
-                      <Button color="primary" type="submit">
-                        {isSignUp ? "Sign Up" : "Log In"}
-                      </Button>
-                      {orDivider}
-                      <Button
-                        fullWidth
-                        startContent={
-                          <Icon
-                            className="text-default-500"
-                            icon="solar:arrow-left-linear"
-                            width={18}
-                          />
-                        }
-                        variant="flat"
-                        onPress={() => setIsFormVisible(false)}
-                      >
-                        Other {isSignUp ? "Sign Up" : "Login"} options
-                      </Button>
-                    </m.form>
-                  ) : (
-                    <>
-                      <Button
-                        fullWidth
-                        color="primary"
-                        startContent={
-                          <Icon
-                            className="pointer-events-none text-2xl"
-                            icon="solar:letter-bold"
-                          />
-                        }
-                        type="button"
-                        onPress={() => setIsFormVisible(true)}
-                      >
-                        Continue with Email
-                      </Button>
-                      {orDivider}
-                      <m.div
-                        animate="visible"
-                        className="flex flex-col gap-y-2"
-                        exit="hidden"
-                        initial="hidden"
-                        variants={variants}
-                      >
-                        <Button
-                          fullWidth
-                          startContent={
-                            <Icon icon="flat-color-icons:google" width={24} />
-                          }
-                          variant="flat"
-                        >
-                          Continue with Google
-                        </Button>
-                        <p className="mt-3 text-center text-small">
-                          {isSignUp
-                            ? "Already have an account?"
-                            : "Need to create an account?"}
-                          &nbsp;
-                          <Link href="#" size="sm" onClick={toggleMode}>
-                            {isSignUp ? "Log In" : "Sign Up"}
-                          </Link>
-                        </p>
-                      </m.div>
-                    </>
-                  )}
-                </LazyMotion>
-              </AnimatePresence>
-            </ModalBody>
-            <ModalFooter>
-              <Button color="danger" variant="light" onPress={onClose}>
-                Close
-              </Button>
-            </ModalFooter>
-          </>
-        )}
-      </ModalContent>
-    </Modal>
+    <LazyMotion features={domAnimation}>
+      <Modal isOpen={isOpen} onClose={onClose} size="lg">
+        <ModalContent>
+          <ModalHeader className="flex flex-col gap-1">
+            {isSignUp ? "Create an account" : "Welcome back"}
+          </ModalHeader>
+          <ModalBody>
+            <AnimatePresence mode="wait">
+              {!isFormVisible ? (
+                <ButtonSection
+                  isSignUp={isSignUp}
+                  setIsFormVisible={setIsFormVisible}
+                />
+              ) : (
+                <FormSection
+                  isSignUp={isSignUp}
+                  formData={formData}
+                  handleChange={handleChange}
+                  errors={errors}
+                  handleSubmit={handleSubmit}
+                />
+              )}
+            </AnimatePresence>
+          </ModalBody>
+          <ModalFooter>
+            <div className="w-full text-center">
+              <span className="text-gray-600 dark:text-gray-400">
+                {isSignUp
+                  ? "Already have an account?"
+                  : "Need to create an account?"}
+              </span>{" "}
+              <Link href="#" onPress={toggleSignUp}>
+                {isSignUp ? "Log In" : "Sign Up"}
+              </Link>
+            </div>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    </LazyMotion>
   );
 }

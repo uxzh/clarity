@@ -1,35 +1,43 @@
-import React, { useState } from "react";
+import React, { useState, lazy, Suspense } from "react";
 import {
   Navbar,
   NavbarBrand,
   NavbarContent,
   NavbarItem,
   Link,
-  Button,
   Badge,
+  Skeleton,
 } from "@nextui-org/react";
 import { useLocation } from "react-router-dom";
 import { ReactComponent as Clarity } from "../../lib/logo2.svg";
 import MobileMenu from "./mobileMenu";
-import SignUpModal from "../ui/signing/SignUpModal";
+// import useAuth from "../../hooks/useAuth";
+import Avatar from "../ui/signed/Avatar";
+import SignInButton from "../ui/buttons/SignInButton";
 
-export default function ActiveNavbar() {
+const SignUpModal = lazy(() => import("../ui/signing/SignUpModal"));
+
+const ActiveNavbar = React.memo(() => {
   const location = useLocation();
   const [isSignUpModalOpen, setIsSignUpModalOpen] = useState(false);
+  const [isModalLoading, setIsModalLoading] = useState(false);
+  const isLoggedIn = true; // Test variable
+  // const { isLoggedIn } = useAuth();
 
   const getLinkStyles = (path) => {
-    if (location.pathname === path) {
-      return "text-black font-extrabold";
-    }
-    return "text-foreground";
+    return location.pathname === path
+      ? "text-black font-extrabold"
+      : "text-foreground";
   };
 
-  const openSignUpModal = () => {
+  const handleSignInClick = () => {
+    setIsModalLoading(true);
     setIsSignUpModalOpen(true);
   };
 
-  const closeSignUpModal = () => {
+  const handleModalClose = () => {
     setIsSignUpModalOpen(false);
+    setIsModalLoading(false);
   };
 
   return (
@@ -74,21 +82,34 @@ export default function ActiveNavbar() {
         </NavbarContent>
         <NavbarContent justify="end">
           <NavbarItem>
-            <Button
-              style={{ border: "1px solid #1a202c" }}
-              variant="bordered"
-              className="shadow-[0px_3px_0px_0px_#1a202c] bg-white"
-              onPress={openSignUpModal}
-            >
-              Sign In
-            </Button>
+            {isLoggedIn ? (
+              <Avatar />
+            ) : (
+              <SignInButton onClick={handleSignInClick}>
+                {isModalLoading ? (
+                  <Skeleton className="h-4 w-16 rounded-lg" />
+                ) : (
+                  "Sign In"
+                )}
+              </SignInButton>
+            )}
           </NavbarItem>
         </NavbarContent>
       </Navbar>
       <MobileMenu />
       {isSignUpModalOpen && (
-        <SignUpModal isOpen={isSignUpModalOpen} onClose={closeSignUpModal} />
+        <Suspense fallback={null}>
+          <SignUpModal
+            isOpen={isSignUpModalOpen}
+            onClose={handleModalClose}
+            onOpenChange={(isOpen) => {
+              if (!isOpen) handleModalClose();
+            }}
+          />
+        </Suspense>
       )}
     </>
   );
-}
+});
+
+export default ActiveNavbar;
