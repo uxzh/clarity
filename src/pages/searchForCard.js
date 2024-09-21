@@ -191,7 +191,7 @@ function ReviewSearch() {
                           {item.cardName}
                         </span>
                         <span className="text-tiny text-default-400">
-                          Issuer: Unknown
+                          Issuer: {item.bankName}
                         </span>
                       </div>
                     </div>
