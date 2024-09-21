@@ -4,6 +4,7 @@ const CardsController = require('../controllers/cardsController');
 
 router.get('/', CardsController.getCards);
 
+
 // todo
 // router.post('/',
 //   CardsController.createCard
@@ -20,6 +21,8 @@ router.get('/', CardsController.getCards);
 // );
 
 router.get('/top-cards', CardsController.getTopCards);
+
+router.get('/:id', CardsController.getCard);
 
 router.get('/:id/reviews', CardsController.getReviews);
 

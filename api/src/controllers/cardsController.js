@@ -3,6 +3,21 @@ const CardsDAO = require("../dao/cardsDAO");
 const ReviewsDAO = require("../dao/reviewsDAO");
 
 class CardsController {
+  static async getCard(req, res) {
+    try {
+      console.log("getCard")
+      const { id } = req.params;
+      const card = await CardsDAO.getOneByIdWithReviews(id);
+      if (!card) {
+        return res.status(404).send({ error: "Card not found" });
+      }
+      res.status(200).send(card);
+    } catch (e) {
+      console.error(e)
+      res.status(500).send({ error: "Error fetching card" });
+    }
+  }
+
   static async getCards(req, res) {
     try {
       const { filters, page, perPage, search } = req.query;

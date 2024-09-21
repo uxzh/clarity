@@ -82,7 +82,7 @@ function ReviewSearch() {
             <CardItem
               translateZ={20}
               as={Link}
-              href={`/review?cardId=${encodeURIComponent(card.cardName)}`}
+              href={`/review?cardId=${encodeURIComponent(card._id)}`}
               className="px-6 py-2 rounded-xl bg-black dark:bg-white dark:text-black text-white text-sm font-bold"
             >
               Go to Card

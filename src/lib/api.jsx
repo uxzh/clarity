@@ -6,6 +6,10 @@ class Api {
   // cards
   getTopCards = async () => await this.axios.get(`/cards/top-cards`);
 
+  getCard = async (id) => await this.axios.get(`/cards/${id}`);
+
+  getCards = async ({ page = 0, perPage = 20, search = '' }) => await this.axios.get(`/cards?page=${page}&perPage=${perPage}&search=${search}`);
+
   // login
   login = async ({ email, password }) => await this.axios.post(`/auth/login`, { email, password });
 

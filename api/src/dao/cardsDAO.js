@@ -24,6 +24,42 @@ class CardsDAO {
     }
   }
 
+  static async getOneByIdWithReviews(id) {
+    try {
+      const agg = 
+      [
+        {
+          $match: {
+            _id: new ObjectId(id)
+          }
+        },
+        {
+          $lookup: {
+            from: "reviews",
+            localField: "_id",
+            foreignField: "cardId",
+            as: "reviews"
+          }
+        },
+        {
+          $addFields: {
+            reviews: {
+              $sortArray: {
+                input: "$reviews",
+                sortBy: { createdAt: -1 }
+              }
+            }
+          }
+        }
+      ]
+      return (await cards.aggregate(agg).toArray())[0];
+    
+    } catch (e) {
+      console.error(`Unable to get card with reviews: ${e}`);
+      return { error: e };
+    }
+  }
+
   static async getMany({
     page = 0,
     perPage = CARDS_PER_PAGE,
