@@ -65,16 +65,21 @@ export default function useAuth() {
 
     const getUserInfo = useCallback(async (token) => {
         const tokenPayload = parseJwt(token)
-        const { id } = tokenPayload;
+        const { _id: id } = tokenPayload;
         try {
             const response = await api.getUser(id);
             return response.data
         }
         catch (error) {
+            console.error('Error fetching user info:', error)
+            return {isLoggedIn: false}
         }
     }, [api]);
 
-    
+    const login = (user) => {
+        localStorage.setItem(TOKEN_NAME, user.token)
+        setUser({isLoggedIn: true, ...user})
+    }
 
     const logout = async () => {
         localStorage.removeItem(TOKEN_NAME)
@@ -107,6 +112,7 @@ export default function useAuth() {
         user,
         setUser,
         getUserInfo,
+        login,
         logout,
         api,
         isLoading

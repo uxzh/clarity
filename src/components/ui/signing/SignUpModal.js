@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback } from "react";
+import React, { useState, useMemo, useCallback, useContext, useEffect } from "react";
 import {
   Modal,
   ModalContent,
@@ -12,6 +12,7 @@ import {
 } from "@nextui-org/react";
 import { AnimatePresence, m, domAnimation, LazyMotion } from "framer-motion";
 import { Icon } from "@iconify/react";
+import { AuthContext } from "../../../contexts/AuthContext";
 
 const useForm = (initialState) => {
   const [formData, setFormData] = useState(initialState);
@@ -20,6 +21,9 @@ const useForm = (initialState) => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+    if (errors[name]) {
+      setErrors((prev) => ({ ...prev, [name]: "" }));
+    }
   };
 
   const validateForm = () => {
@@ -212,18 +216,36 @@ export default function SignUpModal({ isOpen, onClose }) {
   const { formData, handleChange, errors, validateForm } =
     useForm(initialFormState);
 
+  const { api, login } = useContext(AuthContext);
+
   const toggleSignUp = useCallback(() => {
     setIsSignUp((prev) => !prev);
     setIsFormVisible(false);
   }, []);
 
   const handleSubmit = useCallback(
-    (e) => {
-      e.preventDefault();
-      if (validateForm()) {
-        console.log("Form submitted", formData);
-        onClose();
+    async (e) => {
+    e.preventDefault();
+    if (validateForm()) {
+      try {
+        const response = await api[isSignUp ? "signup" : "login"]({
+          email: formData.email,
+          username: formData.username,
+          password: formData.password,
+          confirmPassword: formData.confirmPassword,
+        });
+        login(response.data);
+      } catch (error) {
+        const errorMessage = error.response?.
+        data?.error || "An error occurred";
+        console.error(errorMessage);
       }
+      // onClose();
+      // TODO: on signup show success/failure message
+      // and that an email was sent if it's a signup
+      // close on login
+      // show failure message on login
+    }
     },
     [formData, validateForm, onClose]
   );

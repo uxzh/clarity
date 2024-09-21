@@ -17,6 +17,23 @@ class UsersController {
     }
   }
 
+  static async getUser(req, res) {
+    try {
+      const { id } = req.params;
+      if (req.user.id === id) {
+        return res.status(200).send(req.user);
+      }
+      const user = await UsersDAO.getOneById(id);
+      if (!user || user.error) {
+        return res.status(404).send({ error: "User not found" });
+      }
+      res.status(200).send(user);
+    } catch (e) {
+      res.status(500).send({ error: "Error fetching user" });
+    }
+  }
+
+
   static async updateUser(req, res) {
     try {
       if (Object.keys(req.body).length === 0) {
