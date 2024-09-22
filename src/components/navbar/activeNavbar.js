@@ -1,4 +1,4 @@
-import React, { useState, lazy, Suspense } from "react";
+import React, { useState, lazy, Suspense, useContext } from "react";
 import {
   Navbar,
   NavbarBrand,
@@ -14,6 +14,7 @@ import MobileMenu from "./mobileMenu";
 // import useAuth from "../../hooks/useAuth";
 import Avatar from "../ui/signed/Avatar";
 import SignInButton from "../ui/buttons/SignInButton";
+import { AuthContext } from "../../contexts/AuthContext";
 
 const SignUpModal = lazy(() => import("../ui/signing/SignUpModal"));
 
@@ -21,8 +22,7 @@ const ActiveNavbar = React.memo(() => {
   const location = useLocation();
   const [isSignUpModalOpen, setIsSignUpModalOpen] = useState(false);
   const [isModalLoading, setIsModalLoading] = useState(false);
-  const isLoggedIn = true; // Test variable
-  // const { isLoggedIn } = useAuth();
+  const { user } = useContext(AuthContext);
 
   const getLinkStyles = (path) => {
     return location.pathname === path
@@ -82,7 +82,7 @@ const ActiveNavbar = React.memo(() => {
         </NavbarContent>
         <NavbarContent justify="end">
           <NavbarItem>
-            {isLoggedIn ? (
+            {user?.isLoggedIn ? (
               <Avatar />
             ) : (
               <SignInButton onClick={handleSignInClick}>

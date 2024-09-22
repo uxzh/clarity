@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useCallback } from "react";
+import React, { useState, useEffect, useMemo, useCallback, useContext } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Card, Spacer, Button } from "@nextui-org/react";
 import { IconCreditCardFilled } from "@tabler/icons-react";
@@ -12,6 +12,7 @@ import { useDisclosure } from "@nextui-org/react";
 import FeedbackModal from "../components/FEEDBACK/feedbackModal";
 import ReviewSearch from "./searchForCard";
 import { Spinner } from "@nextui-org/react";
+import { AuthContext } from "../contexts/AuthContext";
 
 function Review() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -29,6 +30,8 @@ function Review() {
   const searchParams = new URLSearchParams(location.search);
   const cardId = searchParams.get("cardId");
 
+  const { api } = useContext(AuthContext);
+
   useEffect(() => {
     if (!cardId) {
       setIsLoading(false);
@@ -39,36 +42,9 @@ function Review() {
       setIsLoading(true);
       setError(null);
       try {
-        console.log("Fetching data for cardId:", cardId);
-        const [cardResponse, reviewsResponse] = await Promise.all([
-          fetch("/server/cards.json"),
-          fetch("/server/reviews.json"),
-        ]);
-
-        if (!cardResponse.ok || !reviewsResponse.ok) {
-          throw new Error(
-            `HTTP error! status: ${cardResponse.status}, ${reviewsResponse.status}`
-          );
-        }
-
-        const cardsData = await cardResponse.json();
-        const reviewsData = await reviewsResponse.json();
-
-        console.log("Cards data:", cardsData);
-        console.log("Reviews data:", reviewsData);
-
-        const selectedCard = cardsData.find((card) =>
-          card._id.includes(cardId)
-        );
-        if (!selectedCard) {
-          throw new Error("Card not found");
-        }
+        const { data: selectedCard } = await api.getCard(cardId);
+        setReviews(selectedCard.reviews || []);
         setCardData(selectedCard);
-
-        const cardReviews = reviewsData.filter(
-          (review) => review.cardId === selectedCard._id
-        );
-        setReviews(cardReviews);
       } catch (error) {
         console.error("Error fetching data:", error);
         setError(error);

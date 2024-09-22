@@ -6,6 +6,7 @@ const jwt = require('../lib/jwt');
 const verifyGoogleToken = require('../lib/verifyGoogleToken');
 const { MailSender } = require('../lib/mail/mailSender');
 const { MAIL_TEMPLATES } = require('../lib/mail/templates');
+const { HOST } = require('../lib/const');
 
 class AuthController {
   static async signup(req, res) {
@@ -55,7 +56,7 @@ class AuthController {
       user.token = token;
 
       const verificationToken = jwt.sign({ email });
-      const message = MAIL_TEMPLATES.confirmEmail(`${process.env.HOST}:${process.env.PORT}/api/v1/auth/verify-email/${verificationToken}`);
+      const message = MAIL_TEMPLATES.confirmEmail(`${HOST}/api/v1/auth/verify-email/${verificationToken}`);
 
       try {
         await MailSender.send(email, message);

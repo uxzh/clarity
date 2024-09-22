@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   Dropdown,
   DropdownTrigger,
@@ -6,8 +6,10 @@ import {
   DropdownItem,
   Avatar as NextUIAvatar,
 } from "@nextui-org/react";
+import { AuthContext } from "../../../contexts/AuthContext";
 
 const Avatar = React.memo(() => {
+  const { user, logout } = useContext(AuthContext);
   return (
     <Dropdown placement="bottom-end">
       <DropdownTrigger>
@@ -24,11 +26,13 @@ const Avatar = React.memo(() => {
       <DropdownMenu aria-label="Profile Actions" variant="flat">
         <DropdownItem key="profile" className="h-14 gap-2">
           <p className="font-semibold">Signed in as</p>
-          <p className="font-semibold">user@example.com</p>
+          <p className="font-semibold">{user?.email}</p>
         </DropdownItem>
         <DropdownItem key="settings">My Settings</DropdownItem>
         <DropdownItem key="help_and_feedback">Help & Feedback</DropdownItem>
-        <DropdownItem key="logout" color="danger">
+        <DropdownItem key="logout" color="danger"
+          onClick={() => logout()}
+        >
           Log Out
         </DropdownItem>
       </DropdownMenu>
