@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useMemo, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Button,
@@ -17,6 +17,7 @@ import {
 import { AuthContext } from "../contexts/AuthContext.jsx";
 import { DataContext } from "../contexts/DataContext.js";
 import { IconSearch } from "@tabler/icons-react";
+import { debounce } from "../lib/utils.ts";
 
 function ReviewSearch() {
   const [isLoading, setIsLoading] = useState(true);
@@ -24,6 +25,8 @@ function ReviewSearch() {
 
   const { api } = useContext(AuthContext);
   const { topCards, setTopCards } = useContext(DataContext);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -41,7 +44,7 @@ function ReviewSearch() {
     fetchData();
   }, [api, setTopCards]);
 
-  const handleSearch = (cardId) => {
+  const handleClickSearchResult = (cardId) => {
     if (cardId) {
       navigate(`/review?cardId=${encodeURIComponent(cardId)}`);
     }
@@ -118,6 +121,28 @@ function ReviewSearch() {
       ].filter(Boolean)
     : [];
 
+  const fetchSearchResults = useCallback(
+    debounce(async (searchTerm) => {
+      if (!searchTerm) {
+        setSearchResults([]);
+        return;
+      }
+
+      try {
+        const { data } = await api.getCards({ search: searchTerm, perPage: 20, page: 0 });
+        setSearchResults(data);
+      } catch (error) {
+        console.error("Error fetching search results:", error);
+      }
+    }, 500),
+    [api]
+  );
+
+  useEffect(() => {
+    fetchSearchResults(searchTerm);
+  }, [searchTerm, fetchSearchResults]);
+
+
   return (
     <div>
       <TopNavbar />
@@ -135,6 +160,7 @@ function ReviewSearch() {
                   selectorButton: "text-default-500",
                 }}
                 defaultItems={autocompleteItems}
+                items={searchResults.length > 0 ? searchResults : autocompleteItems}
                 inputProps={{
                   classNames: {
                     input: "ml-1 text-base sm:text-lg",
@@ -172,7 +198,9 @@ function ReviewSearch() {
                 }
                 radius="full"
                 variant="bordered"
-                onSelectionChange={handleSearch}
+                onSelectionChange={handleClickSearchResult}
+                inputValue={searchTerm}
+                onInputChange={(v) => setSearchTerm(v)}
                 size="lg"
               >
                 {(item) => (

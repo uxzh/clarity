@@ -5,7 +5,6 @@ const ReviewsDAO = require("../dao/reviewsDAO");
 class CardsController {
   static async getCard(req, res) {
     try {
-      console.log("getCard")
       const { id } = req.params;
       const card = await CardsDAO.getOneByIdWithReviews(id);
       if (!card) {
@@ -20,9 +19,8 @@ class CardsController {
 
   static async getCards(req, res) {
     try {
-      const { filters, page, perPage, search } = req.query;
+      const { page, perPage, search } = req.query;
       const cards = await CardsDAO.getMany({
-        filters,
         page: page && parseInt(page),
         perPage: perPage && parseInt(perPage),
         searchTerm: search,
