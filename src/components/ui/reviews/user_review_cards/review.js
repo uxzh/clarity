@@ -1,29 +1,36 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect, useContext, useRef } from "react";
 import { User, Button } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
 import { IconThumbUp, IconThumbDown } from "@tabler/icons-react";
 import { cn } from "./cn";
+import { AuthContext } from "../../../../contexts/AuthContext";
 
 const Review = React.forwardRef(
   (
     {
       children,
-      user,
+      _id,
+      user: author,
       title,
       content,
       rating,
       createdAt,
-      initialLikes = 0,
-      initialDislikes = 0,
+      likedByUser = 0,  // -1 or 0 or 1
+      likes: initialLikes = 0,
+      dislikes: initialDislikes = 0,
       ...props
     },
     ref
   ) => {
-    const [likeStatus, setLikeStatus] = useState("none");
+    const [likeStatus, setLikeStatus] = useState(
+      likedByUser === 1 ? "like" : likedByUser === -1 ? "dislike" : "none"
+    );
+    const prevLikeStatusRef = useRef(likeStatus);
     const [likes, setLikes] = useState(initialLikes);
     const [dislikes, setDislikes] = useState(initialDislikes);
     const [hoveredButton, setHoveredButton] = useState(null);
     const [lastInteraction, setLastInteraction] = useState(null);
+    const { api, user } = useContext(AuthContext);
 
     const formatDate = (dateString) => {
       if (!dateString) return "Unknown Date";
@@ -41,7 +48,15 @@ const Review = React.forwardRef(
     };
 
     const handleLikeDislike = (action) => {
+      // if user is not logged in, do not allow like/dislike
+      if (!user?.isLoggedIn) {
+        // TODO: show a modal to prompt user to login
+        console.log("Please login in to leave a like/dislike");
+        return
+      }
+
       setLikeStatus((prevStatus) => {
+        prevLikeStatusRef.current = prevStatus;
         if (prevStatus === action) {
           // If the same button is clicked again, remove the like/dislike
           setLikes((prev) => (action === "like" ? prev - 1 : prev));
@@ -61,20 +76,35 @@ const Review = React.forwardRef(
       setLastInteraction(Date.now());
     };
 
-    const debouncedApiCall = useCallback(() => {
-      // Simulated API call
-      console.log(
-        `API call: Update likes to ${likes} and dislikes to ${dislikes}`
-      );
-      // Replace with actual API call
-      // updateLikesDislikesApi(likes, dislikes);
-    }, [likes, dislikes]);
+    const debouncedApiCall = useCallback(async () => {
+      let apiFunc;
+      switch (likeStatus) {
+        // if button unpressed, remove like/dislike
+        case "none":
+          apiFunc = () => api.deleteReviewLike(_id);
+          break;
+        default:
+          const prevStatus = prevLikeStatusRef.current;
+          if (prevStatus === "none") {
+            apiFunc = () => api.likeReview(_id, likeStatus === "like");
+          } else {
+            apiFunc = () => api.updateReviewLike(_id, likeStatus === "like");
+          }
+          break;
+      }
+
+      try {
+        await apiFunc();
+      } catch (error) {
+        console.error("Error updating like/dislike:", error
+      );}
+    }, [likeStatus, _id, api]);
 
     useEffect(() => {
       if (lastInteraction) {
         const timer = setTimeout(() => {
           debouncedApiCall();
-        }, 5000);
+        }, 1000);
         return () => clearTimeout(timer);
       }
     }, [lastInteraction, debouncedApiCall]);
@@ -85,14 +115,14 @@ const Review = React.forwardRef(
           <div className="flex items-center gap-2">
             <User
               avatarProps={{
-                src: user?.avatar,
+                src: author?.avatar,
               }}
               classNames={{
                 name: "font-medium",
                 description: "text-small",
               }}
               description={formatDate(createdAt)}
-              name={user?.name || "Anonymous"}
+              name={author?.username || "Anonymous"}
             />
           </div>
           <div className="flex items-center gap-1">
@@ -149,6 +179,7 @@ const Review = React.forwardRef(
               likeStatus === "dislike" || hoveredButton === "dislike"
                 ? "text-danger"
                 : "text-default-400"
+              
             )}
           >
             <div className="flex items-center px-2">
