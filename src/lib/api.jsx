@@ -19,6 +19,8 @@ class Api {
   getUser = async (id) => await this.axios.get(`/users/${id}`);
 
   // reviews
+  createReview = async ({ cardId, title, content, rating }) => await this.axios.post(`/reviews`, { cardId, title, content, rating });
+
   likeReview = async (id, isLike) => await this.axios.post(`/reviews/${id}/like`, { isLike });
 
   updateReviewLike = async (id, isLike) => await this.axios.put(`/reviews/${id}/like`, { isLike });

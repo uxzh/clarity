@@ -22,9 +22,37 @@ class ReviewsDAO {
     }
   }
 
-  static async createOne(review) {
+  static async getOneByCardAndUser(cardId, userId) {
     try {
-      return await reviews.insertOne(review);
+      return await reviews.findOne({
+        cardId: new ObjectId(cardId),
+        userId: new ObjectId(userId),
+      });
+    } catch (e) {
+      console.error(`Unable to get review: ${e}`);
+      return { error: e };
+    }
+  }
+
+  static async createOne({
+    cardId,
+    userId,
+    rating,
+    title,
+    content,
+    createdAt = new Date(),
+    updatedAt = new Date(),
+  }) {
+    try {
+      return await reviews.insertOne({
+        cardId: new ObjectId(cardId),
+        userId: new ObjectId(userId),
+        rating,
+        title,
+        content,
+        createdAt,
+        updatedAt,
+      });
     } catch (e) {
       console.error(`Unable to create review: ${e}`);
       return { error: e };

@@ -26,6 +26,11 @@ class ReviewsController {
         return res.status(404).send({ error: "Card not found" });
       }
 
+      const existingReview = await ReviewsDAO.getOneByCardAndUser(cardId, req.user._id);
+      if (existingReview && !existingReview.error) {
+        return res.status(400).send({ error: "Review already exists" });
+      }
+
       const date = new Date();
 
       const review = {
