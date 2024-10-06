@@ -20,7 +20,7 @@ const Avatar = React.memo(() => {
           color="primary"
           name="User Name"
           size="sm"
-          src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
+          src={user.avatar}
         />
       </DropdownTrigger>
       <DropdownMenu aria-label="Profile Actions" variant="flat">
