@@ -1,9 +1,8 @@
 const router = require('express').Router();
 
 const ReviewsController = require('../controllers/reviewsController');
-const { models } = require('../lib/models');
 const Permissions = require('../middleware/permissions');
-const { createLikeschema } = require('../middleware/validation/schemas/likeSchema');
+const { likeSchema } = require('../middleware/validation/schemas/likeSchema');
 const { createReviewSchema } = require('../middleware/validation/schemas/reviewSchema');
 const validate = require('../middleware/validation/validate');
 
@@ -24,13 +23,18 @@ router.delete('/:id',
 
 router.post('/:id/like',
   Permissions.isEmailVerified,
-  Permissions.isOwnerOrAdmin(models.reviews),
-  validate(createLikeschema),
+  validate(likeSchema),
   ReviewsController.likeReview
 );
 
+router.put('/:id/like',
+  Permissions.isEmailVerified,
+  validate(likeSchema),
+  ReviewsController.updateReviewLike,
+);
+
 router.delete('/:id/like',
-  Permissions.isOwnerOrAdmin(models.reviews),
+  Permissions.isAuthenticated,
   ReviewsController.deleteLike
 );
 

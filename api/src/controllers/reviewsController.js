@@ -6,7 +6,6 @@ class ReviewsController {
   static async getReview(req, res) {
     try {
       const { id } = req.params
-      // const review = await ReviewsDAO.getOneByIdWithLikes(id)
       const review = await ReviewsDAO.getOneById(id)
       if (!review || review.error) {
         return res.status(404).send({ error: "Review not found" });
@@ -46,6 +45,7 @@ class ReviewsController {
 
       res.status(201).send(review);
     } catch (e) {
+      console.error(e)
       res.status(500).send({ error: "Error creating review" });
     }
   }
@@ -58,6 +58,7 @@ class ReviewsController {
       res.status(204).send();
 
     } catch (e) {
+      console.error(e)
       res.status(500).send({ error: "Error deleting review" });
     }
   }
@@ -91,7 +92,46 @@ class ReviewsController {
 
       res.status(201).send(like);
     } catch (e) {
+      console.error(e)
       res.status(500).send({ error: "Error creating like" });
+    }
+  }
+
+  static async updateReviewLike(req, res) {
+    try {
+      const { isLike } = req.body;
+      const { id: targetId } = req.params;
+
+      const review = await ReviewsDAO.getOneById(targetId);
+      if (!review || review.error) {
+        return res.status(404).send({ error: "Review not found" });
+      }
+
+      const existingLike = await LikesDAO.getLikeByUserAndTarget(req.user._id, targetId);
+      if (!existingLike || existingLike.error) {
+        return res.status(404).send({ error: "Like not found" });
+      }
+
+      if (existingLike.isLike === isLike) {
+        return res.status(400).send({ error: "Like already set" });
+      }
+
+      const like = {
+        targetId,
+        targetType: "review",
+        userId: req.user._id,
+        isLike,
+      };
+
+      const result = await LikesDAO.updateOne(like);
+      if (!result || result.error) {
+        return res.status(500).send({ error: "Error updating like" });
+      }
+
+      res.status(200).send(like);
+    } catch (e) {
+      console.error(e)
+      res.status(500).send({ error: "Error updating like" });
     }
   }
 
@@ -109,6 +149,7 @@ class ReviewsController {
 
       res.status(204).send();
     } catch (e) {
+      console.error(e)
       res.status(500).send({ error: "Error deleting like" });
     }
   }

@@ -29,29 +29,77 @@ class CardsDAO {
       const agg = 
       [
         {
-          $match: {
-            _id: new ObjectId(id)
+          "$match": {
+            "_id": {
+              "$eq": new ObjectId(id)
+            }
           }
         },
         {
-          $lookup: {
-            from: "reviews",
-            localField: "_id",
-            foreignField: "cardId",
-            as: "reviews"
+          "$lookup": {
+            "from": "reviews",
+            "localField": "_id",
+            "foreignField": "cardId",
+            "as": "reviews"
           }
         },
         {
-          $addFields: {
-            reviews: {
+          "$unwind": {
+            "path": "$reviews",
+            "preserveNullAndEmptyArrays": true
+          }
+        },
+        {
+          "$lookup": {
+            "from": "users",
+            "localField": "reviews.userId",
+            "foreignField": "_id",
+            "as": "userInfo"
+          }
+        },
+        {
+          "$unwind": {
+            "path": "$userInfo",
+            "preserveNullAndEmptyArrays": true
+          }
+        },
+        {
+          "$addFields": {
+            "reviews.user.username": "$userInfo.username",
+            "reviews.user.avatar": "$userInfo.avatar"
+          }
+        },
+        {
+          "$group": {
+            "_id": "$_id",
+            "card": {
+              "$first": "$$ROOT"
+            },
+            "reviews": {
+              "$push": "$reviews"
+            }
+          }
+        },
+        {
+          "$addFields": {
+            "card.reviews": {
               $sortArray: {
                 input: "$reviews",
                 sortBy: { createdAt: -1 }
               }
             }
           }
+        },
+        {
+          "$replaceRoot": {
+            "newRoot": "$card"
+          }
+        },
+        {
+          "$unset": "userInfo"
         }
       ]
+
       return (await cards.aggregate(agg).toArray())[0];
     
     } catch (e) {

@@ -24,7 +24,7 @@ router.get('/top-cards', CardsController.getTopCards);
 
 router.get('/:id', CardsController.getCard);
 
-router.get('/:id/reviews', CardsController.getReviews);
+router.get('/:id/reviews', CardsController.getReviewsByCard);
 
 
 
