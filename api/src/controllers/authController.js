@@ -89,7 +89,10 @@ class AuthController {
       const token = jwt.sign({ _id: user._id });
       user.token = token;
 
-      await UsersDAO.updateOne(user._id, { lastLogin: new Date() });
+      await UsersDAO.updateOne({
+        id: user._id,
+        set: { lastLogin: new Date() },
+      });
 
       res.status(200).send(user);
     } catch (e) {
@@ -198,7 +201,10 @@ class AuthController {
       user.token = token;
       delete user.previousUsernames;
 
-      await UsersDAO.updateOne(user._id, { lastLogin: new Date() });
+      await UsersDAO.updateOne({
+        id: user._id,
+        set: { lastLogin: new Date() },
+      });
 
       res.status(200).send(user);
     } catch (e) {
