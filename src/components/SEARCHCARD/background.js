@@ -148,7 +148,7 @@ export default function Component() {
 
   return (
     <section className="mx-auto top-[-40vh] w-full max-w-6xl px-6 py-20 sm:py-32 lg:px-8 lg:py-40 absolute blur-0 opacity-40 z-0">
-      <div className="columns-1 blur-sm sm:columns-2 md:columns-3 lg:columns-3">
+      <div className="columns-1 blur-sm sm:columns-2 md:columns-3 lg:columns-4">
         <ScrollingBanner
           isVertical
           duration={isMobile ? 200 : 120}

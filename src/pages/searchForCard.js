@@ -1,11 +1,12 @@
-import React, { useState, useEffect, useContext, useMemo, useCallback } from "react";
+import React, {
+  useState,
+  useEffect,
+  useContext,
+  useCallback,
+  useRef,
+} from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  Button,
-  Link,
-  Autocomplete,
-  AutocompleteItem,
-} from "@nextui-org/react";
+import { Link, Autocomplete, AutocompleteItem } from "@nextui-org/react";
 import TopNavbar from "../components/navbar/activeNavbar";
 import Footer from "../components/footer/footer";
 import Background from "../components/SEARCHCARD/background";
@@ -22,20 +23,28 @@ import { debounce } from "../lib/utils.ts";
 function ReviewSearch() {
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
-
   const { api } = useContext(AuthContext);
   const { topCards, setTopCards } = useContext(DataContext);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
+  const [initialCards, setInitialCards] = useState([]);
+  const [hasSearched, setHasSearched] = useState(false);
+
+  const inputRef = useRef(null);
 
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
       try {
-        const { data } = await api.getTopCards();
-        setTopCards(data);
+        const [topCardsData, initialCardsData] = await Promise.all([
+          api.getTopCards(),
+          api.getCards({ perPage: 10, page: 0 }),
+        ]);
+        setTopCards(topCardsData.data);
+        setInitialCards(initialCardsData.data);
+        setSearchResults(initialCardsData.data);
       } catch (error) {
-        console.error("Error fetching card data:", error);
+        console.error("Error fetching data:", error);
       } finally {
         setIsLoading(false);
       }
@@ -44,11 +53,45 @@ function ReviewSearch() {
     fetchData();
   }, [api, setTopCards]);
 
+  const fetchSearchResults = useCallback(
+    debounce(async (term) => {
+      if (!term.trim()) {
+        setSearchResults(initialCards);
+        setHasSearched(false);
+        return;
+      }
+      try {
+        const { data } = await api.getCards({
+          search: term,
+          perPage: 20,
+          page: 0,
+        });
+        setSearchResults(data);
+        setHasSearched(true);
+      } catch (error) {
+        console.error("Error fetching search results:", error);
+        setSearchResults([]);
+        setHasSearched(true);
+      }
+    }, 300),
+    [api, initialCards]
+  );
+
+  useEffect(() => {
+    fetchSearchResults(searchTerm);
+  }, [searchTerm, fetchSearchResults]);
+
   const handleClickSearchResult = (cardId) => {
     if (cardId) {
       navigate(`/review?cardId=${encodeURIComponent(cardId)}`);
     }
   };
+
+  const handleInputClick = useCallback(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, []);
 
   const renderCard = (card, title) => {
     if (!card) return null;
@@ -99,75 +142,49 @@ function ReviewSearch() {
     );
   };
 
-  const heroText = (
-    <div className="relative py-8 px-4">
-      <h2 className="relative z-10 text-3xl font-semibold mb-2 text-gray-800 drop-shadow-[0_0_10px_rgba(255,255,255,0.7)]">
-        Credit cards lack{" "}
-        <span className="font-black text-primary drop-shadow-[0_0_10px_rgba(255,255,255,0.7)]">
-          Clarity
-        </span>
-      </h2>
-      <h1 className="relative z-10 text-2xl md:text-3xl lg:text-4xl font-bold mb-6 text-slate-900 drop-shadow-[0_0_10px_rgba(255,255,255,0.7)]">
-        Honest feedback matters.
-      </h1>
-    </div>
-  );
-
-  const autocompleteItems = topCards
-    ? [
-        topCards.bestRatingCard,
-        topCards.worstRatingCard,
-        topCards.mostReviewedCard,
-      ].filter(Boolean)
-    : [];
-
-  const fetchSearchResults = useCallback(
-    debounce(async (searchTerm) => {
-      if (!searchTerm) {
-        setSearchResults([]);
-        return;
-      }
-
-      try {
-        const { data } = await api.getCards({ search: searchTerm, perPage: 20, page: 0 });
-        setSearchResults(data);
-      } catch (error) {
-        console.error("Error fetching search results:", error);
-      }
-    }, 500),
-    [api]
-  );
-
-  useEffect(() => {
-    fetchSearchResults(searchTerm);
-  }, [searchTerm, fetchSearchResults]);
-
-
   return (
     <div>
       <TopNavbar />
       <div className="flex-grow flex flex-col items-center justify-start relative">
-        <Background className="absolute top-0 left-0 right-0 h-[50vh] z-5" />
+        <Background
+          className="absolute top-0 left-0 right-0 max-h-[10vh] z-5"
+          style={{ maxHeight: "2vh !important" }}
+        />
         <div className="relative z-10 w-full max-w-6xl mx-auto px-0 sm:px-4 pt-20">
           <div className="text-center mx-auto mb-[4vh]">
-            {heroText}
-
+            <div className="relative py-8 px-4">
+              <h2 className="relative z-10 text-3xl font-semibold mb-2 text-gray-800 drop-shadow-[0_0_10px_rgba(255,255,255,0.7)]">
+                Credit cards lack{" "}
+                <span className="font-black text-primary drop-shadow-[0_0_10px_rgba(255,255,255,0.7)]">
+                  Clarity
+                </span>
+              </h2>
+              <h1 className="relative z-10 text-2xl md:text-3xl lg:text-4xl font-bold mb-6 text-slate-900 drop-shadow-[0_0_10px_rgba(255,255,255,0.7)]">
+                Honest feedback matters.
+              </h1>
+            </div>
             <div className="mx-auto w-full px-4 sm:px-0 sm:max-w-xl">
               <Autocomplete
+                ref={inputRef}
                 classNames={{
                   base: "w-full max-w-full",
                   listboxWrapper: "max-h-[320px]",
                   selectorButton: "text-default-500",
                 }}
-                defaultItems={autocompleteItems}
-                items={searchResults.length > 0 ? searchResults : autocompleteItems}
+                defaultItems={initialCards}
+                items={searchResults}
                 inputProps={{
                   classNames: {
                     input: "ml-1 text-base sm:text-lg",
                     inputWrapper: "h-[56px] sm:h-[64px]",
                   },
+                  onClick: handleInputClick,
                 }}
                 listboxProps={{
+                  emptyContent:
+                    hasSearched && searchResults.length === 0
+                      ? "No results found. Try a different card?"
+                      : " ",
                   hideSelectedIcon: true,
                   itemClasses: {
                     base: [
@@ -200,14 +217,11 @@ function ReviewSearch() {
                 variant="bordered"
                 onSelectionChange={handleClickSearchResult}
                 inputValue={searchTerm}
-                onInputChange={(v) => setSearchTerm(v)}
+                onInputChange={(value) => setSearchTerm(value)}
                 size="lg"
               >
                 {(item) => (
-                  <AutocompleteItem
-                    key={item._id}
-                    textValue={item.cardName}
-                  >
+                  <AutocompleteItem key={item._id} textValue={item.cardName}>
                     <div className="flex items-center">
                       <img
                         src={item.cardImageUrl}
@@ -219,7 +233,7 @@ function ReviewSearch() {
                           {item.cardName}
                         </span>
                         <span className="text-tiny text-default-400">
-                          Issuer: {item.bankName}
+                          {item.bankName}
                         </span>
                       </div>
                     </div>
