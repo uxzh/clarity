@@ -22,9 +22,37 @@ class ReviewsDAO {
     }
   }
 
-  static async createOne(review) {
+  static async getOneByCardAndUser(cardId, userId) {
     try {
-      return await reviews.insertOne(review);
+      return await reviews.findOne({
+        cardId: new ObjectId(cardId),
+        userId: new ObjectId(userId),
+      });
+    } catch (e) {
+      console.error(`Unable to get review: ${e}`);
+      return { error: e };
+    }
+  }
+
+  static async createOne({
+    cardId,
+    userId,
+    rating,
+    title,
+    content,
+    createdAt = new Date(),
+    updatedAt = new Date(),
+  }) {
+    try {
+      return await reviews.insertOne({
+        cardId: new ObjectId(cardId),
+        userId: new ObjectId(userId),
+        rating,
+        title,
+        content,
+        createdAt,
+        updatedAt,
+      });
     } catch (e) {
       console.error(`Unable to create review: ${e}`);
       return { error: e };
@@ -39,12 +67,46 @@ class ReviewsDAO {
     perPage = 20,
   } = {}) {
     try {
-      return await reviews
-        .find({ [field]: value })
-        .sort({ [sort]: -1 })
-        .skip(perPage * page)
-        .limit(perPage)
-        .toArray();
+      return await reviews.aggregate([
+        {
+          $match: { [field]: new ObjectId(value) }
+        },
+        {
+          $lookup: {
+            from: models.users,
+            localField: "userId",
+            foreignField: "_id",
+            as: "user"
+          }
+        },
+        {
+          $unwind: "$user"
+        },
+        {
+          $project: {
+            _id: 1,
+            cardId: 1,
+            userId: 1,
+            rating: 1,
+            title: 1,
+            content: 1,
+            createdAt: 1,
+            updatedAt: 1,
+            "user.username": 1,
+            "user.avatar": 1
+          }
+        },
+        {
+          $sort: { [sort]: -1 }
+        },
+        {
+          $skip: perPage * page
+        },
+        {
+          $limit: perPage
+        }
+      ]).toArray();
+
     } catch (e) {
       console.error(`Unable to get reviews: ${e}`);
       return { error: e };

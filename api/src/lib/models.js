@@ -2,7 +2,7 @@ const models = {
   users: 'users',
   cards: 'cards',
   reviews: 'reviews',
-  replies: 'reviews',
+  replies: 'replies',
   likes: 'likes',
 }
 

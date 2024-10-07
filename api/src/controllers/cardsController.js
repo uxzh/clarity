@@ -1,15 +1,24 @@
 const { ObjectId } = require("mongodb");
 const CardsDAO = require("../dao/cardsDAO");
 const ReviewsDAO = require("../dao/reviewsDAO");
+const LikesDAO = require("../dao/likesDAO");
+const { getReviewsByCardIdWithLikes } = require("./utils");
 
 class CardsController {
   static async getCard(req, res) {
     try {
       const { id } = req.params;
-      const card = await CardsDAO.getOneByIdWithReviews(id);
+      const card = await CardsDAO.getOneById(id);
       if (!card) {
         return res.status(404).send({ error: "Card not found" });
       }
+      const reviews = await getReviewsByCardIdWithLikes({
+        id,
+        user: req.user,
+        perPage: 20,
+        page: 0,
+      });
+      card.reviews = reviews;
       res.status(200).send(card);
     } catch (e) {
       console.error(e)
@@ -36,13 +45,14 @@ class CardsController {
     }
   }
 
-  static async getReviews(req, res) {
+  static async getReviewsByCard(req, res) {
     try {
       const { id } = req.params;
-      const reviews = await ReviewsDAO.getManyByField({
-        field: "cardId",
-        value: new ObjectId(id),
-        sort: "createdAt",
+      const reviews = await getReviewsByCardIdWithLikes({
+        id,
+        user: req.user,
+        perPage: parseInt(req.query.perPage) || 20,
+        page: parseInt(req.query.page) || 0,
       });
       const { error } = reviews;
       if (error) {
@@ -62,7 +72,7 @@ class CardsController {
     } catch (e) {
       console.error(e)
       res.status(500).send({ error: "Error fetching top cards" });
-    } 
+    }
   }
 }
 
