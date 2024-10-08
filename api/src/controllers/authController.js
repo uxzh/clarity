@@ -24,7 +24,14 @@ class AuthController {
       }
 
       // deep email validation
-      const validationResult = await validate(email);
+      const validationResult = await validate({
+        email,
+        validateRegex: true,
+        validateMX: true,
+        validateTypo: true,
+        validateDisposable: true,
+        validateSMTP: false,
+      });
       if (!validationResult.valid) {
         return res.status(400).send({ error: 'Invalid email' });
       }
