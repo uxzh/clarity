@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback, useContext, useEffect } from "react";
+import React, { useState, useCallback, useContext } from "react";
 import {
   Modal,
   ModalContent,
@@ -9,6 +9,8 @@ import {
   Input,
   Link,
   Checkbox,
+  Spinner,
+  Tooltip,
 } from "@nextui-org/react";
 import { AnimatePresence, m, domAnimation, LazyMotion } from "framer-motion";
 import { Icon } from "@iconify/react";
@@ -26,7 +28,7 @@ const useForm = (initialState) => {
     }
   };
 
-  const validateForm = () => {
+  const validateForm = (isSignUp) => {
     const newErrors = {};
     if (!formData.email) newErrors.email = "Email is required";
     else if (!/\S+@\S+\.\S+/.test(formData.email))
@@ -35,9 +37,16 @@ const useForm = (initialState) => {
     if (!formData.password) newErrors.password = "Password is required";
     else if (formData.password.length < 8)
       newErrors.password = "Password must be at least 8 characters";
+    else if (formData.password.length > 50)
+      newErrors.password = "Password must be less than 50 characters";
 
-    if (formData.isSignUp) {
+    if (isSignUp) {
       if (!formData.username) newErrors.username = "Username is required";
+      else if (formData.username.length < 5)
+        newErrors.username = "Username must be at least 5 characters";
+      else if (formData.username.length > 50)
+        newErrors.username = "Username must be less than 50 characters";
+
       if (!formData.confirmPassword)
         newErrors.confirmPassword = "Confirm password is required";
       else if (formData.password !== formData.confirmPassword)
@@ -48,7 +57,7 @@ const useForm = (initialState) => {
     return Object.keys(newErrors).length === 0;
   };
 
-  return { formData, handleChange, errors, validateForm };
+  return { formData, handleChange, errors, setErrors, validateForm };
 };
 
 const ButtonSection = ({ isSignUp, setIsFormVisible }) => (
@@ -85,6 +94,7 @@ const FormSection = ({
   handleChange,
   errors,
   handleSubmit,
+  isLoading,
 }) => (
   <m.form
     key="form"
@@ -96,51 +106,59 @@ const FormSection = ({
     onSubmit={handleSubmit}
   >
     {isSignUp && (
+      <Tooltip content="Username must be 5-50 characters long">
+        <Input
+          label="Username"
+          name="username"
+          placeholder="Enter your username"
+          value={formData.username}
+          onChange={handleChange}
+          className="mb-3"
+          errorMessage={errors.username}
+        />
+      </Tooltip>
+    )}
+    <Tooltip content="Enter a valid email address">
       <Input
-        label="Username"
-        name="username"
-        placeholder="Enter your username"
-        value={formData.username}
+        label="Email"
+        name="email"
+        placeholder="Enter your email"
+        value={formData.email}
         onChange={handleChange}
         className="mb-3"
-        errorMessage={errors.username}
+        errorMessage={errors.email}
       />
-    )}
-    <Input
-      label="Email"
-      name="email"
-      placeholder="Enter your email"
-      value={formData.email}
-      onChange={handleChange}
-      className="mb-3"
-      errorMessage={errors.email}
-    />
-    <Input
-      label="Password"
-      name="password"
-      placeholder="Enter your password"
-      value={formData.password}
-      onChange={handleChange}
-      className="mb-3"
-      type={formData.isPasswordVisible ? "text" : "password"}
-      errorMessage={errors.password}
-      endContent={
-        <button
-          className="focus:outline-none"
-          type="button"
-          onClick={() =>
-            handleChange({
-              target: {
-                name: "isPasswordVisible",
-                value: !formData.isPasswordVisible,
-              },
-            })
-          }
-        >
-          <Icon icon={formData.isPasswordVisible ? "mdi:eye-off" : "mdi:eye"} />
-        </button>
-      }
-    />
+    </Tooltip>
+    <Tooltip content="Password must be 8-50 characters long">
+      <Input
+        label="Password"
+        name="password"
+        placeholder="Enter your password"
+        value={formData.password}
+        onChange={handleChange}
+        className="mb-3"
+        type={formData.isPasswordVisible ? "text" : "password"}
+        errorMessage={errors.password}
+        endContent={
+          <button
+            className="focus:outline-none"
+            type="button"
+            onClick={() =>
+              handleChange({
+                target: {
+                  name: "isPasswordVisible",
+                  value: !formData.isPasswordVisible,
+                },
+              })
+            }
+          >
+            <Icon
+              icon={formData.isPasswordVisible ? "mdi:eye-off" : "mdi:eye"}
+            />
+          </button>
+        }
+      />
+    </Tooltip>
     {isSignUp && (
       <Input
         label="Confirm Password"
@@ -188,8 +206,19 @@ const FormSection = ({
         </Link>
       )}
     </div>
-    <Button color="primary" className="w-full mt-4" type="submit">
-      {isSignUp ? "Sign Up with Email" : "Sign In with Email"}
+    <Button
+      color="primary"
+      className="w-full mt-4"
+      type="submit"
+      disabled={isLoading}
+    >
+      {isLoading ? (
+        <Spinner color="current" size="sm" />
+      ) : isSignUp ? (
+        "Sign Up with Email"
+      ) : (
+        "Sign In with Email"
+      )}
     </Button>
   </m.form>
 );
@@ -199,9 +228,32 @@ const variants = {
   hidden: { opacity: 0, y: 10 },
 };
 
+const ErrorDisplay = ({ message }) => (
+  <div
+    className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4"
+    role="alert"
+  >
+    <p className="font-bold">Error</p>
+    <p>{message}</p>
+  </div>
+);
+
+const SuccessDisplay = ({ message }) => (
+  <div
+    className="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4"
+    role="alert"
+  >
+    <p className="font-bold">Success</p>
+    <p>{message}</p>
+  </div>
+);
+
 export default function SignUpModal({ isOpen, onClose }) {
   const [isSignUp, setIsSignUp] = useState(false);
   const [isFormVisible, setIsFormVisible] = useState(false);
+  const [apiError, setApiError] = useState(null);
+  const [apiSuccess, setApiSuccess] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const initialFormState = {
     email: "",
@@ -213,7 +265,7 @@ export default function SignUpModal({ isOpen, onClose }) {
     rememberMe: false,
   };
 
-  const { formData, handleChange, errors, validateForm } =
+  const { formData, handleChange, errors, setErrors, validateForm } =
     useForm(initialFormState);
 
   const { api, login } = useContext(AuthContext);
@@ -221,33 +273,50 @@ export default function SignUpModal({ isOpen, onClose }) {
   const toggleSignUp = useCallback(() => {
     setIsSignUp((prev) => !prev);
     setIsFormVisible(false);
-  }, []);
+    setApiError(null);
+    setApiSuccess(null);
+    setErrors({});
+  }, [setErrors]);
 
   const handleSubmit = useCallback(
     async (e) => {
-    e.preventDefault();
-    if (validateForm()) {
-      try {
-        const response = await api[isSignUp ? "signup" : "login"]({
-          email: formData.email,
-          username: formData.username,
-          password: formData.password,
-          confirmPassword: formData.confirmPassword,
-        });
-        login(response.data);
-      } catch (error) {
-        const errorMessage = error.response?.
-        data?.error || "An error occurred";
-        console.error(errorMessage);
+      e.preventDefault();
+      if (validateForm(isSignUp)) {
+        setIsLoading(true);
+        setApiError(null);
+        setApiSuccess(null);
+        try {
+          const response = await api[isSignUp ? "signup" : "login"]({
+            email: formData.email,
+            username: formData.username,
+            password: formData.password,
+            confirmPassword: formData.confirmPassword,
+          });
+          login(response.data);
+          if (isSignUp) {
+            setApiSuccess(
+              "Congratulations! Your account has been successfully created. Please check your email to verify your account."
+            );
+          } else {
+            onClose();
+          }
+        } catch (error) {
+          if (
+            error.response &&
+            error.response.data &&
+            error.response.data.error
+          ) {
+            setApiError(error.response.data.error);
+          } else {
+            setApiError("An unexpected error occurred. Please try again.");
+          }
+          console.error("Authentication error:", error);
+        } finally {
+          setIsLoading(false);
+        }
       }
-      // onClose();
-      // TODO: on signup show success/failure message
-      // and that an email was sent if it's a signup
-      // close on login
-      // show failure message on login
-    }
     },
-    [formData, validateForm, onClose]
+    [formData, validateForm, isSignUp, api, login, onClose]
   );
 
   return (
@@ -258,6 +327,8 @@ export default function SignUpModal({ isOpen, onClose }) {
             {isSignUp ? "Create an account" : "Welcome back"}
           </ModalHeader>
           <ModalBody>
+            {apiError && <ErrorDisplay message={apiError} />}
+            {apiSuccess && <SuccessDisplay message={apiSuccess} />}
             <AnimatePresence mode="wait">
               {!isFormVisible ? (
                 <ButtonSection
@@ -271,6 +342,7 @@ export default function SignUpModal({ isOpen, onClose }) {
                   handleChange={handleChange}
                   errors={errors}
                   handleSubmit={handleSubmit}
+                  isLoading={isLoading}
                 />
               )}
             </AnimatePresence>
