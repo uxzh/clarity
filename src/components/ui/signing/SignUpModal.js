@@ -15,6 +15,7 @@ import {
 import { AnimatePresence, m, domAnimation, LazyMotion } from "framer-motion";
 import { Icon } from "@iconify/react";
 import { AuthContext } from "../../../contexts/AuthContext";
+import SignUpSuccess from "./SignUpSuccess";
 
 const useForm = (initialState) => {
   const [formData, setFormData] = useState(initialState);
@@ -23,9 +24,7 @@ const useForm = (initialState) => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-    if (errors[name]) {
-      setErrors((prev) => ({ ...prev, [name]: "" }));
-    }
+    setErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
   const validateForm = (isSignUp) => {
@@ -108,6 +107,7 @@ const FormSection = ({
     {isSignUp && (
       <Tooltip content="Username must be 5-50 characters long">
         <Input
+          isRequired
           label="Username"
           name="username"
           placeholder="Enter your username"
@@ -120,6 +120,7 @@ const FormSection = ({
     )}
     <Tooltip content="Enter a valid email address">
       <Input
+        isRequired
         label="Email"
         name="email"
         placeholder="Enter your email"
@@ -131,6 +132,7 @@ const FormSection = ({
     </Tooltip>
     <Tooltip content="Password must be 8-50 characters long">
       <Input
+        isRequired
         label="Password"
         name="password"
         placeholder="Enter your password"
@@ -161,6 +163,7 @@ const FormSection = ({
     </Tooltip>
     {isSignUp && (
       <Input
+        isRequired
         label="Confirm Password"
         name="confirmPassword"
         placeholder="Confirm your password"
@@ -254,6 +257,7 @@ export default function SignUpModal({ isOpen, onClose }) {
   const [apiError, setApiError] = useState(null);
   const [apiSuccess, setApiSuccess] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   const initialFormState = {
     email: "",
@@ -292,12 +296,11 @@ export default function SignUpModal({ isOpen, onClose }) {
             password: formData.password,
             confirmPassword: formData.confirmPassword,
           });
-          login(response.data);
           if (isSignUp) {
-            setApiSuccess(
-              "Congratulations! Your account has been successfully created. Please check your email to verify your account."
-            );
+            setShowSuccessModal(true);
+            onClose();
           } else {
+            login(response.data);
             onClose();
           }
         } catch (error) {
@@ -307,6 +310,12 @@ export default function SignUpModal({ isOpen, onClose }) {
             error.response.data.error
           ) {
             setApiError(error.response.data.error);
+            if (error.response.data.error === "Username already in use") {
+              setErrors((prev) => ({
+                ...prev,
+                username: "Username is already taken",
+              }));
+            }
           } else {
             setApiError("An unexpected error occurred. Please try again.");
           }
@@ -320,47 +329,53 @@ export default function SignUpModal({ isOpen, onClose }) {
   );
 
   return (
-    <LazyMotion features={domAnimation}>
-      <Modal isOpen={isOpen} onClose={onClose} size="lg">
-        <ModalContent>
-          <ModalHeader className="flex flex-col gap-1">
-            {isSignUp ? "Create an account" : "Welcome back"}
-          </ModalHeader>
-          <ModalBody>
-            {apiError && <ErrorDisplay message={apiError} />}
-            {apiSuccess && <SuccessDisplay message={apiSuccess} />}
-            <AnimatePresence mode="wait">
-              {!isFormVisible ? (
-                <ButtonSection
-                  isSignUp={isSignUp}
-                  setIsFormVisible={setIsFormVisible}
-                />
-              ) : (
-                <FormSection
-                  isSignUp={isSignUp}
-                  formData={formData}
-                  handleChange={handleChange}
-                  errors={errors}
-                  handleSubmit={handleSubmit}
-                  isLoading={isLoading}
-                />
-              )}
-            </AnimatePresence>
-          </ModalBody>
-          <ModalFooter>
-            <div className="w-full text-center">
-              <span className="text-gray-600 dark:text-gray-400">
-                {isSignUp
-                  ? "Already have an account?"
-                  : "Need to create an account?"}
-              </span>{" "}
-              <Link href="#" onPress={toggleSignUp}>
-                {isSignUp ? "Log In" : "Sign Up"}
-              </Link>
-            </div>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
-    </LazyMotion>
+    <>
+      <LazyMotion features={domAnimation}>
+        <Modal isOpen={isOpen} onClose={onClose} size="lg">
+          <ModalContent>
+            <ModalHeader className="flex flex-col gap-1">
+              {isSignUp ? "Create an account" : "Welcome back"}
+            </ModalHeader>
+            <ModalBody>
+              {apiError && <ErrorDisplay message={apiError} />}
+              {apiSuccess && <SuccessDisplay message={apiSuccess} />}
+              <AnimatePresence mode="wait">
+                {!isFormVisible ? (
+                  <ButtonSection
+                    isSignUp={isSignUp}
+                    setIsFormVisible={setIsFormVisible}
+                  />
+                ) : (
+                  <FormSection
+                    isSignUp={isSignUp}
+                    formData={formData}
+                    handleChange={handleChange}
+                    errors={errors}
+                    handleSubmit={handleSubmit}
+                    isLoading={isLoading}
+                  />
+                )}
+              </AnimatePresence>
+            </ModalBody>
+            <ModalFooter>
+              <div className="w-full text-center">
+                <span className="text-gray-600 dark:text-gray-400">
+                  {isSignUp
+                    ? "Already have an account?"
+                    : "Need to create an account?"}
+                </span>{" "}
+                <Link href="#" onPress={toggleSignUp}>
+                  {isSignUp ? "Log In" : "Sign Up"}
+                </Link>
+              </div>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
+      </LazyMotion>
+      <SignUpSuccess
+        isOpen={showSuccessModal}
+        onClose={() => setShowSuccessModal(false)}
+      />
+    </>
   );
 }
