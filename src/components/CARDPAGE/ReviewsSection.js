@@ -22,17 +22,18 @@ const ReviewsSection = React.memo(
 
     return (
       <div className="flex flex-col gap-4">
-        <div className="flex w-full items-center justify-between gap-4">
-          <div className="flex items-center gap-2">
+        <div className="flex w-full items-center justify-end gap-4">
+          <div className="flex items-center">
             <Button
-              startContent={<Icon icon="akar-icons:arrow-left" />}
               variant="light"
+              isIconOnly
               onClick={handleGoBack}
-              className="md:inline-block bg-white hidden"
+              className="md:inline-flex bg-white hidden"
             >
-              Back to cards
+              <Icon icon="akar-icons:arrow-left" />
             </Button>
-            <h1 className="text-medium font-semibold md:text-large hidden md:block">
+
+            <h1 className="text-medium font-semibold mx-4 md:text-large hidden md:block">
               Reviews
             </h1>
           </div>
