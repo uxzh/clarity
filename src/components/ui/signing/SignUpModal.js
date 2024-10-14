@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useContext } from "react";
+import React, { useState, useCallback, useContext, useEffect } from "react";
 import {
   Modal,
   ModalContent,
@@ -16,6 +16,11 @@ import { AnimatePresence, m, domAnimation, LazyMotion } from "framer-motion";
 import { Icon } from "@iconify/react";
 import { AuthContext } from "../../../contexts/AuthContext";
 import SignUpSuccess from "./SignUpSuccess";
+
+const AUTH_METHODS = {
+  google: "google",
+  email: "email",
+}
 
 const useForm = (initialState) => {
   const [formData, setFormData] = useState(initialState);
@@ -59,7 +64,7 @@ const useForm = (initialState) => {
   return { formData, handleChange, errors, setErrors, validateForm };
 };
 
-const ButtonSection = ({ isSignUp, setIsFormVisible }) => (
+const ButtonSection = ({ isSignUp, setIsFormVisible, setAuthMethod }) => (
   <m.div
     key="buttons"
     initial="hidden"
@@ -73,14 +78,20 @@ const ButtonSection = ({ isSignUp, setIsFormVisible }) => (
       variant="bordered"
       startContent={<Icon icon="flat-color-icons:google" />}
       className="w-full mb-3"
-      onPress={() => setIsFormVisible(true)}
+      onPress={() => {
+        setIsFormVisible(true)
+        setAuthMethod(AUTH_METHODS.google)
+      }}
     >
       {isSignUp ? "Sign Up with Google" : "Sign In with Google"}
     </Button>
     <Button
       color="primary"
       className="w-full"
-      onPress={() => setIsFormVisible(true)}
+      onPress={() => {
+        setIsFormVisible(true)
+        setAuthMethod(AUTH_METHODS.email)
+      }}
     >
       {isSignUp ? "Sign Up with Email" : "Sign In with Email"}
     </Button>
@@ -251,6 +262,37 @@ const SuccessDisplay = ({ message }) => (
   </div>
 );
 
+const GoogleFormSection = ({
+  isSignUp,
+  handleGoogle,
+}) => {
+  useEffect(() => {
+    /* global google */
+    if (window.google) {
+      google.accounts.id.initialize({
+        client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID,
+        callback: (res) => handleGoogle(res, isSignUp),
+      });
+
+      google.accounts.id.renderButton(document.getElementById("google-signup"), {
+        theme: "filled_white",
+        text: "continue_with",
+        shape: "pill",
+      });
+    }
+  }, [handleGoogle]);
+
+  return (
+    <div id="google-signup"
+      style={{ 
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+       }}
+    ></div>
+  )
+};
+
 export default function SignUpModal({ isOpen, onClose }) {
   const [isSignUp, setIsSignUp] = useState(false);
   const [isFormVisible, setIsFormVisible] = useState(false);
@@ -258,6 +300,7 @@ export default function SignUpModal({ isOpen, onClose }) {
   const [apiSuccess, setApiSuccess] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [authMethod, setAuthMethod] = useState(null);
 
   const initialFormState = {
     email: "",
@@ -280,6 +323,7 @@ export default function SignUpModal({ isOpen, onClose }) {
     setApiError(null);
     setApiSuccess(null);
     setErrors({});
+    setAuthMethod(null);
   }, [setErrors]);
 
   const handleSubmit = useCallback(
@@ -298,11 +342,9 @@ export default function SignUpModal({ isOpen, onClose }) {
           });
           if (isSignUp) {
             setShowSuccessModal(true);
-            onClose();
-          } else {
-            login(response.data);
-            onClose();
           }
+          login(response.data);
+          onClose();
         } catch (error) {
           if (
             error.response &&
@@ -328,6 +370,33 @@ export default function SignUpModal({ isOpen, onClose }) {
     [formData, validateForm, isSignUp, api, login, onClose]
   );
 
+  const handleGoogle = useCallback(async (response, isSignUp) => {
+    setIsLoading(true);
+    try {
+      const res = await api[isSignUp ? "signupGoogle" : "loginGoogle"]({
+        credential: response.credential,
+      });
+      if (isSignUp) {
+        setShowSuccessModal(true);
+      }
+      login(res.data);
+      onClose();
+    } catch (error) {
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.error
+      ) {
+        setApiError(error.response.data.error);
+      } else {
+        setApiError("An unexpected error occurred. Please try again.");
+      }
+      console.error("Authentication error:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [api, login, onClose]);
+
   return (
     <>
       <LazyMotion features={domAnimation}>
@@ -344,8 +413,11 @@ export default function SignUpModal({ isOpen, onClose }) {
                   <ButtonSection
                     isSignUp={isSignUp}
                     setIsFormVisible={setIsFormVisible}
+                    setAuthMethod={setAuthMethod}
                   />
-                ) : (
+                ) : null}
+
+                {isFormVisible && authMethod === AUTH_METHODS.email ? (
                   <FormSection
                     isSignUp={isSignUp}
                     formData={formData}
@@ -354,7 +426,16 @@ export default function SignUpModal({ isOpen, onClose }) {
                     handleSubmit={handleSubmit}
                     isLoading={isLoading}
                   />
-                )}
+                ) : null}
+
+                {isFormVisible && authMethod === AUTH_METHODS.google ? (
+                  <GoogleFormSection
+                    isSignUp={isSignUp}
+                    errors={errors}
+                    handleGoogle={handleGoogle}
+                    isLoading={isLoading}
+                  />
+                ) : null}
               </AnimatePresence>
             </ModalBody>
             <ModalFooter>

@@ -152,7 +152,8 @@ class AuthController {
       }
 
       const profile = verificationResponse?.payload;
-      let existingUser = await UsersDAO.getOneByField("email", profile?.email);
+      const { email } = profile;
+      let existingUser = await UsersDAO.getOneByField("email", email);
       if (existingUser) {
         return res.status(400).send({ error: "User already exists" });
       }
@@ -176,6 +177,7 @@ class AuthController {
 
       const { error } = await UsersDAO.createOne(user);
       if (error) {
+        console.error('db error', error)
         return res.status(500).send({ error: "Error signing up" });
       }
 
@@ -184,6 +186,7 @@ class AuthController {
       delete user.role;
       res.status(201).send(user);
     } catch (e) {
+      console.error(e);
       res.status(500).send({ error: "Error signing up" });
     }
   }
