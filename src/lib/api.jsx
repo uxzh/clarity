@@ -15,6 +15,10 @@ class Api {
 
   signup = async ({ email, password, confirmPassword, username }) => await this.axios.post(`/auth/signup`, { email, password, confirmPassword, username });
 
+  loginGoogle = async ({ credential }) => await this.axios.post(`/auth/login/google`, { credential });
+
+  signupGoogle = async ({ credential }) => await this.axios.post(`/auth/signup/google`, { credential });
+
   // users
   getUser = async (id) => await this.axios.get(`/users/${id}`);
 

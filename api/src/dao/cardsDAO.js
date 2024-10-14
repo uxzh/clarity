@@ -176,6 +176,12 @@ class CardsDAO {
             ], 
             'worst_rating': [
               {
+                '$match': {
+                  'bayesianRating': {
+                    '$gte': 1
+                  }
+                }
+              }, {
                 '$sort': {
                   'bayesianRating': 1
                 }
