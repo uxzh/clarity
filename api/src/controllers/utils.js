@@ -6,17 +6,26 @@ const getReviewsByCardIdWithLikes = async ({
   id,
   user,
   perPage,
-  page
+  page,
+  sort
 }) => {
   try {
-   // TODO: optimize db queries
+    const sortOptions = {
+      most_recent: { createdAt: -1 },
+      highest_rating: { rating: -1 },
+      lowest_rating: { rating: 1 },
+      most_popular: { likes: -1 }
+    };
+
+    // Apply pagination and sorting to the MongoDB query
     const reviews = await ReviewsDAO.getManyByField({
       field: "cardId",
       value: new ObjectId(id),
-      sort: "createdAt",
+      sort: sortOptions[sort] || sortOptions.most_popular,
       page,
       perPage,
     });
+
     const reviewIds = reviews.map((review) => review._id);
     const likes = await LikesDAO.getManyCountByTargetIds(reviewIds, 'review');
     const likesMap = likes.reduce((acc, like) => {

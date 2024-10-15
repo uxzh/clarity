@@ -158,6 +158,26 @@ class ReviewsController {
       res.status(500).send({ error: "Error deleting like" });
     }
   }
+
+  // Add a method to handle the search request and call the new method in ReviewsDAO
+  static async searchReviews(req, res) {
+    try {
+      const { query } = req.query;
+      if (!query) {
+        return res.status(400).send({ error: "No search query provided" });
+      }
+
+      const reviews = await ReviewsDAO.fuzzySearchReviews(query);
+      if (!reviews || reviews.error) {
+        return res.status(500).send({ error: "Error searching reviews" });
+      }
+
+      res.status(200).send(reviews);
+    } catch (e) {
+      console.error(e);
+      res.status(500).send({ error: "Error searching reviews" });
+    }
+  }
 }
 
 module.exports = ReviewsController;

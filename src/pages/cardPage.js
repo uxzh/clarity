@@ -21,7 +21,7 @@ function Review() {
   const [cardData, setCardData] = useState(null);
   const [reviews, setReviews] = useState([]);
   const [selectedFilter, setSelectedFilter] = useState(
-    new Set(["most_recent"])
+    new Set(["most_popular"])
   );
   const [selectedTab, setSelectedTab] = useState("reviews");
   const [isLoading, setIsLoading] = useState(true);

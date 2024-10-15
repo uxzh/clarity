@@ -112,6 +112,122 @@ class ReviewsDAO {
       return { error: e };
     }
   }
+
+  // Add a method for fuzzy searching reviews using MongoDB's text search capabilities
+  static async fuzzySearchReviews(query) {
+    try {
+      return await reviews.aggregate([
+        {
+          $search: {
+            index: "reviews-search",
+            text: {
+              query: query,
+              path: ["title", "content"],
+              fuzzy: {
+                maxEdits: 2
+              }
+            }
+          }
+        },
+        {
+          $lookup: {
+            from: models.users,
+            localField: "userId",
+            foreignField: "_id",
+            as: "user"
+          }
+        },
+        {
+          $unwind: "$user"
+        },
+        {
+          $project: {
+            _id: 1,
+            cardId: 1,
+            userId: 1,
+            rating: 1,
+            title: 1,
+            content: 1,
+            createdAt: 1,
+            updatedAt: 1,
+            "user.username": 1,
+            "user.avatar": 1
+          }
+        }
+      ]).toArray();
+    } catch (e) {
+      console.error(`Unable to perform fuzzy search on reviews: ${e}`);
+      return { error: e };
+    }
+  }
+
+  // Add a method for sorting reviews by the number of likes
+  static async getReviewsSortedByLikes({
+    field,
+    value,
+    sort = "likes",
+    page = 0,
+    perPage = 20,
+  } = {}) {
+    try {
+      return await reviews.aggregate([
+        {
+          $match: { [field]: new ObjectId(value) }
+        },
+        {
+          $lookup: {
+            from: models.likes,
+            localField: "_id",
+            foreignField: "targetId",
+            as: "likes"
+          }
+        },
+        {
+          $addFields: {
+            likesCount: { $size: "$likes" }
+          }
+        },
+        {
+          $lookup: {
+            from: models.users,
+            localField: "userId",
+            foreignField: "_id",
+            as: "user"
+          }
+        },
+        {
+          $unwind: "$user"
+        },
+        {
+          $project: {
+            _id: 1,
+            cardId: 1,
+            userId: 1,
+            rating: 1,
+            title: 1,
+            content: 1,
+            createdAt: 1,
+            updatedAt: 1,
+            likesCount: 1,
+            "user.username": 1,
+            "user.avatar": 1
+          }
+        },
+        {
+          $sort: { [sort]: -1 }
+        },
+        {
+          $skip: perPage * page
+        },
+        {
+          $limit: perPage
+        }
+      ]).toArray();
+    } catch (e) {
+      console.error(`Unable to get reviews sorted by likes: ${e}`);
+      return { error: e };
+    }
+  }
 }
 
 module.exports = ReviewsDAO;

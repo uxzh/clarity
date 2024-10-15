@@ -8,6 +8,7 @@ class CardsController {
   static async getCard(req, res) {
     try {
       const { id } = req.params;
+      const { sort, page, perPage } = req.query;
       const card = await CardsDAO.getOneById(id);
       if (!card) {
         return res.status(404).send({ error: "Card not found" });
@@ -15,8 +16,9 @@ class CardsController {
       const reviews = await getReviewsByCardIdWithLikes({
         id,
         user: req.user,
-        perPage: 20,
-        page: 0,
+        perPage: parseInt(perPage) || 20,
+        page: parseInt(page) || 0,
+        sort: sort || "most_popular",
       });
       card.reviews = reviews;
       res.status(200).send(card);
@@ -48,11 +50,13 @@ class CardsController {
   static async getReviewsByCard(req, res) {
     try {
       const { id } = req.params;
+      const { sort, page, perPage } = req.query;
       const reviews = await getReviewsByCardIdWithLikes({
         id,
         user: req.user,
-        perPage: parseInt(req.query.perPage) || 20,
-        page: parseInt(req.query.page) || 0,
+        perPage: parseInt(perPage) || 20,
+        page: parseInt(page) || 0,
+        sort: sort || "most_popular",
       });
       const { error } = reviews;
       if (error) {

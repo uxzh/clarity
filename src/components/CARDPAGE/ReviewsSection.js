@@ -13,25 +13,15 @@ const ReviewsSection = React.memo(
     selectedFilter,
     handleSelectionChange,
     handleGoBack,
+    currentPage,
+    reviewsPerPage,
+    handlePageChange,
   }) => {
-    const [currentPage, setCurrentPage] = useState(1);
-    const reviewsPerPage = 5;
-
     const averageRating = useMemo(() => {
       if (reviews.length === 0) return 0;
       const sum = reviews.reduce((acc, review) => acc + review.rating, 0);
       return (sum / reviews.length).toFixed(1);
     }, [reviews]);
-
-    const paginatedReviews = useMemo(() => {
-      const startIndex = (currentPage - 1) * reviewsPerPage;
-      const endIndex = startIndex + reviewsPerPage;
-      return reviews.slice(startIndex, endIndex);
-    }, [currentPage, reviews]);
-
-    const handlePageChange = (page) => {
-      setCurrentPage(page);
-    };
 
     return (
       <div className="flex flex-col gap-4">
@@ -69,6 +59,9 @@ const ReviewsSection = React.memo(
                 onSelectionChange={handleSelectionChange}
                 disallowEmptySelection={true}
               >
+                <SelectItem key="most_popular" value="most_popular">
+                  Most popular
+                </SelectItem>
                 <SelectItem key="most_recent" value="most_recent">
                   Most recent
                 </SelectItem>
@@ -86,7 +79,7 @@ const ReviewsSection = React.memo(
         {reviews.length > 0 ? (
           <>
             <SummaryFromTheWeb reviewFromTheWeb={reviewFromTheWeb} />
-            {paginatedReviews.map((review, index) => (
+            {reviews.map((review, index) => (
               <CardReview key={index} {...review} />
             ))}
             <Pagination
