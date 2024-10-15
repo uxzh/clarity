@@ -3,7 +3,7 @@ import { Button, Input, Select, SelectItem, Card, Pagination } from "@nextui-org
 import React, { useMemo, useState, useEffect, useContext } from "react";
 import CardReview from "../ui/reviews/user_review_cards/card-review";
 import SummaryFromTheWeb from "./from-the-web/summary";
-import { AuthContext } from "../../../contexts/AuthContext";
+import { AuthContext } from "../../contexts/AuthContext";
 
 const ReviewsSection = React.memo(
   ({
@@ -20,22 +20,23 @@ const ReviewsSection = React.memo(
   }) => {
     const { api } = useContext(AuthContext);
     const [searchQuery, setSearchQuery] = useState("");
+    const [sortedReviews, setSortedReviews] = useState(reviews);
 
     const averageRating = useMemo(() => {
-      if (reviews.length === 0) return 0;
-      const sum = reviews.reduce((acc, review) => acc + review.rating, 0);
-      return (sum / reviews.length).toFixed(1);
-    }, [reviews]);
+      if (sortedReviews.length === 0) return 0;
+      const sum = sortedReviews.reduce((acc, review) => acc + review.rating, 0);
+      return (sum / sortedReviews.length).toFixed(1);
+    }, [sortedReviews]);
 
     useEffect(() => {
       const fetchData = async () => {
         try {
           const { data: sortedReviews } = await api.getCard(cardId, {
-            sort: selectedFilter,
+            sort: Array.from(selectedFilter)[0],
             page: currentPage,
             perPage: reviewsPerPage,
           });
-          setReviews(sortedReviews);
+          setSortedReviews(sortedReviews.reviews);
         } catch (error) {
           console.error("Error fetching sorted reviews:", error);
         }
@@ -47,7 +48,7 @@ const ReviewsSection = React.memo(
     const handleSearch = async () => {
       try {
         const { data: searchResults } = await api.searchReviews(searchQuery);
-        setReviews(searchResults);
+        setSortedReviews(searchResults);
       } catch (error) {
         console.error("Error searching reviews:", error);
       }
@@ -70,7 +71,7 @@ const ReviewsSection = React.memo(
               Reviews
             </h1>
           </div>
-          {reviews.length > 0 && (
+          {sortedReviews.length > 0 && (
             <div className="flex items-center justify-between w-full">
               <Input
                 variant="flat"
@@ -113,14 +114,14 @@ const ReviewsSection = React.memo(
           )}
         </div>
 
-        {reviews.length > 0 ? (
+        {sortedReviews.length > 0 ? (
           <>
             <SummaryFromTheWeb reviewFromTheWeb={reviewFromTheWeb} />
-            {reviews.map((review, index) => (
+            {sortedReviews.map((review, index) => (
               <CardReview key={index} {...review} />
             ))}
             <Pagination
-              total={Math.ceil(reviews.length / reviewsPerPage)}
+              total={Math.ceil(sortedReviews.length / reviewsPerPage)}
               initialPage={1}
               page={currentPage}
               onChange={handlePageChange}
