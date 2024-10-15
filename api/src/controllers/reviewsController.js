@@ -158,6 +158,29 @@ class ReviewsController {
       res.status(500).send({ error: "Error deleting like" });
     }
   }
+
+  static async getReviews(req, res) {
+    try {
+      const { cardId, sort = "most_popular", search = "", page = 0, perPage = 20 } = req.query;
+
+      const reviews = await ReviewsDAO.getReviews({
+        cardId,
+        sort,
+        search,
+        page: parseInt(page),
+        perPage: parseInt(perPage),
+      });
+
+      if (!reviews || reviews.error) {
+        return res.status(500).send({ error: "Error fetching reviews" });
+      }
+
+      res.status(200).send(reviews);
+    } catch (e) {
+      console.error(e);
+      res.status(500).send({ error: "Error fetching reviews" });
+    }
+  }
 }
 
 module.exports = ReviewsController;

@@ -112,6 +112,70 @@ class ReviewsDAO {
       return { error: e };
     }
   }
+
+  static async getReviews({
+    cardId,
+    sort = "most_popular",
+    search = "",
+    page = 0,
+    perPage = 20,
+  } = {}) {
+    try {
+      const pipeline = [
+        {
+          $match: { cardId: new ObjectId(cardId) },
+        },
+        {
+          $lookup: {
+            from: models.users,
+            localField: "userId",
+            foreignField: "_id",
+            as: "user",
+          },
+        },
+        {
+          $unwind: "$user",
+        },
+        {
+          $project: {
+            _id: 1,
+            cardId: 1,
+            userId: 1,
+            rating: 1,
+            title: 1,
+            content: 1,
+            createdAt: 1,
+            updatedAt: 1,
+            "user.username": 1,
+            "user.avatar": 1,
+            likes: 1,
+          },
+        },
+        {
+          $match: {
+            $or: [
+              { title: { $regex: search, $options: "i" } },
+              { content: { $regex: search, $options: "i" } },
+            ],
+          },
+        },
+      ];
+
+      if (sort === "most_popular") {
+        pipeline.push({ $sort: { likes: -1 } });
+      } else {
+        pipeline.push({ $sort: { createdAt: -1 } });
+      }
+
+      pipeline.push({ $skip: perPage * page });
+      pipeline.push({ $limit: perPage });
+
+      return await reviews.aggregate(pipeline).toArray();
+    } catch (e) {
+      console.error(`Unable to get reviews: ${e}`);
+      return { error: e };
+    }
+  }
 }
 
 module.exports = ReviewsDAO;

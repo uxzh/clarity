@@ -30,6 +30,9 @@ function Review() {
   const [currentPage, setCurrentPage] = useState(1);
   const reviewsPerPage = 5;
 
+  const [searchTerm, setSearchTerm] = useState(""); // Pd5d1
+  const [filteredReviews, setFilteredReviews] = useState([]); // P4223
+
   const searchParams = new URLSearchParams(location.search);
   const cardId = searchParams.get("cardId");
 
@@ -71,8 +74,8 @@ function Review() {
   const paginatedReviews = useMemo(() => {
     const startIndex = (currentPage - 1) * reviewsPerPage;
     const endIndex = startIndex + reviewsPerPage;
-    return reviews.slice(startIndex, endIndex);
-  }, [currentPage, reviews]);
+    return filteredReviews.slice(startIndex, endIndex);
+  }, [currentPage, filteredReviews]);
 
   const handleWriteReview = useCallback(() => {
     onOpen();
@@ -94,6 +97,36 @@ function Review() {
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
+
+  const handleSearch = useCallback((term) => {
+    setSearchTerm(term);
+    const filtered = reviews.filter(
+      (review) =>
+        review.title.toLowerCase().includes(term.toLowerCase()) ||
+        review.content.toLowerCase().includes(term.toLowerCase())
+    );
+    setFilteredReviews(filtered);
+  }, [reviews]); // P7d23
+
+  useEffect(() => {
+    const fetchReviews = async () => {
+      try {
+        const { data: fetchedReviews } = await api.getReviews({
+          cardId,
+          sort: selectedFilter.values().next().value,
+          search: searchTerm,
+          page: currentPage - 1,
+          perPage: reviewsPerPage,
+        });
+        setReviews(fetchedReviews);
+        setFilteredReviews(fetchedReviews);
+      } catch (error) {
+        console.error("Error fetching reviews:", error);
+      }
+    };
+
+    fetchReviews();
+  }, [api, cardId, selectedFilter, searchTerm, currentPage]); // P8e6a
 
   if (isLoading)
     return (
@@ -122,6 +155,8 @@ function Review() {
               currentPage={currentPage}
               reviewsPerPage={reviewsPerPage}
               handlePageChange={handlePageChange}
+              searchTerm={searchTerm} // P8e6a
+              handleSearch={handleSearch} // P8e6a
             />
           </section>
           <section className="lg:col-span-1 lg:sticky lg:top-16 lg:h-screen lg:overflow-y-auto order-1 lg:order-2">

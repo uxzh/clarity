@@ -13,6 +13,8 @@ const ReviewsSection = React.memo(
     selectedFilter,
     handleSelectionChange,
     handleGoBack,
+    searchTerm,
+    handleSearch,
   }) => {
     const [currentPage, setCurrentPage] = useState(1);
     const reviewsPerPage = 5;
@@ -60,6 +62,8 @@ const ReviewsSection = React.memo(
                 labelPlacement="outside"
                 placeholder="Search reviews"
                 startContent={<Icon icon="solar:magnifer-linear" />}
+                value={searchTerm}
+                onChange={(e) => handleSearch(e.target.value)}
               />
               <Select
                 variant="flat"
@@ -77,6 +81,9 @@ const ReviewsSection = React.memo(
                 </SelectItem>
                 <SelectItem key="lowest_rating" value="lowest_rating">
                   Lowest rating
+                </SelectItem>
+                <SelectItem key="most_popular" value="most_popular">
+                  Most Popular
                 </SelectItem>
               </Select>
             </div>
