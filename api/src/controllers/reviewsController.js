@@ -1,6 +1,7 @@
 const CardsDAO = require("../dao/cardsDAO");
 const LikesDAO = require("../dao/likesDAO");
 const ReviewsDAO = require("../dao/reviewsDAO");
+const { getReviewsByCardIdWithLikes } = require("./utils");
 
 class ReviewsController {
   static async getReview(req, res) {
