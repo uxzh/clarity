@@ -45,7 +45,11 @@ function Review() {
       setIsLoading(true);
       setError(null);
       try {
-        const { data: selectedCard } = await api.getCard(cardId);
+        const { data: selectedCard } = await api.getCard(cardId, {
+          sort: Array.from(selectedFilter)[0],
+          page: currentPage,
+          perPage: reviewsPerPage,
+        });
         setReviews(selectedCard.reviews || []);
         setCardData(selectedCard);
       } catch (error) {
@@ -60,7 +64,7 @@ function Review() {
     };
 
     fetchData();
-  }, [cardId, navigate]);
+  }, [cardId, navigate, selectedFilter, currentPage, reviewsPerPage]);
 
   const averageRating = useMemo(() => {
     if (reviews.length === 0) return 0;

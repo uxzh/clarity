@@ -6,7 +6,9 @@ class Api {
   // cards
   getTopCards = async () => await this.axios.get(`/cards/top-cards`);
 
-  getCard = async (id) => await this.axios.get(`/cards/${id}`);
+  getCard = async (id, { sort, page, perPage }) => await this.axios.get(`/cards/${id}`, {
+    params: { sort, page, perPage }
+  });
 
   getCards = async ({ page = 0, perPage = 20, search = '' }) => await this.axios.get(`/cards?page=${page}&perPage=${perPage}&search=${search}`);
 
@@ -30,6 +32,10 @@ class Api {
   updateReviewLike = async (id, isLike) => await this.axios.put(`/reviews/${id}/like`, { isLike });
 
   deleteReviewLike = async (id) => await this.axios.delete(`/reviews/${id}/like`);
+
+  searchReviews = async (query) => await this.axios.get(`/reviews/search`, {
+    params: { query }
+  });
 }
 
 export default Api;

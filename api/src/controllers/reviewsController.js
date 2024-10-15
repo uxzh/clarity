@@ -178,6 +178,29 @@ class ReviewsController {
       res.status(500).send({ error: "Error searching reviews" });
     }
   }
+
+  // Update the getReviewsByCard method to accept and pass the sort parameter
+  static async getReviewsByCard(req, res) {
+    try {
+      const { id } = req.params;
+      const { sort, page, perPage } = req.query;
+      const reviews = await getReviewsByCardIdWithLikes({
+        id,
+        user: req.user,
+        perPage: parseInt(perPage) || 20,
+        page: parseInt(page) || 0,
+        sort: sort || "most_popular",
+      });
+      const { error } = reviews;
+      if (error) {
+        return res.status(404).send(error)
+      }
+      res.status(200).send(reviews);
+    } catch (e) {
+      console.error(e)
+      res.status(500).send({ error: "Error fetching reviews" });
+    }
+  }
 }
 
 module.exports = ReviewsController;

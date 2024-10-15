@@ -1,8 +1,9 @@
 import { Icon } from "@iconify/react";
 import { Button, Input, Select, SelectItem, Card, Pagination } from "@nextui-org/react";
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect, useContext } from "react";
 import CardReview from "../ui/reviews/user_review_cards/card-review";
 import SummaryFromTheWeb from "./from-the-web/summary";
+import { AuthContext } from "../../../contexts/AuthContext";
 
 const ReviewsSection = React.memo(
   ({
@@ -17,11 +18,40 @@ const ReviewsSection = React.memo(
     reviewsPerPage,
     handlePageChange,
   }) => {
+    const { api } = useContext(AuthContext);
+    const [searchQuery, setSearchQuery] = useState("");
+
     const averageRating = useMemo(() => {
       if (reviews.length === 0) return 0;
       const sum = reviews.reduce((acc, review) => acc + review.rating, 0);
       return (sum / reviews.length).toFixed(1);
     }, [reviews]);
+
+    useEffect(() => {
+      const fetchData = async () => {
+        try {
+          const { data: sortedReviews } = await api.getCard(cardId, {
+            sort: selectedFilter,
+            page: currentPage,
+            perPage: reviewsPerPage,
+          });
+          setReviews(sortedReviews);
+        } catch (error) {
+          console.error("Error fetching sorted reviews:", error);
+        }
+      };
+
+      fetchData();
+    }, [selectedFilter, currentPage, reviewsPerPage]);
+
+    const handleSearch = async () => {
+      try {
+        const { data: searchResults } = await api.searchReviews(searchQuery);
+        setReviews(searchResults);
+      } catch (error) {
+        console.error("Error searching reviews:", error);
+      }
+    };
 
     return (
       <div className="flex flex-col gap-4">
@@ -50,6 +80,13 @@ const ReviewsSection = React.memo(
                 labelPlacement="outside"
                 placeholder="Search reviews"
                 startContent={<Icon icon="solar:magnifer-linear" />}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onKeyPress={(e) => {
+                  if (e.key === "Enter") {
+                    handleSearch();
+                  }
+                }}
               />
               <Select
                 variant="flat"
