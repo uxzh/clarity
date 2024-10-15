@@ -45,7 +45,7 @@ const CardReview = React.forwardRef(({ className, ...review }, ref) => {
   // Destructure review props
   const {
     _id,
-    likedByUser = 0,
+    likedbyuser = 0,
     likes: initialLikes = 0,
     dislikes: initialDislikes = 0,
     user: author,
@@ -53,7 +53,7 @@ const CardReview = React.forwardRef(({ className, ...review }, ref) => {
 
   // State for like/dislike functionality
   const [likeStatus, setLikeStatus] = useState(
-    likedByUser === 1 ? "like" : likedByUser === -1 ? "dislike" : "none"
+    likedbyuser === 1 ? "like" : likedbyuser === -1 ? "dislike" : "none"
   );
   const [likes, setLikes] = useState(initialLikes);
   const [dislikes, setDislikes] = useState(initialDislikes);
