@@ -29,6 +29,7 @@ function Review() {
 
   const [currentPage, setCurrentPage] = useState(1);
   const reviewsPerPage = 5;
+  const [fetchedPages, setFetchedPages] = useState({});
 
   const searchParams = new URLSearchParams(location.search);
   const cardId = searchParams.get("cardId");
@@ -48,6 +49,7 @@ function Review() {
         const { data: selectedCard } = await api.getCard(cardId);
         setReviews(selectedCard.reviews || []);
         setCardData(selectedCard);
+        setFetchedPages({ 1: selectedCard.reviews || [] });
       } catch (error) {
         console.error("Error fetching data:", error);
         setError(error);
@@ -61,6 +63,23 @@ function Review() {
 
     fetchData();
   }, [cardId, navigate]);
+
+  const fetchNextPage = useCallback(async (page) => {
+    if (fetchedPages[page]) return;
+    try {
+      const { data: nextPageReviews } = await api.getReviews(cardId, page, reviewsPerPage);
+      setFetchedPages((prev) => ({ ...prev, [page]: nextPageReviews }));
+      setReviews((prev) => [...prev, ...nextPageReviews]);
+    } catch (error) {
+      console.error("Error fetching next page of reviews:", error);
+    }
+  }, [cardId, fetchedPages, reviewsPerPage]);
+
+  useEffect(() => {
+    if (currentPage > 1) {
+      fetchNextPage(currentPage + 1);
+    }
+  }, [currentPage, fetchNextPage]);
 
   const averageRating = useMemo(() => {
     if (reviews.length === 0) return 0;
