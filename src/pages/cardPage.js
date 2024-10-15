@@ -27,6 +27,9 @@ function Review() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const reviewsPerPage = 5;
+
   const searchParams = new URLSearchParams(location.search);
   const cardId = searchParams.get("cardId");
 
@@ -65,6 +68,12 @@ function Review() {
     return (sum / reviews.length).toFixed(1);
   }, [reviews]);
 
+  const paginatedReviews = useMemo(() => {
+    const startIndex = (currentPage - 1) * reviewsPerPage;
+    const endIndex = startIndex + reviewsPerPage;
+    return reviews.slice(startIndex, endIndex);
+  }, [currentPage, reviews]);
+
   const handleWriteReview = useCallback(() => {
     onOpen();
   }, [onOpen]);
@@ -81,6 +90,10 @@ function Review() {
   const handleTabChange = useCallback((key) => {
     setSelectedTab(key);
   }, []);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
 
   if (isLoading)
     return (
@@ -99,13 +112,16 @@ function Review() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <section className="lg:col-span-2 lg:mt-6 px-2 order-2 lg:order-1">
             <ReviewsSection
-              reviews={reviews}
+              reviews={paginatedReviews}
               handleWriteReview={onOpen}
               cardName={cardData.cardName}
               selectedFilter={selectedFilter}
               handleSelectionChange={handleSelectionChange}
               handleGoBack={handleGoBack}
               reviewFromTheWeb={cardData.reviewFromTheWeb}
+              currentPage={currentPage}
+              reviewsPerPage={reviewsPerPage}
+              handlePageChange={handlePageChange}
             />
           </section>
           <section className="lg:col-span-1 lg:sticky lg:top-16 lg:h-screen lg:overflow-y-auto order-1 lg:order-2">
