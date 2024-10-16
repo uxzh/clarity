@@ -148,7 +148,7 @@ const CardReview = React.forwardRef(({ className, ...review }, ref) => {
   };
 
   // Handle submit reply
-  const handleSubmitReply = () => {
+  const handleSubmitReply = async () => {
     if (!canInteract) {
       console.log(
         "You need to be logged in with a verified email to submit a reply."
@@ -161,8 +161,19 @@ const CardReview = React.forwardRef(({ className, ...review }, ref) => {
     }
     // Logic for submitting reply to server
     console.log("Submitting reply:", replyContent);
-    setIsReplying(false);
+    try {
+      // Submit reply to server
+      const response = await api.createReply({
+        reviewId: _id,
+        content: replyContent.trim(),
+      })
+      console.log("Reply submitted:", response);
+    } catch (error) {
+      console.error("Error submitting reply:", error);
+    }
+
     setReplyContent("");
+    setIsReplying(false);
     setValidationError("");
   };
 

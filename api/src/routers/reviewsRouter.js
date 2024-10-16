@@ -21,6 +21,7 @@ router.delete('/:id',
   ReviewsController.deleteReview
 );
 
+// likes
 router.post('/:id/like',
   Permissions.isEmailVerified,
   validate(likeSchema),
@@ -36,6 +37,11 @@ router.put('/:id/like',
 router.delete('/:id/like',
   Permissions.isAuthenticated,
   ReviewsController.deleteLike
+);
+
+// replies
+router.get('/:id/replies',
+  ReviewsController.getRepliesByReview
 );
 
 module.exports = router;

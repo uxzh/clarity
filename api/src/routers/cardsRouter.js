@@ -22,6 +22,8 @@ router.get('/', CardsController.getCards);
 
 router.get('/top-cards', CardsController.getTopCards);
 
+router.get('/default-search', CardsController.getDefaultSearchCards);
+
 router.get('/:id', CardsController.getCard);
 
 router.get('/:id/reviews', CardsController.getReviewsByCard);
