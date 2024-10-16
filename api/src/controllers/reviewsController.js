@@ -1,5 +1,6 @@
 const CardsDAO = require("../dao/cardsDAO");
 const LikesDAO = require("../dao/likesDAO");
+const RepliesDAO = require("../dao/repliesDAO");
 const ReviewsDAO = require("../dao/reviewsDAO");
 
 class ReviewsController {
@@ -68,6 +69,7 @@ class ReviewsController {
     }
   }
 
+  // likes
   static async likeReview(req, res) {
     try {
       const { isLike } = req.body;
@@ -156,6 +158,24 @@ class ReviewsController {
     } catch (e) {
       console.error(e)
       res.status(500).send({ error: "Error deleting like" });
+    }
+  }
+
+  // replies
+  static async getRepliesByReview(req, res) {
+    try {
+      const { id } = req.params;
+      const replies = await RepliesDAO.getManyByField({
+        field: "reviewId",
+        value: id,
+        sort: "createdAt",
+        page: parseInt(req.query.page) || 0,
+        perPage: parseInt(req.query.perPage) || 20,
+      });
+      res.status(200).send(replies);
+    } catch (e) {
+      console.error(e)
+      res.status(500).send({ error: "Error fetching replies" });
     }
   }
 }
