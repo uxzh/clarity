@@ -38,4 +38,8 @@ router.delete('/:id/like',
   ReviewsController.deleteLike
 );
 
+router.get('/',
+  ReviewsController.getReviews
+);
+
 module.exports = router;

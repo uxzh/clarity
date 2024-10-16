@@ -6,14 +6,14 @@ const getReviewsByCardIdWithLikes = async ({
   id,
   user,
   perPage,
-  page
+  page,
+  sort = "createdAt"
 }) => {
   try {
-   // TODO: optimize db queries
     const reviews = await ReviewsDAO.getManyByField({
       field: "cardId",
       value: new ObjectId(id),
-      sort: "createdAt",
+      sort: sort === "most_popular" ? "likes" : sort,
       page,
       perPage,
     });
