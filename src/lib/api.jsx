@@ -10,6 +10,8 @@ class Api {
 
   getCards = async ({ page = 0, perPage = 20, search = '' }) => await this.axios.get(`/cards?page=${page}&perPage=${perPage}&search=${search}`);
 
+  getDefaultSearchCards = async ({ page = 0, perPage = 10 }) => await this.axios.get(`/cards/default-search?page=${page}&perPage=${perPage}`);
+
   // login
   login = async ({ email, password }) => await this.axios.post(`/auth/login`, { email, password });
 

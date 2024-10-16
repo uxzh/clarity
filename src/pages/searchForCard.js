@@ -38,7 +38,7 @@ function ReviewSearch() {
       try {
         const [topCardsData, initialCardsData] = await Promise.all([
           api.getTopCards(),
-          api.getCards({ perPage: 10, page: 0 }),
+          api.getDefaultSearchCards({ perPage: 10, page: 0 }),
         ]);
         setTopCards(topCardsData.data);
         setInitialCards(initialCardsData.data);

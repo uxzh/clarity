@@ -45,6 +45,20 @@ class CardsController {
     }
   }
 
+  static async getDefaultSearchCards(req, res) {
+    try {
+      const { page, perPage } = req.query;
+      const cards = await CardsDAO.getDefaultSearchCards({
+        page: page && parseInt(page),
+        perPage: perPage && parseInt(perPage),
+      });
+      res.status(200).send(cards);
+    } catch (e) {
+      console.error(e)
+      res.status(500).send({ error: "Error fetching default search cards" });
+    }
+  }
+
   static async getReviewsByCard(req, res) {
     try {
       const { id } = req.params;

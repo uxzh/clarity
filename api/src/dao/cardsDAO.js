@@ -234,6 +234,24 @@ class CardsDAO {
       console.error(`Unable to get top cards: ${e}`)
     }
   }
+
+  static async getDefaultSearchCards(
+    {
+      page = 0,
+      perPage = 10,
+    }
+  ) {
+    try {
+      return await cards
+        .find({ showByDefault: true })
+        .skip(perPage * page)
+        .limit(perPage)
+        .toArray();
+    } catch (e) {
+      console.error(`Unable to get default search cards: ${e}`);
+      return { error: e };
+    }
+  }
 }
 
 module.exports = CardsDAO;
