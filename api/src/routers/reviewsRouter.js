@@ -21,6 +21,7 @@ router.delete('/:id',
   ReviewsController.deleteReview
 );
 
+// likes
 router.post('/:id/like',
   Permissions.isEmailVerified,
   validate(likeSchema),

@@ -32,6 +32,9 @@ class Api {
   updateReviewLike = async (id, isLike) => await this.axios.put(`/reviews/${id}/like`, { isLike });
 
   deleteReviewLike = async (id) => await this.axios.delete(`/reviews/${id}/like`);
+
+  // replies
+  createReply = async ({ reviewId, content }) => await this.axios.post(`/replies`, { reviewId, content });
 }
 
 export default Api;
