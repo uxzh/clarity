@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Card, Text, Button, Table, Switch, Badge } from "@nextui-org/react";
+import { Card, Button, Table, Switch, Badge } from "@nextui-org/react";
 import axios from 'axios';
 
 const AdminPanel = () => {
@@ -29,11 +29,11 @@ const AdminPanel = () => {
   return (
     <div className="admin-panel">
       <Card>
-        <Text h2>Admin Panel</Text>
+        <h2>Admin Panel</h2>
       </Card>
 
       <Card>
-        <Text h3>Users</Text>
+        <h3>Users</h3>
         <Table>
           <Table.Header>
             <Table.Column>Username</Table.Column>
@@ -58,7 +58,7 @@ const AdminPanel = () => {
       </Card>
 
       <Card>
-        <Text h3>Latest Comments</Text>
+        <h3>Latest Comments</h3>
         <Table>
           <Table.Header>
             <Table.Column>Comment</Table.Column>
@@ -82,7 +82,7 @@ const AdminPanel = () => {
       </Card>
 
       <Card>
-        <Text h3>Credit Cards</Text>
+        <h3>Credit Cards</h3>
         <Table>
           <Table.Header>
             <Table.Column>Card Name</Table.Column>
