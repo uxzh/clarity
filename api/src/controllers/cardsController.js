@@ -88,6 +88,19 @@ class CardsController {
       res.status(500).send({ error: "Error fetching top cards" });
     }
   }
+
+  static async getAllCreditCards(req, res) {
+    try {
+      const creditCards = await CardsDAO.getMany({
+        page: 0,
+        perPage: 1000, // Adjust as needed
+      });
+      res.status(200).send(creditCards);
+    } catch (e) {
+      console.error(e);
+      res.status(500).send({ error: "Error fetching credit cards" });
+    }
+  }
 }
 
 module.exports = CardsController;

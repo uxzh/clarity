@@ -32,6 +32,22 @@ class RepliesController {
       res.status(500).send({ error: "Error creating reply" });
     }
   }
+
+  static async getLatestComments(req, res) {
+    try {
+      const comments = await RepliesDAO.getManyByField({
+        field: "createdAt",
+        value: { $exists: true },
+        sort: "createdAt",
+        page: parseInt(req.query.page) || 0,
+        perPage: parseInt(req.query.perPage) || 20,
+      });
+      res.status(200).send(comments);
+    } catch (e) {
+      console.error(e);
+      res.status(500).send({ error: "Error fetching latest comments" });
+    }
+  }
 }
 
 module.exports = RepliesController;

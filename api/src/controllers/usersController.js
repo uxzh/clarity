@@ -33,6 +33,14 @@ class UsersController {
     }
   }
 
+  static async getAllUsers(req, res) {
+    try {
+      const users = await UsersDAO.getAll();
+      res.status(200).send(users);
+    } catch (e) {
+      res.status(500).send({ error: "Error fetching users" });
+    }
+  }
 
   static async updateUser(req, res) {
     try {

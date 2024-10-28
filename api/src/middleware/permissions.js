@@ -54,7 +54,7 @@ class Permissions {
 
   static isAdmin = [
     Permissions.isAuthenticated,
-    () => {
+    (req, res, next) => {
       try {
         if (!req.user.isAdmin) {
           return res.status(403).send('User is not authorized to access this endpoint');
