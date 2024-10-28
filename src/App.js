@@ -1,6 +1,5 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import MainPage from "./pages/main";
 import Wallet from "./pages/wallet";
 import Rating from "./pages/rating";
 
@@ -17,9 +16,9 @@ export default function App() {
       <DataProvider>
         <Router>
           <Routes>
-            <Route path="/" element={<MainPage />} />
+            <Route path="/" element={<Review />} />
             <Route path="/wallet" element={<Wallet />} />
-            <Route path="/review" element={<Review />} />
+            <Route path="/review" element={<ReviewSearch />} />
             <Route path="/rating" element={<Rating />} />
             <Route path="*" element={<PageNotFound />} />
           </Routes>

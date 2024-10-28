@@ -13,6 +13,8 @@ import FeedbackModal from "../components/FEEDBACK/feedbackModal";
 import ReviewSearch from "./searchForCard";
 import { Spinner } from "@nextui-org/react";
 import { AuthContext } from "../contexts/AuthContext";
+import ByTheNumbers from "../components/ui/ByTheNumbers";
+import FAQ from "../components/ui/FAQ";
 
 function Review() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -164,6 +166,8 @@ function Review() {
           </section>
         </div>
       </div>
+      <ByTheNumbers />
+      <FAQ />
       <Footer />
       <FeedbackModal
         isOpen={isOpen}
