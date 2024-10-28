@@ -178,7 +178,8 @@ function ReviewSearch() {
                 inputProps={{
                   classNames: {
                     input: "ml-1 text-base sm:text-lg",
-                    inputWrapper: "h-[56px] sm:h-[64px]",
+                    inputWrapper:
+                      "h-[56px] sm:h-[64px] bg-white dark:bg-gray-900",
                   },
                   onClick: handleInputClick,
                 }}
