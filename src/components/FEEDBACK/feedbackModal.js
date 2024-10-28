@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import { useLocation } from "react-router-dom";
 import {
   Button,
@@ -15,11 +15,42 @@ import {
 import { Icon } from "@iconify/react";
 
 import FeedbackRating from "./feedback-rating";
+import { AuthContext } from "../../contexts/AuthContext";
+import { ratingToNumber } from "./feedback-rating-item";
 
 export default function FeedbackModal({ isOpen, onOpenChange, cardName }) {
   const location = useLocation();
-  const searchParams = new URLSearchParams(location.search);
-  // const cardName = searchParams.get("cardName") || "this card";
+  const cardId = new URLSearchParams(location.search).get("cardId");
+
+  const { api } = useContext(AuthContext);
+
+  const handleSubmit = async (e, onClose) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const data = {
+      title: formData.get("title"),
+      content: formData.get("content"),
+      rating: ratingToNumber(formData.get("rating")),
+    };
+    for (let [key, value] of Object.entries(data)) {
+      if (!value) {
+        console.error("Missing data:", key);
+        // TODO: show an error message
+        return;
+      }
+    }
+    data.cardId = cardId;
+
+    try {
+      const response = await api.createReview(data);
+      const newReview = response.data;
+      // TODO: push the new review to the reviews list
+      onClose();
+    } catch (error) {
+      // TODO: show an error message
+      console.error("Error submitting review:", error);
+    }
+  }
 
   return (
     <Modal
@@ -41,22 +72,20 @@ export default function FeedbackModal({ isOpen, onOpenChange, cardName }) {
             </ModalHeader>
             <form
               className="flex w-full flex-col gap-2 mt-[-1rem]"
-              onSubmit={(e) => {
-                e.preventDefault();
-                onClose();
-              }}
+              onSubmit={(e) => handleSubmit(e, onClose)}
             >
               <Input
                 type="title"
                 variant="faded"
                 label="Title"
+                name="title"
                 // placeholder="Short review title"
                 labelPlacement="outside"
               />
               <Textarea
                 aria-label="Review"
                 minRows={12}
-                name="review"
+                name="content"
                 labelPlacement="outside"
                 placeholder={`
 

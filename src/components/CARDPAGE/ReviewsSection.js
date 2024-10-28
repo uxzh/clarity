@@ -1,6 +1,6 @@
 import { Icon } from "@iconify/react";
-import { Button, Input, Select, SelectItem, Card } from "@nextui-org/react";
-import React, { useMemo } from "react";
+import { Button, Input, Select, SelectItem, Card, Pagination } from "@nextui-org/react";
+import React, { useMemo, useState } from "react";
 import CardReview from "../ui/reviews/user_review_cards/card-review";
 import SummaryFromTheWeb from "./from-the-web/summary";
 
@@ -14,25 +14,39 @@ const ReviewsSection = React.memo(
     handleSelectionChange,
     handleGoBack,
   }) => {
+    const [currentPage, setCurrentPage] = useState(1);
+    const reviewsPerPage = 5;
+
     const averageRating = useMemo(() => {
       if (reviews.length === 0) return 0;
       const sum = reviews.reduce((acc, review) => acc + review.rating, 0);
       return (sum / reviews.length).toFixed(1);
     }, [reviews]);
 
+    const paginatedReviews = useMemo(() => {
+      const startIndex = (currentPage - 1) * reviewsPerPage;
+      const endIndex = startIndex + reviewsPerPage;
+      return reviews.slice(startIndex, endIndex);
+    }, [currentPage, reviews]);
+
+    const handlePageChange = (page) => {
+      setCurrentPage(page);
+    };
+
     return (
       <div className="flex flex-col gap-4">
-        <div className="flex w-full items-center justify-between gap-4">
-          <div className="flex items-center gap-2">
+        <div className="flex w-full items-center justify-end gap-4">
+          <div className="flex items-center">
             <Button
-              startContent={<Icon icon="akar-icons:arrow-left" />}
               variant="light"
+              isIconOnly
               onClick={handleGoBack}
-              className="md:inline-block bg-white hidden"
+              className="md:inline-flex bg-white hidden"
             >
-              Back to cards
+              <Icon icon="akar-icons:arrow-left" />
             </Button>
-            <h1 className="text-medium font-semibold md:text-large hidden md:block">
+
+            <h1 className="text-medium font-semibold mx-4 md:text-large hidden md:block">
               Reviews
             </h1>
           </div>
@@ -42,7 +56,7 @@ const ReviewsSection = React.memo(
                 variant="flat"
                 isClearable
                 aria-label="Search"
-                className="w-[60%] md:w-72 ml-[-18px]"
+                className="w-[60%] md:w-72 ml-[-18px] pr-2"
                 labelPlacement="outside"
                 placeholder="Search reviews"
                 startContent={<Icon icon="solar:magnifer-linear" />}
@@ -72,9 +86,16 @@ const ReviewsSection = React.memo(
         {reviews.length > 0 ? (
           <>
             <SummaryFromTheWeb reviewFromTheWeb={reviewFromTheWeb} />
-            {reviews.map((review, index) => (
+            {paginatedReviews.map((review, index) => (
               <CardReview key={index} {...review} />
             ))}
+            <Pagination
+              total={Math.ceil(reviews.length / reviewsPerPage)}
+              initialPage={1}
+              page={currentPage}
+              onChange={handlePageChange}
+              className="self-center mt-4"
+            />
           </>
         ) : (
           <div className="text-center max-w-[500px] mx-auto py-8">

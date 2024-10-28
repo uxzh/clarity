@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useCallback } from "react";
+import React, { useState, useEffect, useMemo, useCallback, useContext } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Card, Spacer, Button } from "@nextui-org/react";
 import { IconCreditCardFilled } from "@tabler/icons-react";
@@ -10,7 +10,9 @@ import ReviewsSection from "../components/CARDPAGE/ReviewsSection";
 import CardDetails from "../components/CARDPAGE/CardDetails";
 import { useDisclosure } from "@nextui-org/react";
 import FeedbackModal from "../components/FEEDBACK/feedbackModal";
-import ReviewSearch from "./reviewSearch";
+import ReviewSearch from "./searchForCard";
+import { Spinner } from "@nextui-org/react";
+import { AuthContext } from "../contexts/AuthContext";
 
 function Review() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -25,8 +27,13 @@ function Review() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const reviewsPerPage = 5;
+
   const searchParams = new URLSearchParams(location.search);
   const cardId = searchParams.get("cardId");
+
+  const { api } = useContext(AuthContext);
 
   useEffect(() => {
     if (!cardId) {
@@ -38,36 +45,9 @@ function Review() {
       setIsLoading(true);
       setError(null);
       try {
-        console.log("Fetching data for cardId:", cardId);
-        const [cardResponse, reviewsResponse] = await Promise.all([
-          fetch("/server/cards.json"),
-          fetch("/server/reviews.json"),
-        ]);
-
-        if (!cardResponse.ok || !reviewsResponse.ok) {
-          throw new Error(
-            `HTTP error! status: ${cardResponse.status}, ${reviewsResponse.status}`
-          );
-        }
-
-        const cardsData = await cardResponse.json();
-        const reviewsData = await reviewsResponse.json();
-
-        console.log("Cards data:", cardsData);
-        console.log("Reviews data:", reviewsData);
-
-        const selectedCard = cardsData.find((card) =>
-          card._id.includes(cardId)
-        );
-        if (!selectedCard) {
-          throw new Error("Card not found");
-        }
+        const { data: selectedCard } = await api.getCard(cardId);
+        setReviews(selectedCard.reviews || []);
         setCardData(selectedCard);
-
-        const cardReviews = reviewsData.filter(
-          (review) => review.cardId === selectedCard._id
-        );
-        setReviews(cardReviews);
       } catch (error) {
         console.error("Error fetching data:", error);
         setError(error);
@@ -88,6 +68,12 @@ function Review() {
     return (sum / reviews.length).toFixed(1);
   }, [reviews]);
 
+  const paginatedReviews = useMemo(() => {
+    const startIndex = (currentPage - 1) * reviewsPerPage;
+    const endIndex = startIndex + reviewsPerPage;
+    return reviews.slice(startIndex, endIndex);
+  }, [currentPage, reviews]);
+
   const handleWriteReview = useCallback(() => {
     onOpen();
   }, [onOpen]);
@@ -105,7 +91,16 @@ function Review() {
     setSelectedTab(key);
   }, []);
 
-  if (isLoading) return <div>Loading...</div>;
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+  if (isLoading)
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <Spinner />
+      </div>
+    );
   if (!cardId || error) return <ReviewSearch />;
   if (!cardData) return null;
 
@@ -117,13 +112,16 @@ function Review() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <section className="lg:col-span-2 lg:mt-6 px-2 order-2 lg:order-1">
             <ReviewsSection
-              reviews={reviews}
+              reviews={paginatedReviews}
               handleWriteReview={onOpen}
               cardName={cardData.cardName}
               selectedFilter={selectedFilter}
               handleSelectionChange={handleSelectionChange}
               handleGoBack={handleGoBack}
               reviewFromTheWeb={cardData.reviewFromTheWeb}
+              currentPage={currentPage}
+              reviewsPerPage={reviewsPerPage}
+              handlePageChange={handlePageChange}
             />
           </section>
           <section className="lg:col-span-1 lg:sticky lg:top-16 lg:h-screen lg:overflow-y-auto order-1 lg:order-2">
@@ -132,7 +130,7 @@ function Review() {
                 id="floatingCard"
                 imgSrc={cardData.cardImageUrl}
                 creditCardName={cardData.cardName}
-                className="sm:w-[380px]"
+                className="sm:w-[380px] lg:h-[200px]"
               />
               <div>
                 <div className="pl-1">

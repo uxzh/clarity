@@ -1,56 +1,52 @@
 import React from "react";
 import { User } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
-
 import { cn } from "./cn";
 
-const Review = React.forwardRef(
-  ({ children, user, title, content, rating, createdAt, ...props }, ref) => {
-    const formatDate = (dateString) => {
-      if (!dateString) return "Unknown Date";
-
-      const date = new Date(dateString);
-      if (isNaN(date.getTime())) return "Invalid Date";
-
-      return new Intl.DateTimeFormat("en-US", {
+// Helper function to format date
+const formatDate = (dateString) => {
+  if (!dateString) return "Unknown Date";
+  const date = new Date(dateString);
+  return isNaN(date.getTime())
+    ? "Invalid Date"
+    : new Intl.DateTimeFormat("en-US", {
         month: "long",
         day: "numeric",
         year: "numeric",
       }).format(date);
-    };
+};
 
+// Component for rendering star rating
+const StarRating = ({ rating }) => (
+  <div className="flex items-center gap-1">
+    {[...Array(5)].map((_, i) => (
+      <Icon
+        key={i}
+        className={cn(
+          "text-lg sm:text-xl",
+          i < rating ? "text-primary" : "text-default-200"
+        )}
+        icon="solar:star-bold"
+      />
+    ))}
+  </div>
+);
+
+const Review = React.forwardRef(
+  (
+    { children, user: author, title, content, rating, createdAt, ...props },
+    ref
+  ) => {
     return (
-      <div ref={ref} {...props}>
+      <div ref={ref} {...props} className="relative pb-10">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <User
-              avatarProps={{
-                src: user?.avatar,
-              }}
-              classNames={{
-                name: "font-medium",
-                description: "text-small",
-              }}
-              description={formatDate(createdAt)}
-              name={user?.name || "Anonymous"}
-            />
-          </div>
-          <div className="flex items-center gap-1">
-            {Array.from({ length: 5 }, (_, i) => {
-              const isSelected = i + 1 <= (rating || 0);
-
-              return (
-                <Icon
-                  key={i}
-                  className={cn(
-                    "text-lg sm:text-xl",
-                    isSelected ? "text-primary" : "text-default-200"
-                  )}
-                  icon="solar:star-bold"
-                />
-              );
-            })}
-          </div>
+          <User
+            avatarProps={{ src: author?.avatar }}
+            classNames={{ name: "font-medium", description: "text-small" }}
+            description={formatDate(createdAt)}
+            name={author?.username || "Anonymous"}
+          />
+          <StarRating rating={rating} />
         </div>
         <div className="mt-4 w-full">
           <p className="font-medium text-default-900">{title || "No Title"}</p>

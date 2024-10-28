@@ -18,6 +18,23 @@ export let RatingValueEnum = /*#__PURE__*/ (function (RatingValueEnum) {
   return RatingValueEnum;
 })({});
 
+export const ratingToNumber = (rating) => {
+  switch (rating) {
+    case RatingValueEnum.ANGRY:
+      return 1;
+    case RatingValueEnum.BAD:
+      return 2;
+    case RatingValueEnum.NEUTRAL:
+      return 3;
+    case RatingValueEnum.GOOD:
+      return 4;
+    case RatingValueEnum.GREAT:
+      return 5;
+    default:
+      return 0;
+  }
+};
+
 const FeedbackRatingItem = React.forwardRef((props, ref) => {
   const {
     Component,
