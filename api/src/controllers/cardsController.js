@@ -93,7 +93,7 @@ class CardsController {
     try {
       const creditCards = await CardsDAO.getMany({
         page: 0,
-        perPage: 1000, // Adjust as needed
+        perPage: 30, // Adjust as needed
       });
       res.status(200).send(creditCards);
     } catch (e) {
