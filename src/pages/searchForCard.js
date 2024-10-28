@@ -19,6 +19,8 @@ import { AuthContext } from "../contexts/AuthContext.jsx";
 import { DataContext } from "../contexts/DataContext.js";
 import { IconSearch } from "@tabler/icons-react";
 import { debounce } from "../lib/utils.ts";
+import ByTheNumbers from "../components/ui/ByTheNumbers.js";
+import FAQ from "../components/ui/FAQ.js";
 
 function ReviewSearch() {
   const [isLoading, setIsLoading] = useState(true);
@@ -253,6 +255,8 @@ function ReviewSearch() {
           </div>
         )}
       </div>
+      <ByTheNumbers />
+      <FAQ />
       <Footer />
     </div>
   );
