@@ -11,6 +11,15 @@ import AdminPanel from "./pages/adminPanel";
 import { AuthProvider } from "./contexts/AuthContext";
 import { DataProvider } from "./contexts/DataContext";
 
+const ProtectedRoute = ({ element, ...rest }) => {
+  const user = JSON.parse(localStorage.getItem("user"));
+  if (user && user.username === "leafy22") {
+    return <Route {...rest} element={element} />;
+  } else {
+    return <Route path="*" element={<PageNotFound />} />;
+  }
+};
+
 export default function App() {
   return (
     <AuthProvider>
@@ -21,7 +30,7 @@ export default function App() {
             <Route path="/wallet" element={<Wallet />} />
             <Route path="/review" element={<Review />} />
             <Route path="/rating" element={<Rating />} />
-            <Route path="/admin" element={<AdminPanel />} />
+            <ProtectedRoute path="/admin" element={<AdminPanel />} />
             <Route path="*" element={<PageNotFound />} />
           </Routes>
         </Router>

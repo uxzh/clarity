@@ -14,7 +14,13 @@ class AdminController {
 
   static async getComments(req, res) {
     try {
-      const comments = await RepliesDAO.getAll();
+      const comments = await RepliesDAO.getManyByField({
+        field: "createdAt",
+        value: { $exists: true },
+        sort: "createdAt",
+        page: parseInt(req.query.page) || 0,
+        perPage: parseInt(req.query.perPage) || 20,
+      });
       res.status(200).send(comments);
     } catch (e) {
       res.status(500).send({ error: "Error fetching comments" });
@@ -23,7 +29,10 @@ class AdminController {
 
   static async getCreditCards(req, res) {
     try {
-      const creditCards = await CardsDAO.getAll();
+      const creditCards = await CardsDAO.getMany({
+        page: 0,
+        perPage: 30, // Adjust as needed
+      });
       res.status(200).send(creditCards);
     } catch (e) {
       res.status(500).send({ error: "Error fetching credit cards" });
