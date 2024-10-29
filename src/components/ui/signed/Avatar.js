@@ -29,6 +29,9 @@ const Avatar = React.memo(() => {
     [updateUser]
   );
 
+  // console log user's info
+  console.log(user);
+
   return (
     <>
       <Dropdown placement="bottom-end">

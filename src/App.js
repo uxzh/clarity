@@ -1,6 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import MainPage from "./pages/main";
+import AdminPanel from "./pages/adminPanel";
 import Wallet from "./pages/wallet";
 import Rating from "./pages/rating";
 import PageNotFound from "./pages/notFound";
@@ -18,6 +18,7 @@ export default function App() {
           <Routes>
             <Route path="/" element={<ReviewSearch />} />
             <Route path="/wallet" element={<Wallet />} />
+            <Route path="/admin" element={<AdminPanel />} />
             <Route path="/review" element={<Review />} />
             <Route path="/rating" element={<Rating />} />
             <Route path="*" element={<PageNotFound />} />
