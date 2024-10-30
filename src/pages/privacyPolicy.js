@@ -1,5 +1,5 @@
 import React from "react";
-import TopNavbar from "../components/navbar/topNavbar";
+import TopNavbar from "../components/navbar/activeNavbar";
 import Footer from "../sections/Footer";
 import { Card, CardHeader, CardBody, CardFooter } from "@nextui-org/react";
 
@@ -18,15 +18,33 @@ const PrivacyPolicy = () => {
             <p>
               CardsClarity, Inc. ("CardsClarity," "we," "us," or "our") operates the website located at cardsclarity.com and related services (collectively, the "Platform"). This Terms of Service and Privacy Policy ("Agreement") governs your access to and use of the Platform.
             </p>
+          </CardBody>
+        </Card>
+        <Card>
+          <CardHeader>
             <h2>2. Acceptance of Terms</h2>
+          </CardHeader>
+          <CardBody>
             <p>
               By accessing or using the Platform, you ("User," "you," or "your") agree to be bound by this Agreement. If you do not agree to these terms, you must not access or use the Platform.
             </p>
+          </CardBody>
+        </Card>
+        <Card>
+          <CardHeader>
             <h2>3. Age Restrictions</h2>
+          </CardHeader>
+          <CardBody>
             <p>
               You must be at least 13 years old to use the Platform. If you are under 18 years old, you must have parental consent to use the Platform. We do not knowingly collect or solicit personal information from anyone under 13 or knowingly allow such persons to register for the Platform. If we become aware that we have collected personal information from a child under 13 without verification of parental consent, we will take steps to remove that information from our servers.
             </p>
+          </CardBody>
+        </Card>
+        <Card>
+          <CardHeader>
             <h2>4. User-Generated Content</h2>
+          </CardHeader>
+          <CardBody>
             <h3>4.1. User Content</h3>
             <p>
               The Platform allows Users to submit, post, and share content related to credit card products, including reviews, comments, and ratings ("User Content").
@@ -64,7 +82,13 @@ const PrivacyPolicy = () => {
               <li>Ban you from the Platform</li>
               <li>Take legal action if necessary</li>
             </ul>
+          </CardBody>
+        </Card>
+        <Card>
+          <CardHeader>
             <h2>5. Intellectual Property Rights</h2>
+          </CardHeader>
+          <CardBody>
             <h3>5.1. CardsClarity's Intellectual Property</h3>
             <p>
               The Platform and its original content (excluding User Content), features, and functionality are owned by CardsClarity and are protected by international copyright, trademark, patent, trade secret, and other intellectual property or proprietary rights laws.
@@ -77,7 +101,13 @@ const PrivacyPolicy = () => {
             <p>
               If you believe that any User Content violates your copyright, please contact us at cardsclarity@gmail.com with a detailed description of the alleged infringement. We will respond to notices of alleged copyright infringement that comply with applicable law and are properly provided to us.
             </p>
+          </CardBody>
+        </Card>
+        <Card>
+          <CardHeader>
             <h2>6. Privacy Policy</h2>
+          </CardHeader>
+          <CardBody>
             <h3>6.1. Data Collection</h3>
             <p>
               We collect personal information you provide during account creation and platform interaction, including email address, name, account password, username, comments, and votes.
@@ -125,7 +155,13 @@ const PrivacyPolicy = () => {
             <p>
               We will notify users of any material changes to this Privacy Policy via email and/or a prominent notice on our Platform at least 30 days prior to the changes becoming effective.
             </p>
+          </CardBody>
+        </Card>
+        <Card>
+          <CardHeader>
             <h2>7. California Consumer Privacy Act (CCPA) Rights</h2>
+          </CardHeader>
+          <CardBody>
             <p>
               For California residents, in addition to the rights described elsewhere in this Agreement, you have the following rights under the CCPA:
             </p>
@@ -148,7 +184,13 @@ const PrivacyPolicy = () => {
             <p>
               To exercise these rights, please contact us at cardsclarity@gmail.com.
             </p>
+          </CardBody>
+        </Card>
+        <Card>
+          <CardHeader>
             <h2>8. Data Breach Notification</h2>
+          </CardHeader>
+          <CardBody>
             <p>
               In the event of a data breach that compromises your personal information, we will notify you via email within 72 hours of discovering the breach. The notification will include:
             </p>
@@ -159,7 +201,13 @@ const PrivacyPolicy = () => {
               <li>Recommended steps you can take to protect yourself</li>
               <li>Contact information for further questions or concerns</li>
             </ul>
+          </CardBody>
+        </Card>
+        <Card>
+          <CardHeader>
             <h2>9. Dispute Resolution and Arbitration</h2>
+          </CardHeader>
+          <CardBody>
             <h3>9.1. Informal Resolution</h3>
             <p>
               Before initiating any arbitration or court proceeding, you agree to first contact us at cardsclarity@gmail.com and attempt to resolve any dispute informally.
@@ -180,7 +228,13 @@ const PrivacyPolicy = () => {
             <p>
               You have the right to opt-out and not be bound by the arbitration and class action waiver provisions by sending written notice of your decision to opt-out to cardsclarity@gmail.com within 30 days of your first use of the Platform.
             </p>
+          </CardBody>
+        </Card>
+        <Card>
+          <CardHeader>
             <h2>10. Termination</h2>
+          </CardHeader>
+          <CardBody>
             <h3>10.1. Termination by CardsClarity</h3>
             <p>
               We may terminate or suspend your account and bar access to the Platform immediately, without prior notice or liability, under our sole discretion, for any reason whatsoever and without limitation, including but not limited to a breach of this Agreement.
@@ -197,11 +251,23 @@ const PrivacyPolicy = () => {
             <p>
               All provisions of this Agreement which by their nature should survive termination shall survive termination, including, without limitation, ownership provisions, warranty disclaimers, indemnity and limitations of liability.
             </p>
+          </CardBody>
+        </Card>
+        <Card>
+          <CardHeader>
             <h2>11. Changes to this Agreement</h2>
+          </CardHeader>
+          <CardBody>
             <p>
               We reserve the right to modify this Agreement at any time. We will notify users of any material changes by posting the new Agreement on the Platform and updating the "Last Updated" date at the top of this Agreement. Your continued use of the Platform after any such changes constitutes your acceptance of the new Agreement.
             </p>
+          </CardBody>
+        </Card>
+        <Card>
+          <CardHeader>
             <h2>12. Contact Information</h2>
+          </CardHeader>
+          <CardBody>
             <p>
               If you have any questions about this Agreement, please contact us at:
             </p>

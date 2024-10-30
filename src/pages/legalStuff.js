@@ -1,5 +1,5 @@
 import React from "react";
-import TopNavbar from "../components/navbar/topNavbar";
+import TopNavbar from "../components/navbar/activeNavbar";
 import Footer from "../sections/Footer";
 import { Card, CardHeader, CardBody, CardFooter } from "@nextui-org/react";
 
@@ -16,7 +16,13 @@ const LegalStuff = () => {
             <p>
               At CardsClarity, we believe in transparency and clarity, especially when it comes to legal matters. This page serves as a central hub for all our important legal documents. While we're in the process of developing comprehensive documentation, we want to provide you with an overview of the key legal aspects that govern our relationship with our users, partners, and visitors.
             </p>
+          </CardBody>
+        </Card>
+        <Card>
+          <CardHeader>
             <h2>For Users</h2>
+          </CardHeader>
+          <CardBody>
             <p>
               As a user of CardsClarity, the following documents are essential for understanding your rights and responsibilities:
             </p>
@@ -26,7 +32,13 @@ const LegalStuff = () => {
               <li>Cookie Policy: This policy explains how we use cookies and similar technologies on our website, and how you can manage your preferences.</li>
               <li>Acceptable Use Policy: This document sets out the permitted uses and prohibited activities when using our platform.</li>
             </ul>
+          </CardBody>
+        </Card>
+        <Card>
+          <CardHeader>
             <h2>For Partners</h2>
+          </CardHeader>
+          <CardBody>
             <p>
               If you're considering a partnership with CardsClarity, these documents will be relevant:
             </p>
@@ -34,7 +46,13 @@ const LegalStuff = () => {
               <li>Partner Agreement: This agreement outlines the terms and conditions for our various partnership programs.</li>
               <li>Affiliate Program Terms: If you're interested in our affiliate program, this document details the rules and compensation structure.</li>
             </ul>
+          </CardBody>
+        </Card>
+        <Card>
+          <CardHeader>
             <h2>For Everyone</h2>
+          </CardHeader>
+          <CardBody>
             <p>
               These documents apply to all visitors of our website and users of our services:
             </p>
@@ -43,7 +61,13 @@ const LegalStuff = () => {
               <li>Intellectual Property Rights: Information about our trademarks, copyrights, and how you can use our brand assets.</li>
               <li>Accessibility Statement: Our commitment to making our website and services accessible to all users.</li>
             </ul>
+          </CardBody>
+        </Card>
+        <Card>
+          <CardHeader>
             <h2>Data Privacy and Security</h2>
+          </CardHeader>
+          <CardBody>
             <p>
               At CardsClarity, we take data privacy and security seriously. While we're finalizing our comprehensive documentation, please know that we adhere to industry-standard practices for data protection, including:
             </p>
@@ -53,11 +77,23 @@ const LegalStuff = () => {
               <li>Providing transparency about our data collection and use practices</li>
               <li>Offering users control over their personal information</li>
             </ul>
+          </CardBody>
+        </Card>
+        <Card>
+          <CardHeader>
             <h2>Future Updates</h2>
+          </CardHeader>
+          <CardBody>
             <p>
               We're continuously working on improving and expanding our legal documentation to provide you with the most comprehensive and up-to-date information. As we develop new documents or make significant changes to existing ones, we'll update this page and notify our users accordingly.
             </p>
+          </CardBody>
+        </Card>
+        <Card>
+          <CardHeader>
             <h2>Contact Us</h2>
+          </CardHeader>
+          <CardBody>
             <p>
               If you have any questions about our legal documents or need further clarification, please don't hesitate to contact us at:
             </p>
