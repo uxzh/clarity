@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback, useContext } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Card, Spacer, Button } from "@nextui-org/react";
+import { Card, Spacer, Button, Skeleton } from "@nextui-org/react";
 import { IconCreditCardFilled } from "@tabler/icons-react";
 import TopNavbar from "../components/navbar/activeNavbar";
 import { FloatingCard } from "../components/ui/floatingCard";
@@ -11,7 +11,6 @@ import CardDetails from "../components/CARDPAGE/CardDetails";
 import { useDisclosure } from "@nextui-org/react";
 import FeedbackModal from "../components/FEEDBACK/feedbackModal";
 import ReviewSearch from "./searchForCard";
-import { Spinner } from "@nextui-org/react";
 import { AuthContext } from "../contexts/AuthContext";
 
 function Review() {
@@ -98,7 +97,13 @@ function Review() {
   if (isLoading)
     return (
       <div className="flex justify-center items-center h-screen">
-        <Spinner />
+        <div className="w-full max-w-md">
+          <Skeleton height="40px" width="100%" />
+          <Skeleton height="20px" width="60%" />
+          <Skeleton height="20px" width="80%" />
+          <Skeleton height="20px" width="90%" />
+          <Skeleton height="20px" width="70%" />
+        </div>
       </div>
     );
   if (!cardId || error) return <ReviewSearch />;
@@ -111,54 +116,79 @@ function Review() {
       <div className="max-w-7xl md:mt-16 mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <section className="lg:col-span-2 lg:mt-6 px-2 order-2 lg:order-1">
-            <ReviewsSection
-              reviews={paginatedReviews}
-              handleWriteReview={onOpen}
-              cardName={cardData.cardName}
-              selectedFilter={selectedFilter}
-              handleSelectionChange={handleSelectionChange}
-              handleGoBack={handleGoBack}
-              reviewFromTheWeb={cardData.reviewFromTheWeb}
-              currentPage={currentPage}
-              reviewsPerPage={reviewsPerPage}
-              handlePageChange={handlePageChange}
-            />
+            {isLoading ? (
+              <Skeleton height="300px" width="100%" />
+            ) : (
+              <ReviewsSection
+                reviews={paginatedReviews}
+                handleWriteReview={onOpen}
+                cardName={cardData.cardName}
+                selectedFilter={selectedFilter}
+                handleSelectionChange={handleSelectionChange}
+                handleGoBack={handleGoBack}
+                reviewFromTheWeb={cardData.reviewFromTheWeb}
+                currentPage={currentPage}
+                reviewsPerPage={reviewsPerPage}
+                handlePageChange={handlePageChange}
+              />
+            )}
           </section>
           <section className="lg:col-span-1 lg:sticky lg:top-16 lg:h-screen lg:overflow-y-auto order-1 lg:order-2">
             <Card shadow="sm" className="p-4 pt-2 scale-95">
-              <FloatingCard
-                id="floatingCard"
-                imgSrc={cardData.cardImageUrl}
-                creditCardName={cardData.cardName}
-                className="sm:w-[380px] lg:h-[200px]"
-              />
+              {isLoading ? (
+                <Skeleton height="200px" width="100%" />
+              ) : (
+                <FloatingCard
+                  id="floatingCard"
+                  imgSrc={cardData.cardImageUrl}
+                  creditCardName={cardData.cardName}
+                  className="sm:w-[380px] lg:h-[200px]"
+                />
+              )}
               <div>
                 <div className="pl-1">
-                  <p className="text-md xs:mt-2 md:mt-0 md:text-left text-center text-gray-700">
-                    {cardData.bankName}
-                  </p>
-                  <h2 className="text-2xl md:text-left  text-center font-black">
-                    {cardData.cardName}
-                  </h2>
+                  {isLoading ? (
+                    <>
+                      <Skeleton height="20px" width="50%" />
+                      <Skeleton height="30px" width="70%" />
+                    </>
+                  ) : (
+                    <>
+                      <p className="text-md xs:mt-2 md:mt-0 md:text-left text-center text-gray-700">
+                        {cardData.bankName}
+                      </p>
+                      <h2 className="text-2xl md:text-left text-center font-black">
+                        {cardData.cardName}
+                      </h2>
+                    </>
+                  )}
                 </div>
                 <Spacer y={2} />
-                <Button
-                  style={{ border: "1px solid #1a202c" }}
-                  target="_blank"
-                  variant="bordered"
-                  fullWidth
-                  className="shadow-[0px_3px_0px_0px_#1a202c] font-bold hover:scale-105"
-                  startContent={<IconCreditCardFilled stroke={1} />}
-                >
-                  Apply
-                </Button>
+                {isLoading ? (
+                  <Skeleton height="40px" width="100%" />
+                ) : (
+                  <Button
+                    style={{ border: "1px solid #1a202c" }}
+                    target="_blank"
+                    variant="bordered"
+                    fullWidth
+                    className="shadow-[0px_3px_0px_0px_#1a202c] font-bold hover:scale-105"
+                    startContent={<IconCreditCardFilled stroke={1} />}
+                  >
+                    Apply
+                  </Button>
+                )}
                 <Spacer y={4} />
-                <CardDetails
-                  selectedTab={selectedTab}
-                  handleTabChange={handleTabChange}
-                  cardData={cardData}
-                  reviews={reviews}
-                />
+                {isLoading ? (
+                  <Skeleton height="300px" width="100%" />
+                ) : (
+                  <CardDetails
+                    selectedTab={selectedTab}
+                    handleTabChange={handleTabChange}
+                    cardData={cardData}
+                    reviews={reviews}
+                  />
+                )}
               </div>
             </Card>
           </section>
