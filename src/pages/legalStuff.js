@@ -1,7 +1,7 @@
 import React from "react";
 import TopNavbar from "../components/navbar/topNavbar";
 import Footer from "../sections/Footer";
-import { Card } from "@nextui-org/react";
+import { Card, CardHeader, CardBody, CardFooter } from "@nextui-org/react";
 
 const LegalStuff = () => {
   return (
@@ -9,8 +9,10 @@ const LegalStuff = () => {
       <TopNavbar />
       <div className="container mx-auto p-4">
         <Card>
-          <Card.Body>
+          <CardHeader>
             <h1>Legal Stuff</h1>
+          </CardHeader>
+          <CardBody>
             <p>
               At CardsClarity, we believe in transparency and clarity, especially when it comes to legal matters. This page serves as a central hub for all our important legal documents. While we're in the process of developing comprehensive documentation, we want to provide you with an overview of the key legal aspects that govern our relationship with our users, partners, and visitors.
             </p>
@@ -74,10 +76,10 @@ const LegalStuff = () => {
             <p>
               We're committed to maintaining open communication with our users and ensuring that our legal documentation is clear, accessible, and compliant with all relevant laws and regulations.
             </p>
-            <p>
-              Last updated: 08/23/2024
-            </p>
-          </Card.Body>
+          </CardBody>
+          <CardFooter>
+            <p>Last updated: 08/23/2024</p>
+          </CardFooter>
         </Card>
       </div>
       <Footer />

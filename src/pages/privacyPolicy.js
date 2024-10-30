@@ -1,7 +1,7 @@
 import React from "react";
 import TopNavbar from "../components/navbar/topNavbar";
 import Footer from "../sections/Footer";
-import { Card } from "@nextui-org/react";
+import { Card, CardHeader, CardBody, CardFooter } from "@nextui-org/react";
 
 const PrivacyPolicy = () => {
   return (
@@ -9,8 +9,10 @@ const PrivacyPolicy = () => {
       <TopNavbar />
       <div className="container mx-auto p-4">
         <Card>
-          <Card.Body>
+          <CardHeader>
             <h1>Privacy Policy</h1>
+          </CardHeader>
+          <CardBody>
             <p>Last Updated: 08/20/2024</p>
             <h2>1. Introduction</h2>
             <p>
@@ -218,7 +220,10 @@ const PrivacyPolicy = () => {
             <p>
               By using the CardsClarity Platform, you acknowledge that you have read, understood, and agree to be bound by this Agreement.
             </p>
-          </Card.Body>
+          </CardBody>
+          <CardFooter>
+            <p>Last updated: 08/20/2024</p>
+          </CardFooter>
         </Card>
       </div>
       <Footer />
