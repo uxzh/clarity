@@ -19,11 +19,11 @@ const navLinks = [
   //   },
   {
     name: "Legal Stuff",
-    href: "#",
+    href: "/legal-stuff",
   },
   {
     name: "Privacy Policy",
-    href: "#",
+    href: "/privacy-policy",
   },
   {
     name: "Contact",
