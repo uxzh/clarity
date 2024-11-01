@@ -18,11 +18,12 @@ import FeedbackRating from "./feedback-rating";
 import { AuthContext } from "../../contexts/AuthContext";
 import { ratingToNumber } from "./feedback-rating-item";
 
-export default function FeedbackModal({ isOpen, onOpenChange, cardName }) {
+export default function FeedbackModal({ isOpen, onOpenChange, cardName, onReviewSubmit }) {
   const location = useLocation();
   const cardId = new URLSearchParams(location.search).get("cardId");
 
   const { api } = useContext(AuthContext);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleSubmit = async (e, onClose) => {
     e.preventDefault();
@@ -35,7 +36,7 @@ export default function FeedbackModal({ isOpen, onOpenChange, cardName }) {
     for (let [key, value] of Object.entries(data)) {
       if (!value) {
         console.error("Missing data:", key);
-        // TODO: show an error message
+        setErrorMessage("All fields are required.");
         return;
       }
     }
@@ -44,10 +45,10 @@ export default function FeedbackModal({ isOpen, onOpenChange, cardName }) {
     try {
       const response = await api.createReview(data);
       const newReview = response.data;
-      // TODO: push the new review to the reviews list
+      onReviewSubmit(newReview);
       onClose();
     } catch (error) {
-      // TODO: show an error message
+      setErrorMessage("Error submitting review. Please try again.");
       console.error("Error submitting review:", error);
     }
   }
@@ -94,6 +95,9 @@ export default function FeedbackModal({ isOpen, onOpenChange, cardName }) {
             • Who is this card perfect for?`}
                 variant="faded"
               />
+              {errorMessage && (
+                <p className="text-red-500 text-sm">{errorMessage}</p>
+              )}
               <Spacer y={2} />
               <div className="flex w-full items-center justify-between pb-4">
                 <FeedbackRating name="rating" size="lg" />

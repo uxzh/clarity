@@ -95,6 +95,10 @@ function Review() {
     setCurrentPage(page);
   };
 
+  const handleReviewSubmit = (newReview) => {
+    setReviews((prevReviews) => [newReview, ...prevReviews]);
+  };
+
   if (isLoading)
     return (
       <div className="flex justify-center items-center h-screen">
@@ -169,6 +173,7 @@ function Review() {
         isOpen={isOpen}
         onOpenChange={onOpenChange}
         cardName={cardData.cardName}
+        onReviewSubmit={handleReviewSubmit}
       />
     </div>
   );
