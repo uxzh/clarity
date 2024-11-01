@@ -276,7 +276,7 @@ const CardReview = React.forwardRef(({ className, onDelete, ...review }, ref) =>
                   deleteConfirmation ? "text-danger" : "text-default-400"
                 )}
               >
-                <IconTrashX stroke={2} />
+                {deleteConfirmation ? "Are you sure?" : <IconTrashX stroke={2} />}
               </Button>
             )}
           </div>
