@@ -1,4 +1,12 @@
-import React, { useState, useEffect, useMemo, useCallback, useContext } from "react";
+// cardPage.js
+import React, {
+  useState,
+  useEffect,
+  useMemo,
+  useCallback,
+  useContext,
+  useRef,
+} from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Card, Spacer, Button } from "@nextui-org/react";
 import { IconCreditCardFilled } from "@tabler/icons-react";
@@ -26,53 +34,131 @@ function Review() {
   const [selectedTab, setSelectedTab] = useState("reviews");
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-
   const [currentPage, setCurrentPage] = useState(1);
   const reviewsPerPage = 5;
+  const pollingInterval = useRef(null);
+  const [lastUpdateTime, setLastUpdateTime] = useState(Date.now());
 
   const searchParams = new URLSearchParams(location.search);
   const cardId = searchParams.get("cardId");
-
   const { api } = useContext(AuthContext);
 
-  useEffect(() => {
+  const fetchData = useCallback(async () => {
     if (!cardId) {
       setIsLoading(false);
       return;
     }
 
-    const fetchData = async () => {
-      setIsLoading(true);
-      setError(null);
-      try {
-        const { data: selectedCard } = await api.getCard(cardId);
-        setReviews(selectedCard.reviews || []);
-        setCardData(selectedCard);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        setError(error);
-        if (error.message === "Card not found") {
-          navigate("/review");
+    try {
+      const { data: selectedCard } = await api.getCard(cardId);
+
+      setReviews((prevReviews) => {
+        const newReviews = selectedCard.reviews || [];
+        if (JSON.stringify(prevReviews) !== JSON.stringify(newReviews)) {
+          return newReviews;
         }
-      } finally {
-        setIsLoading(false);
+        return prevReviews;
+      });
+
+      setCardData((prevData) => {
+        if (
+          !prevData ||
+          JSON.stringify(prevData) !== JSON.stringify(selectedCard)
+        ) {
+          return selectedCard;
+        }
+        return prevData;
+      });
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setError(error);
+      if (error.message === "Card not found") {
+        navigate("/review");
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  }, [cardId, api, navigate]);
+
+  // Initial data fetch
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+
+  // Setup polling
+  useEffect(() => {
+    if (!cardId) return;
+
+    pollingInterval.current = setInterval(fetchData, 5000);
+
+    return () => {
+      if (pollingInterval.current) {
+        clearInterval(pollingInterval.current);
+      }
+    };
+  }, [cardId, fetchData]);
+
+  // Handle visibility change
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        if (pollingInterval.current) {
+          clearInterval(pollingInterval.current);
+        }
+      } else {
+        fetchData();
+        if (pollingInterval.current) {
+          clearInterval(pollingInterval.current);
+        }
+        pollingInterval.current = setInterval(fetchData, 5000);
       }
     };
 
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, [fetchData]);
+
+  const resetPolling = useCallback(() => {
+    setLastUpdateTime(Date.now());
     fetchData();
-  }, [cardId, navigate]);
+  }, [fetchData]);
+
+  const handleReviewSubmit = useCallback(
+    (newReview) => {
+      setReviews((prevReviews) => [newReview, ...prevReviews]);
+      setCurrentPage(1);
+      resetPolling();
+    },
+    [resetPolling]
+  );
+
+  const filteredReviews = useMemo(() => {
+    const reviewsList = [...reviews];
+
+    if (selectedFilter.has("most_recent")) {
+      reviewsList.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    } else if (selectedFilter.has("highest_rated")) {
+      reviewsList.sort((a, b) => b.rating - a.rating);
+    } else if (selectedFilter.has("lowest_rated")) {
+      reviewsList.sort((a, b) => a.rating - b.rating);
+    }
+
+    return reviewsList;
+  }, [reviews, selectedFilter]);
+
+  const paginatedReviews = useMemo(() => {
+    const startIndex = (currentPage - 1) * reviewsPerPage;
+    const endIndex = startIndex + reviewsPerPage;
+    return filteredReviews.slice(startIndex, endIndex);
+  }, [currentPage, filteredReviews]);
 
   const averageRating = useMemo(() => {
     if (reviews.length === 0) return 0;
     const sum = reviews.reduce((acc, review) => acc + review.rating, 0);
     return (sum / reviews.length).toFixed(1);
   }, [reviews]);
-
-  const paginatedReviews = useMemo(() => {
-    const startIndex = (currentPage - 1) * reviewsPerPage;
-    const endIndex = startIndex + reviewsPerPage;
-    return reviews.slice(startIndex, endIndex);
-  }, [currentPage, reviews]);
 
   const handleWriteReview = useCallback(() => {
     onOpen();
@@ -91,16 +177,18 @@ function Review() {
     setSelectedTab(key);
   }, []);
 
-  const handlePageChange = (page) => {
+  const handlePageChange = useCallback((page) => {
     setCurrentPage(page);
-  };
+  }, []);
 
-  if (isLoading)
+  if (isLoading) {
     return (
       <div className="flex justify-center items-center h-screen">
         <Spinner />
       </div>
     );
+  }
+
   if (!cardId || error) return <ReviewSearch />;
   if (!cardData) return null;
 
@@ -113,7 +201,7 @@ function Review() {
           <section className="lg:col-span-2 lg:mt-6 px-2 order-2 lg:order-1">
             <ReviewsSection
               reviews={paginatedReviews}
-              handleWriteReview={onOpen}
+              handleWriteReview={handleWriteReview}
               cardName={cardData.cardName}
               selectedFilter={selectedFilter}
               handleSelectionChange={handleSelectionChange}
@@ -122,6 +210,8 @@ function Review() {
               currentPage={currentPage}
               reviewsPerPage={reviewsPerPage}
               handlePageChange={handlePageChange}
+              totalReviews={filteredReviews.length}
+              lastUpdateTime={lastUpdateTime}
             />
           </section>
           <section className="lg:col-span-1 lg:sticky lg:top-16 lg:h-screen lg:overflow-y-auto order-1 lg:order-2">
@@ -137,7 +227,7 @@ function Review() {
                   <p className="text-md xs:mt-2 md:mt-0 md:text-left text-center text-gray-700">
                     {cardData.bankName}
                   </p>
-                  <h2 className="text-2xl md:text-left  text-center font-black">
+                  <h2 className="text-2xl md:text-left text-center font-black">
                     {cardData.cardName}
                   </h2>
                 </div>
@@ -158,6 +248,7 @@ function Review() {
                   handleTabChange={handleTabChange}
                   cardData={cardData}
                   reviews={reviews}
+                  averageRating={averageRating}
                 />
               </div>
             </Card>
@@ -169,6 +260,7 @@ function Review() {
         isOpen={isOpen}
         onOpenChange={onOpenChange}
         cardName={cardData.cardName}
+        onReviewSubmit={handleReviewSubmit}
       />
     </div>
   );
