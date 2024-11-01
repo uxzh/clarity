@@ -61,8 +61,16 @@ class ReviewsController {
       const { id } = req.params;
 
       const review = await ReviewsDAO.getOneById(id);
-      res.status(204).send();
+      if (!review || review.error) {
+        return res.status(404).send({ error: "Review not found" });
+      }
 
+      const result = await ReviewsDAO.deleteOne(id);
+      if (!result || result.error) {
+        return res.status(500).send({ error: "Error deleting review" });
+      }
+
+      res.status(204).send();
     } catch (e) {
       console.error(e)
       res.status(500).send({ error: "Error deleting review" });

@@ -1,4 +1,3 @@
-// cardPage.js
 import React, {
   useState,
   useEffect,
@@ -134,6 +133,15 @@ function Review() {
     [resetPolling]
   );
 
+  const handleDeleteReview = useCallback(
+    (reviewId) => {
+      setReviews((prevReviews) =>
+        prevReviews.filter((review) => review._id !== reviewId)
+      );
+    },
+    []
+  );
+
   const filteredReviews = useMemo(() => {
     const reviewsList = [...reviews];
 
@@ -212,6 +220,7 @@ function Review() {
               handlePageChange={handlePageChange}
               totalReviews={filteredReviews.length}
               lastUpdateTime={lastUpdateTime}
+              handleDeleteReview={handleDeleteReview}
             />
           </section>
           <section className="lg:col-span-1 lg:sticky lg:top-16 lg:h-screen lg:overflow-y-auto order-1 lg:order-2">

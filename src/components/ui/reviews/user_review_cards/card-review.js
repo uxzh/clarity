@@ -6,6 +6,7 @@ import {
   IconThumbDown,
   IconMessageForward,
   IconSquareX,
+  IconTrashX,
 } from "@tabler/icons-react";
 import { cn } from "./cn";
 import Review from "./review";
@@ -41,7 +42,7 @@ const LikeDislikeButton = ({ action, count, isActive, onPress, onHover }) => (
   </Button>
 );
 
-const CardReview = React.forwardRef(({ className, ...review }, ref) => {
+const CardReview = React.forwardRef(({ className, onDelete, ...review }, ref) => {
   // Destructure review props
   const {
     _id,
@@ -65,6 +66,9 @@ const CardReview = React.forwardRef(({ className, ...review }, ref) => {
   const [replyContent, setReplyContent] = useState("");
   const [cancelConfirmation, setCancelConfirmation] = useState(false);
   const [validationError, setValidationError] = useState("");
+
+  // State for delete functionality
+  const [deleteConfirmation, setDeleteConfirmation] = useState(false);
 
   // Get user and API from context
   const { api, user } = useContext(AuthContext);
@@ -191,6 +195,24 @@ const CardReview = React.forwardRef(({ className, ...review }, ref) => {
     };
   }, [cancelConfirmation]);
 
+  // Handle delete button click
+  const handleDelete = async () => {
+    if (!canInteract) {
+      console.log("You need to be logged in with a verified email to delete.");
+      return;
+    }
+    if (deleteConfirmation) {
+      try {
+        await api.deleteReview(_id);
+        onDelete(_id);
+      } catch (error) {
+        console.error("Error deleting review:", error);
+      }
+    } else {
+      setDeleteConfirmation(true);
+    }
+  };
+
   // Reply button component
   const replyButton = (
     <Button
@@ -217,7 +239,7 @@ const CardReview = React.forwardRef(({ className, ...review }, ref) => {
       >
         <Review {...review} />
         {/* Action buttons */}
-        <div className="absolute bottom-0 left-0 right-0 flex justify-between items-center p-2">
+        <div className="absolute top-0 left-0 right-0 flex justify-between items-center p-2">
           {canInteract ? (
             replyButton
           ) : (
@@ -244,6 +266,19 @@ const CardReview = React.forwardRef(({ className, ...review }, ref) => {
                 setHoveredButton(isHovered ? "dislike" : null)
               }
             />
+            {user?._id === author?._id && (
+              <Button
+                isIconOnly
+                variant="light"
+                onPress={handleDelete}
+                className={cn(
+                  "transition-all duration-200 min-w-0 transform scale-95 opacity-70 hover:scale-100 hover:opacity-100",
+                  deleteConfirmation ? "text-danger" : "text-default-400"
+                )}
+              >
+                <IconTrashX stroke={2} />
+              </Button>
+            )}
           </div>
         </div>
       </div>

@@ -13,6 +13,7 @@ const ReviewsSection = React.memo(
     selectedFilter,
     handleSelectionChange,
     handleGoBack,
+    handleDeleteReview,
   }) => {
     const [currentPage, setCurrentPage] = useState(1);
     const reviewsPerPage = 5;
@@ -87,7 +88,7 @@ const ReviewsSection = React.memo(
           <>
             <SummaryFromTheWeb reviewFromTheWeb={reviewFromTheWeb} />
             {paginatedReviews.map((review, index) => (
-              <CardReview key={index} {...review} />
+              <CardReview key={index} {...review} onDelete={handleDeleteReview} />
             ))}
             <Pagination
               total={Math.ceil(reviews.length / reviewsPerPage)}
