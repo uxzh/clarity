@@ -22,11 +22,11 @@ export default function Footer() {
         </div>
         <div className="flex flex-col md:flex-row justify-between items-center mt-4">
           <div className="flex space-x-4 text-sm text-gray-600">
-            <a className="hover:text-gray-800" href="#">
+            <a className="hover:text-gray-800" href="/legal-stuff">
               Legal Stuff
             </a>
             <span>|</span>
-            <a className="hover:text-gray-800" href="#">
+            <a className="hover:text-gray-800" href="/privacy-policy">
               Privacy Policy
             </a>
             <span>|</span>
