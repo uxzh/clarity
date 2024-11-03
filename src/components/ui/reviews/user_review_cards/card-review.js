@@ -239,14 +239,29 @@ const CardReview = React.forwardRef(({ className, onDelete, ...review }, ref) =>
       >
         <Review {...review} />
         {/* Action buttons */}
-        <div className="absolute top-0 left-0 right-0 flex justify-between items-center p-2">
-          {canInteract ? (
-            replyButton
-          ) : (
-            <Tooltip content="You need to be logged in with a verified email to reply.">
-              {replyButton}
-            </Tooltip>
-          )}
+        <div className="absolute bottom-0 left-0 right-0 flex justify-between items-center p-2">
+          <div className="flex gap-2 items-center">
+            {user?._id === author?._id && (
+              <Button
+                isIconOnly
+                variant="light"
+                onPress={handleDelete}
+                className={cn(
+                  "transition-all duration-200 min-w-0 transform scale-95 opacity-70 hover:scale-100 hover:opacity-100",
+                  deleteConfirmation ? "text-danger" : "text-default-400"
+                )}
+              >
+                {deleteConfirmation ? "Are you sure?" : <IconTrashX stroke={2} />}
+              </Button>
+            )}
+            {canInteract ? (
+              replyButton
+            ) : (
+              <Tooltip content="You need to be logged in with a verified email to reply.">
+                {replyButton}
+              </Tooltip>
+            )}
+          </div>
           <div className="flex gap-2 items-center">
             <LikeDislikeButton
               action="like"
@@ -266,19 +281,6 @@ const CardReview = React.forwardRef(({ className, onDelete, ...review }, ref) =>
                 setHoveredButton(isHovered ? "dislike" : null)
               }
             />
-            {user?._id === author?._id && (
-              <Button
-                isIconOnly
-                variant="light"
-                onPress={handleDelete}
-                className={cn(
-                  "transition-all duration-200 min-w-0 transform scale-95 opacity-70 hover:scale-100 hover:opacity-100",
-                  deleteConfirmation ? "text-danger" : "text-default-400"
-                )}
-              >
-                {deleteConfirmation ? "Are you sure?" : <IconTrashX stroke={2} />}
-              </Button>
-            )}
           </div>
         </div>
       </div>
