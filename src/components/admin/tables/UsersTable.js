@@ -171,7 +171,6 @@ export default function UsersTable() {
             </TableColumn>
           )}
         </TableHeader>
-        {/* <TableBody items={mockUsers}> */}
         <TableBody items={data[MODELS.users]}>
           {(item) => (
             <TableRow key={item._id}>

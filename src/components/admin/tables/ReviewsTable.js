@@ -127,7 +127,6 @@ export default function ReviewsTable() {
             <TableColumn key={column.uid}>{column.name}</TableColumn>
           )}
         </TableHeader>
-        {/* <TableBody items={mockReviews}> */}
         <TableBody items={data[MODELS.reviews]}>
           {(item) => (
             <TableRow key={item._id}>
