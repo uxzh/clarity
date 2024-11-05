@@ -99,13 +99,24 @@ export default function CardsTable() {
     }
   };
 
-  const handleSaveCard = (cardData) => {
-    console.log("Saving card:", cardData);
+  const handleSaveCard = async (cardData) => {
+    try {
+      const res = await api.updateCard(selectedCard._id, cardData);
+      const card = res.data;
+      dispatchData({ type: "update", model: MODELS.cards, data: card });
+    } catch (error) {
+      console.error("Error updating card:", error);
+    }
     setEditModalOpen(false);
   };
 
-  const handleDeleteCard = (cardId) => {
-    console.log("Deleting card:", cardId);
+  const handleDeleteCard = async (cardId) => {
+    try {
+      await api.deleteCard(cardId);
+      dispatchData({ type: "delete", model: MODELS.cards, _id: cardId });
+    } catch (error) {
+      console.error("Error deleting card:", error);
+    }
     setDeleteModalOpen(false);
   };
 

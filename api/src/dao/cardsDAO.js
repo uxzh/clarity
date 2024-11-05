@@ -261,6 +261,38 @@ class CardsDAO {
       return { error: e };
     }
   }
+
+  static async createOne(data) {
+    try {
+      return await cards.insertOne(data);
+    } catch (e) {
+      console.error(`Unable to create card: ${e}`);
+      return { error: e };
+    }
+  }
+
+  static async updateOne({ id, set }) {
+    try {
+      return await cards.updateOne(
+        { _id: new ObjectId(id) },
+        {
+          $set: set || {},
+        }
+      );
+    } catch (e) {
+      console.error(`Unable to update card: ${e}`);
+      return { error: e };
+    }
+  }
+
+  static async deleteOne(id) {
+    try {
+      return await cards.deleteOne({ _id: new ObjectId(id) });
+    } catch (e) {
+      console.error(`Unable to delete card: ${e}`);
+      return { error: e };
+    }
+  }
 }
 
 module.exports = CardsDAO;

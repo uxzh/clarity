@@ -21,19 +21,8 @@ const modelsReducer = (state, action) => {
       return {
         ...state,
         [action.model]: state[action.model].map(item => {
-          if (item.id === action.data.id) {
-            return action.data;
-          }
-          return item;
-        })
-      };
-    case 'updateMany':
-      return {
-        ...state,
-        [action.model]: state[action.model].map(item => {
-          const found = action.data.find(el => el.id === item.id);
-          if (found) {
-            return found;
+          if (item._id === action.data._id) {
+            return { ...item, ...action.data };
           }
           return item;
         })
@@ -41,7 +30,7 @@ const modelsReducer = (state, action) => {
     case 'delete':
       return {
         ...state,
-        [action.model]: state[action.model].filter(item => item.id !== action.id)
+        [action.model]: state[action.model].filter(item => item._id !== action._id)
       };
     default:
       return state;

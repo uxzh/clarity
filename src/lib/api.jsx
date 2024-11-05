@@ -18,6 +18,12 @@ class Api {
       `/cards/default-search?page=${page}&perPage=${perPage}`
     );
 
+  createCard = async (data) => await this.axios.post(`/cards`, data);
+
+  updateCard = async (id, data) => await this.axios.put(`/cards/${id}`, data);
+
+  deleteCard = async (id) => await this.axios.delete(`/cards/${id}`);
+
   // login
   login = async ({ email, password }) =>
     await this.axios.post(`/auth/login`, { email, password });

@@ -61,7 +61,7 @@ class ReviewsController {
       if (!result || result.error) {
         return res.status(500).send({ error: "Error creating review" });
       }
-
+      review._id = result.insertedId
       res.status(201).send(review);
     } catch (e) {
       console.error(e)

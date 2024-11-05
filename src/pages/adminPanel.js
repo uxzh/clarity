@@ -9,7 +9,7 @@ import { AuthContext } from "../contexts/AuthContext";
 import { AdminProvider } from "../components/admin/contexts/AdminContext";
 
 export default function AdminPanel() {
-  const [activeTab, setActiveTab] = useState("users");
+  const [activeTab, setActiveTab] = useState("cards");
   const { user } = useContext(AuthContext);
 
   if (user.role !== "admin") {
