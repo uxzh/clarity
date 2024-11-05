@@ -13,6 +13,15 @@ class RepliesDAO {
     }
   }
 
+  static async getTotal() {
+    try {
+      return await replies.countDocuments();
+    } catch (e) {
+      console.error(`Unable to get total number of replies: ${e}`);
+      return { error: e };
+    }
+  }
+
   static async getManyByField({
     field,
     value,

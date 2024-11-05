@@ -13,6 +13,33 @@ class UsersDAO {
     }
   }
 
+  static async getTotal() {
+    try {
+      return await users.countDocuments();
+    } catch (e) {
+      console.error(`Unable to get total number of users: ${e}`);
+      return { error: e };
+    }
+  }
+
+  static async getMany({
+    sort = 'createdAt',
+    page = 0,
+    perPage = 10,
+  }) {
+    try {
+      return await users
+        .find()
+        .sort({ [sort]: -1 })
+        .skip(page * perPage)
+        .limit(perPage)
+        .toArray();
+    } catch (e) {
+      console.error(`Unable to get users: ${e}`);
+      return { error: e };
+    }
+  }
+
   static async getOneById(id) {
     try {
       return await users.findOne({ _id: new ObjectId(id) });

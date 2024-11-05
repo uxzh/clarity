@@ -6,6 +6,11 @@ const { likeSchema } = require('../middleware/validation/schemas/likeSchema');
 const { createReviewSchema } = require('../middleware/validation/schemas/reviewSchema');
 const validate = require('../middleware/validation/validate');
 
+router.get('/',
+  Permissions.isAdmin,
+  ReviewsController.getReviews
+);
+
 router.get('/:id',
   ReviewsController.getReview
 )

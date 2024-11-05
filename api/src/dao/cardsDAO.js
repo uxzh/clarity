@@ -15,6 +15,15 @@ class CardsDAO {
     }
   }
 
+  static async getTotal() {
+    try {
+      return await cards.countDocuments();
+    } catch (e) {
+      console.error(`Unable to get total number of cards: ${e}`);
+      return { error: e };
+    }
+  }
+
   static async getOneById(id) {
     try {
       return await cards.findOne({ _id: new ObjectId(id) });

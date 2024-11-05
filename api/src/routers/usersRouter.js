@@ -13,6 +13,11 @@ router.post('/check-username',
   UsersController.checkUsernameExists
 );
 
+router.get('/',
+  Permissions.isAdmin,
+  UsersController.getUsers
+);
+
 router.get('/:id',
   Permissions.isOwnerOrAdmin(models.users),
   UsersController.getUser
