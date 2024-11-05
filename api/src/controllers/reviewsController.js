@@ -4,6 +4,19 @@ const RepliesDAO = require("../dao/repliesDAO");
 const ReviewsDAO = require("../dao/reviewsDAO");
 
 class ReviewsController {
+  static async getReviews(req, res) {
+    try {
+      const reviews = await ReviewsDAO.getMany({
+        page: parseInt(req.query.page) || 0,
+        perPage: parseInt(req.query.perPage) || 20,
+      });
+      res.status(200).send(reviews);
+    } catch (e) {
+      console.error(e)
+      res.status(500).send({ error: "Error fetching reviews" });
+    }
+  }
+
   static async getReview(req, res) {
     try {
       const { id } = req.params

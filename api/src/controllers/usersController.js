@@ -17,6 +17,24 @@ class UsersController {
     }
   }
 
+  static async getUsers(req, res) {
+    try {
+      const users = await UsersDAO.getMany({
+        page: parseInt(req.query.page) || 0,
+        perPage: parseInt(req.query.perPage) || 10,
+      })
+      if (!users || users.error) {
+        return res.status(500).send({ error: "Error fetching users" });
+      }
+      users.forEach(user => {
+        delete user.password;
+      });
+      res.status(200).send(users);
+    } catch (e) {
+      res.status(500).send({ error: "Error fetching users" });
+    }
+  }
+
   static async getUser(req, res) {
     try {
       const { id } = req.params;
