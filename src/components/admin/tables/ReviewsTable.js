@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Table,
   TableHeader,
@@ -13,8 +13,10 @@ import {
   ReviewHideModal,
   ReviewDeleteModal,
 } from "../modals/ReviewModals";
-import { Status } from "../Status";
-import { mockReviews } from "../../../data/mockData";
+import { useAuthContext } from "../../../contexts/AuthContext";
+import { useAdminContext } from "../contexts/AdminContext";
+import { fetchAllPages } from "../utils";
+import { MODELS } from "../../../lib/models";
 
 export default function ReviewsTable() {
   const [selectedReview, setSelectedReview] = useState(null);
@@ -22,9 +24,25 @@ export default function ReviewsTable() {
   const [hideModalOpen, setHideModalOpen] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 
+  const { api } = useAuthContext();
+  const { data, dispatchData } = useAdminContext();
+
+  useEffect(() => {
+    if (data[MODELS.reviews].length !== 0) return;
+    const fetchData = async () => {
+      try {
+        const data = await fetchAllPages(api.getReviews, 50);
+        dispatchData({ type: "set", model: MODELS.reviews, data });
+      } catch (error) {
+        console.error("Error fetching reviews:", error);
+      }
+    };
+    fetchData();
+  }, []);
+
   const columns = [
-    { name: "USER", uid: "userId" },
-    { name: "CARD", uid: "cardId" },
+    { name: "USER", uid: "user" },
+    { name: "CARD", uid: "card" },
     { name: "RATING", uid: "rating" },
     { name: "TITLE", uid: "title" },
     { name: "CONTENT", uid: "content" },
@@ -33,10 +51,10 @@ export default function ReviewsTable() {
 
   const renderCell = (review, columnKey) => {
     switch (columnKey) {
-      case "userId":
-        return review.userId.username;
-      case "cardId":
-        return review.cardId.cardName;
+      case "user":
+        return review.user.username;
+      case "card":
+        return review.card.cardName;
       case "rating":
         return (
           <div className="flex items-center gap-1">
@@ -109,7 +127,8 @@ export default function ReviewsTable() {
             <TableColumn key={column.uid}>{column.name}</TableColumn>
           )}
         </TableHeader>
-        <TableBody items={mockReviews}>
+        {/* <TableBody items={mockReviews}> */}
+        <TableBody items={data[MODELS.reviews]}>
           {(item) => (
             <TableRow key={item._id}>
               {(columnKey) => (

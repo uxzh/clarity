@@ -37,9 +37,14 @@ class Api {
     await this.axios.post(`/auth/signup/google`, { credential });
 
   // users
+  getUsers = async ({ page = 0, perPage = 20 }) =>
+    await this.axios.get(`/users?page=${page}&perPage=${perPage}`);
+
   getUser = async (id) => await this.axios.get(`/users/${id}`);
 
   // reviews
+  getReviews = async ({ page = 0, perPage = 20 }) => await this.axios.get(`/reviews?page=${page}&perPage=${perPage}`);
+
   createReview = async ({ cardId, title, content, rating }) =>
     await this.axios.post(`/reviews`, { cardId, title, content, rating });
 
@@ -62,6 +67,9 @@ class Api {
 
   createReply = async ({ reviewId, content }) =>
     await this.axios.post(`/replies`, { reviewId, content });
+
+  // admin
+  getTotals = async () => await this.axios.get(`/admin/totals`);
 }
 
 export default Api;
