@@ -13,6 +13,14 @@ const updateUserSchema = yup.object().shape({
   }),
 
   avatar: yup.string().url('Avatar must be a valid URL').max(255, 'Avatar URL must be at most 255 characters'),
+
+  role: yup.string().oneOf(['user', 'admin']),
+
+  emailVerified: yup.boolean(),
+
+  isBlocked: yup.boolean(),
+
+  email: yup.string().email('Email must be a valid email').max(255, 'Email must be at most 255 characters'),
 });
 
 module.exports = {

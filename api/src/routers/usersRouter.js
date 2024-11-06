@@ -10,7 +10,12 @@ const { models } = require('../lib/models');
 router.post('/check-username',
   Permissions.isAuthenticated,
   validate(usernameSchema),
-  UsersController.checkUsernameExists
+  UsersController.checkUsernameAvailable
+);
+
+router.get('/',
+  Permissions.isAdmin,
+  UsersController.getUsers
 );
 
 router.get('/:id',

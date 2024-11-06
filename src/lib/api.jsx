@@ -18,6 +18,12 @@ class Api {
       `/cards/default-search?page=${page}&perPage=${perPage}`
     );
 
+  createCard = async (data) => await this.axios.post(`/cards`, data);
+
+  updateCard = async (id, data) => await this.axios.put(`/cards/${id}`, data);
+
+  deleteCard = async (id) => await this.axios.delete(`/cards/${id}`);
+
   // login
   login = async ({ email, password }) =>
     await this.axios.post(`/auth/login`, { email, password });
@@ -37,11 +43,26 @@ class Api {
     await this.axios.post(`/auth/signup/google`, { credential });
 
   // users
+  getUsers = async ({ page = 0, perPage = 20 }) =>
+    await this.axios.get(`/users?page=${page}&perPage=${perPage}`);
+
   getUser = async (id) => await this.axios.get(`/users/${id}`);
 
+  updateUser = async (id, data) => await this.axios.put(`/users/${id}`, data);
+
+  deleteUser = async (id) => await this.axios.delete(`/users/${id}`);
+
+  checkUsername = async (username) => await this.axios.post(`/users/check-username/`, { username });
+
   // reviews
+  getReviews = async ({ page = 0, perPage = 20 }) => await this.axios.get(`/reviews?page=${page}&perPage=${perPage}`);
+
   createReview = async ({ cardId, title, content, rating }) =>
     await this.axios.post(`/reviews`, { cardId, title, content, rating });
+
+  updateReview = async (id, data) => await this.axios.put(`/reviews/${id}`, data);
+
+  deleteReview = async (id) => await this.axios.delete(`/reviews/${id}`);
 
   likeReview = async (id, isLike) =>
     await this.axios.post(`/reviews/${id}/like`, { isLike });
@@ -62,6 +83,9 @@ class Api {
 
   createReply = async ({ reviewId, content }) =>
     await this.axios.post(`/replies`, { reviewId, content });
+
+  // admin
+  getTotals = async () => await this.axios.get(`/admin/totals`);
 }
 
 export default Api;

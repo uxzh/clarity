@@ -96,7 +96,6 @@ class AuthController {
       }
 
       delete user.password;
-      delete user.role;
       delete user.previousUsernames;
       const token = jwt.sign({ _id: user._id });
       user.token = token;

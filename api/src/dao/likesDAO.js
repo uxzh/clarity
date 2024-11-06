@@ -13,6 +13,15 @@ class LikesDAO {
     }
   }
 
+  static async getTotal() {
+    try {
+      return await likes.countDocuments();
+    } catch (e) {
+      console.error(`Unable to get total number of likes: ${e}`);
+      return { error: e };
+    }
+  }
+
   static async getLikeByUserAndTarget(userId, targetId) {
     try {
       return await likes.findOne({ 

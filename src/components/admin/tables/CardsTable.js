@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Table,
   TableHeader,
@@ -13,14 +13,32 @@ import {
   CardEditModal,
   CardDeleteModal,
 } from "../modals/CardModals";
-import { Status } from "../Status";
-import { mockCards } from "../../../data/mockData";
+import { useAuthContext } from "../../../contexts/AuthContext";
+import { useAdminContext } from "../contexts/AdminContext";
+import { MODELS } from "../../../lib/models";
+import { fetchAllPages } from "../utils";
 
 export default function CardsTable() {
   const [selectedCard, setSelectedCard] = useState(null);
   const [detailsModalOpen, setDetailsModalOpen] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+
+  const { api } = useAuthContext();
+  const { data, dispatchData } = useAdminContext();
+
+  useEffect(() => {
+    if (data[MODELS.cards].length !== 0) return;
+    const fetchData = async () => {
+      try {
+        const data = await fetchAllPages(api.getCards, 50);
+        dispatchData({ type: "set", model: MODELS.cards, data });
+      } catch (error) {
+        console.error("Error fetching cards:", error);
+      }
+    };
+    fetchData();
+  }, []);
 
   const columns = [
     { name: "NAME", uid: "cardName" },
@@ -35,9 +53,9 @@ export default function CardsTable() {
       case "bayesianRating":
         return (
           <div className="flex items-center gap-1">
-            <span>{card.bayesianRating.toFixed(1)}</span>
+            <span>{card?.bayesianRating?.toFixed(1) || 'NaN'}</span>
             <span className="text-sm text-gray-500">
-              ({card.averageRating.toFixed(1)})
+              ({card?.averageRating?.toFixed(1) || 'NaN'})
             </span>
           </div>
         );
@@ -81,13 +99,24 @@ export default function CardsTable() {
     }
   };
 
-  const handleSaveCard = (cardData) => {
-    console.log("Saving card:", cardData);
+  const handleSaveCard = async (cardData) => {
+    try {
+      const res = await api.updateCard(selectedCard._id, cardData);
+      const card = res.data;
+      dispatchData({ type: "update", model: MODELS.cards, data: card });
+    } catch (error) {
+      console.error("Error updating card:", error);
+    }
     setEditModalOpen(false);
   };
 
-  const handleDeleteCard = (cardId) => {
-    console.log("Deleting card:", cardId);
+  const handleDeleteCard = async (cardId) => {
+    try {
+      await api.deleteCard(cardId);
+      dispatchData({ type: "delete", model: MODELS.cards, _id: cardId });
+    } catch (error) {
+      console.error("Error deleting card:", error);
+    }
     setDeleteModalOpen(false);
   };
 
@@ -99,7 +128,7 @@ export default function CardsTable() {
             <TableColumn key={column.uid}>{column.name}</TableColumn>
           )}
         </TableHeader>
-        <TableBody items={mockCards}>
+        <TableBody items={data[MODELS.cards]}>
           {(item) => (
             <TableRow key={item._id}>
               {(columnKey) => (
