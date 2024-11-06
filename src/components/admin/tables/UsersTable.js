@@ -152,6 +152,30 @@ export default function UsersTable() {
     }
   };
 
+  const handleSaveUser = async (data) => {
+    try {
+      const res = await api.updateUser(selectedUser._id, data);
+      dispatchData({ type: "update", model: MODELS.users, data: res.data });
+    } catch (error) {
+      console.error("Error updating user:", error);
+    }
+    setEditModalOpen(false);
+  };
+
+  const handleBlockUser = async (userId) => {
+    try {
+      await api.updateUser(userId, { isBlocked: !selectedUser.isBlocked });
+      dispatchData({
+        type: "update",
+        model: MODELS.users,
+        data: { ...selectedUser, isBlocked: !selectedUser.isBlocked },
+      });
+    } catch (error) {
+      console.error("Error blocking user:", error);
+    }
+    setBlockModalOpen(false);
+  }
+
   return (
     <>
       <Table
@@ -191,19 +215,13 @@ export default function UsersTable() {
         isOpen={editModalOpen}
         onClose={() => setEditModalOpen(false)}
         user={selectedUser}
-        onSave={(data) => {
-          console.log("Saving user:", data);
-          setEditModalOpen(false);
-        }}
+        onSave={handleSaveUser}
       />
       <UserBlockModal
         isOpen={blockModalOpen}
         onClose={() => setBlockModalOpen(false)}
         user={selectedUser}
-        onConfirm={(userId) => {
-          console.log("Toggling block status for user:", userId);
-          setBlockModalOpen(false);
-        }}
+        onConfirm={handleBlockUser}
       />
     </>
   );

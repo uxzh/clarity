@@ -48,6 +48,10 @@ class Api {
 
   getUser = async (id) => await this.axios.get(`/users/${id}`);
 
+  updateUser = async (id, data) => await this.axios.put(`/users/${id}`, data);
+
+  deleteUser = async (id) => await this.axios.delete(`/users/${id}`);
+
   // reviews
   getReviews = async ({ page = 0, perPage = 20 }) => await this.axios.get(`/reviews?page=${page}&perPage=${perPage}`);
 

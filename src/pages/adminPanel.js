@@ -10,7 +10,7 @@ import { AdminProvider } from "../components/admin/contexts/AdminContext";
 import { MODELS } from "../lib/models";
 
 export default function AdminPanel() {
-  const [activeTab, setActiveTab] = useState(MODELS.reviews);
+  const [activeTab, setActiveTab] = useState(MODELS.users);
   const { user } = useContext(AuthContext);
 
   if (user.role !== "admin") {
