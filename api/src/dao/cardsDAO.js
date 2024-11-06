@@ -1,5 +1,6 @@
 const { ObjectId } = require("mongodb");
 const { models } = require("../lib/models");
+const { getMongoClient, getDB } = require("../lib/connectToDB");
 
 let cards;
 
@@ -12,6 +13,15 @@ class CardsDAO {
       cards = await db.collection(models.cards);
     } catch (e) {
       console.error(`Unable to establish collection handles in cardsDAO: ${e}`);
+    }
+  }
+
+  static async getTotal() {
+    try {
+      return await cards.countDocuments();
+    } catch (e) {
+      console.error(`Unable to get total number of cards: ${e}`);
+      return { error: e };
     }
   }
 
@@ -249,6 +259,62 @@ class CardsDAO {
         .toArray();
     } catch (e) {
       console.error(`Unable to get default search cards: ${e}`);
+      return { error: e };
+    }
+  }
+
+  static async createOne(data) {
+    try {
+      return await cards.insertOne(data);
+    } catch (e) {
+      console.error(`Unable to create card: ${e}`);
+      return { error: e };
+    }
+  }
+
+  static async updateOne({ id, set }) {
+    try {
+      return await cards.updateOne(
+        { _id: new ObjectId(id) },
+        {
+          $set: set || {},
+        }
+      );
+    } catch (e) {
+      console.error(`Unable to update card: ${e}`);
+      return { error: e };
+    }
+  }
+
+  static async deleteOne(id) {
+    try {
+      const client = getMongoClient();
+      const db = getDB();
+      const session = client.startSession();
+      const transactionOptions = {
+        readPreference: "primary",
+        readConcern: { level: "local" },
+        writeConcern: { w: "majority" }
+      };
+      let result
+      await session.withTransaction(async () => {
+        result = await cards.deleteOne({ _id: new ObjectId(id) }, { session });
+        const reviews = db.collection(models.reviews);
+        const replies = db.collection(models.replies);
+        const likes = db.collection(models.likes);
+        const relatedReviews = await reviews.find({ cardId: new ObjectId(id) }).toArray()
+        const relatedReviewsIds = relatedReviews.map(review => review._id);
+        const relatedReplies = await replies.find({ reviewId: { $in: relatedReviewsIds } }).toArray()
+        const relatedRepliesIds = relatedReplies.map(reply => reply._id);
+        await likes.deleteMany({ targetId: { $in: [...relatedReviewsIds, ...relatedRepliesIds] } }, { session });
+        await replies.deleteMany({ reviewId: { $in: relatedReviewsIds } }, { session });
+        await reviews.deleteMany({ cardId: new ObjectId(id) }, { session });
+      }, transactionOptions);
+      session.endSession();
+      return result;
+    } catch (e) {
+      console.error(`Unable to delete card: ${e}`);
+      session.endSession();
       return { error: e };
     }
   }

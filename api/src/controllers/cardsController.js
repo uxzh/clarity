@@ -88,6 +88,81 @@ class CardsController {
       res.status(500).send({ error: "Error fetching top cards" });
     }
   }
+
+  static async createCard(req, res) {
+    try {
+      const { cardName, bankName, cardImageUrl, creditScoreRequired, fees, additionalBenefits, apr, cashbackPercentages, perks, redemptionOptions, rewards } = req.body;
+      const date = new Date();
+      const card = {
+        cardName,
+        bankName,
+        cardImageUrl,
+        creditScoreRequired,
+        fees,
+        additionalBenefits,
+        apr,
+        cashbackPercentages,
+        perks,
+        redemptionOptions,
+        rewards,
+        createdAt: date,
+        updatedAt: date,
+      };
+      const result = await CardsDAO.createOne(card);
+      if (!result || result.error) {
+        return res.status(500).send({ error: "Error creating card" });
+      }
+      card._id = result.insertedId
+      res.status(201).send(card);
+    } catch (e) {
+      console.error(e)
+      res.status(500).send({ error: "Error creating card" });
+    }
+  }
+
+  static async updateCard(req, res) {
+    try {
+      const { id } = req.params;
+      const fields = ["cardName", "bankName", "cardImageUrl", "creditScoreRequired", "fees", "additionalBenefits", "apr", "cashbackPercentages", "perks", "redemptionOptions", "rewards", "additionalBenefits"];
+      const data = {}
+      fields.forEach(field => {
+        if (Object.keys(req.body).includes(field)) {
+          data[field] = req.body[field];
+        }
+      });
+      data.updatedAt = new Date();
+
+      const result = await CardsDAO.updateOne({
+        id,
+        set: data,
+      });
+      if (!result || result.error) {
+        return res.status(500).send({ error: "Error updating card" });
+      }
+
+      res.status(200).send({ _id: id, ...data });
+    } catch (e) {
+      console.error(e)
+      res.status(500).send({ error: "Error updating card" });
+    }
+  }
+
+  static async deleteCard(req, res) {
+    try {
+      const { id } = req.params;
+      const result = await CardsDAO.deleteOne(id);
+      if (!result || result.error) {
+        return res.status(500).send({ error: "Error deleting card" });
+      }
+      if (result.deletedCount === 0) {
+        return res.status(404).send({ error: "Card not found" });
+      }
+      res.status(204).send();
+    } catch (e) {
+      console.error(e)
+      res.status(500).send({ error: "Error deleting card" });
+    }
+  }
 }
 
 module.exports = CardsController;

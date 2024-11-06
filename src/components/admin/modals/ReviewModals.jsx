@@ -67,10 +67,10 @@ export const ReviewHideModal = ({ isOpen, onClose, review, onConfirm }) => {
   return (
     <Modal size="sm" isOpen={isOpen} onClose={onClose}>
       <ModalContent>
-        <ModalHeader>{review?.hidden ? "Show" : "Hide"} Review</ModalHeader>
+        <ModalHeader>{review?.isHidden ? "Show" : "Hide"} Review</ModalHeader>
         <ModalBody>
           <p>
-            Are you sure you want to {review?.hidden ? "show" : "hide"} this
+            Are you sure you want to {review?.isHidden ? "show" : "hide"} this
             review?
           </p>
         </ModalBody>
@@ -79,7 +79,7 @@ export const ReviewHideModal = ({ isOpen, onClose, review, onConfirm }) => {
             Cancel
           </Button>
           <Button color="warning" onPress={() => onConfirm(review?._id)}>
-            {review?.hidden ? "Show" : "Hide"} Review
+            {review?.isHidden ? "Show" : "Hide"} Review
           </Button>
         </ModalFooter>
       </ModalContent>

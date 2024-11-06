@@ -14,6 +14,7 @@ import { v4 as uuidv4 } from "uuid";
 import { debounce } from "lodash";
 import { IconSquareCheck } from "@tabler/icons-react";
 import { IconSquareX } from "@tabler/icons-react";
+import { useAuthContext } from "../../../contexts/AuthContext";
 
 const ProfilePopup = ({ isOpen, onClose, user, onSave }) => {
   const [avatarUrl, setAvatarUrl] = useState(user?.avatar || "");
@@ -24,6 +25,8 @@ const ProfilePopup = ({ isOpen, onClose, user, onSave }) => {
   const [isUsernameAvailable, setIsUsernameAvailable] = useState(true);
   const [isChangingPassword, setIsChangingPassword] = useState(false);
   const { onOpenChange } = useDisclosure();
+
+  const { api } = useAuthContext();
 
   const generateNewAvatar = useCallback(() => {
     try {
@@ -37,13 +40,14 @@ const ProfilePopup = ({ isOpen, onClose, user, onSave }) => {
   }, []);
 
   const checkUsernameAvailability = useCallback(async (username) => {
-    // This is a placeholder for the actual API call
-    // Replace this with your actual API endpoint when it's ready
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(Math.random() > 0.5); // Simulate API response
-      }, 300);
-    });
+    try {
+      const response = await api.checkUsername(username);
+      return response.data.isAvailable;
+    } catch (err) {
+      setError("Failed to check username availability. Please try again.");
+      console.error("Username availability check error:", err);
+      return false;
+    }
   }, []);
 
   const debouncedCheckUsername = useCallback(

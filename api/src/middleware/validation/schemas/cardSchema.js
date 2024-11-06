@@ -1,8 +1,6 @@
 const yup = require("yup");
 
 const schema = (isCreate) => yup.object().shape({
-  _id: yup.string().test('id', 'ID is required', (value) => isCreate || value),
-
   cardName: yup.string().required('Title is required').max(255, 'Title must be no more than 255 characters'),
 
   linkToApply: yup.string().url('Link to Apply must be a valid URL'),
@@ -30,10 +28,10 @@ const schema = (isCreate) => yup.object().shape({
     introApr: yup.string(),
   }),
 
-  rewards: yup.object().shape({
-    name: yup.string().required('Reward type is required'),
-    value: yup.string().required('Reward value is required'),
-  }),
+  rewards: yup.array().of(yup.object().shape({
+    name: yup.string(),
+    value: yup.string(),
+  })),
 
   creditScoreRequired: yup.string().required('Credit Score Required is required'),
 

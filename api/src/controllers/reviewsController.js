@@ -4,6 +4,19 @@ const RepliesDAO = require("../dao/repliesDAO");
 const ReviewsDAO = require("../dao/reviewsDAO");
 
 class ReviewsController {
+  static async getReviews(req, res) {
+    try {
+      const reviews = await ReviewsDAO.getMany({
+        page: parseInt(req.query.page) || 0,
+        perPage: parseInt(req.query.perPage) || 20,
+      });
+      res.status(200).send(reviews);
+    } catch (e) {
+      console.error(e)
+      res.status(500).send({ error: "Error fetching reviews" });
+    }
+  }
+
   static async getReview(req, res) {
     try {
       const { id } = req.params
@@ -42,17 +55,50 @@ class ReviewsController {
         content,
         createdAt: date,
         updatedAt: date,
+        isHidden: false,
       };
 
       const result = await ReviewsDAO.createOne(review);
       if (!result || result.error) {
         return res.status(500).send({ error: "Error creating review" });
       }
-
+      review._id = result.insertedId
       res.status(201).send(review);
     } catch (e) {
       console.error(e)
       res.status(500).send({ error: "Error creating review" });
+    }
+  }
+
+  static async updateReview(req, res) {
+    try {
+      const { id } = req.params;
+
+      const review = await ReviewsDAO.getOneById(id);
+      if (!review || review.error) {
+        return res.status(404).send({ error: "Review not found" });
+      }
+
+      const fields = ["rating", "title", "content", "isHidden"];
+      const data = {}
+      fields.forEach(field => {
+        if (Object.keys(req.body).includes(field)) {
+          data[field] = req.body[field];
+        }
+      });
+      data.updatedAt = new Date();
+
+      const result = await ReviewsDAO.updateOne({
+        id,
+        set: data,
+      });
+      if (!result || result.error) {
+        return res.status(500).send({ error: "Error updating review" });
+      }
+      res.status(200).send({ _id: id, ...data });
+    } catch (e) {
+      console.error(e)
+      res.status(500).send({ error: "Error updating review" });
     }
   }
 
@@ -61,8 +107,19 @@ class ReviewsController {
       const { id } = req.params;
 
       const review = await ReviewsDAO.getOneById(id);
-      res.status(204).send();
+      if (!review || review.error) {
+        return res.status(404).send({ error: "Review not found" });
+      }
 
+      const result = await ReviewsDAO.deleteOne(id);
+      if (!result || result.error) {
+        return res.status(500).send({ error: "Error deleting review" });
+      }
+      if (result.deletedCount === 0) {
+        return res.status(404).send({ error: "Review not found" });
+      }
+
+      res.status(204).send();
     } catch (e) {
       console.error(e)
       res.status(500).send({ error: "Error deleting review" });
