@@ -7,9 +7,10 @@ import CardsTable from "../components/admin/tables/CardsTable";
 import ReviewsTable from "../components/admin/tables/ReviewsTable";
 import { AuthContext } from "../contexts/AuthContext";
 import { AdminProvider } from "../components/admin/contexts/AdminContext";
+import { MODELS } from "../lib/models";
 
 export default function AdminPanel() {
-  const [activeTab, setActiveTab] = useState("cards");
+  const [activeTab, setActiveTab] = useState(MODELS.reviews);
   const { user } = useContext(AuthContext);
 
   if (user.role !== "admin") {

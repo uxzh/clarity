@@ -54,6 +54,10 @@ class Api {
   createReview = async ({ cardId, title, content, rating }) =>
     await this.axios.post(`/reviews`, { cardId, title, content, rating });
 
+  updateReview = async (id, data) => await this.axios.put(`/reviews/${id}`, data);
+
+  deleteReview = async (id) => await this.axios.delete(`/reviews/${id}`);
+
   likeReview = async (id, isLike) =>
     await this.axios.post(`/reviews/${id}/like`, { isLike });
 

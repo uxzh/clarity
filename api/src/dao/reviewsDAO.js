@@ -1,5 +1,6 @@
 const { ObjectId } = require("mongodb");
 const { models } = require("../lib/models");
+const { getMongoClient, getDB } = require("../lib/connectToDB");
 
 let reviews;
 
@@ -114,6 +115,7 @@ class ReviewsDAO {
     content,
     createdAt = new Date(),
     updatedAt = new Date(),
+    isHidden = false,
   }) {
     try {
       return await reviews.insertOne({
@@ -124,9 +126,54 @@ class ReviewsDAO {
         content,
         createdAt,
         updatedAt,
+        isHidden,
       });
     } catch (e) {
       console.error(`Unable to create review: ${e}`);
+      return { error: e };
+    }
+  }
+
+  static async updateOne({
+    id,
+    set
+  }) {
+    try {
+      return await reviews.updateOne(
+        { _id: new ObjectId(id) },
+        {
+          $set: set || {},
+        }
+      );
+    } catch (e) {
+      console.error(`Unable to update review: ${e}`);
+      return { error: e };
+    }
+  }
+
+  static async deleteOne(id) {
+    try {
+      const client = getMongoClient();
+      const db = getDB();
+      const session = client.startSession();
+      const transactionOptions = {
+        readPreference: "primary",
+        readConcern: { level: "local" },
+        writeConcern: { w: "majority" }
+      };
+      let result
+      await session.withTransaction(async () => {
+        const likes = db.collection(models.likes);
+        const replies = db.collection(models.replies);
+        await likes.deleteMany({ targetId: new ObjectId(id) }, { session });
+        await replies.deleteMany({ reviewId: new ObjectId(id) }, { session });
+        result = await reviews.deleteOne({ _id: new ObjectId(id) }, { session });
+      }, transactionOptions);
+      session.endSession();
+      return result;
+    } catch (e) {
+      console.error(`Unable to delete review: ${e}`);
+      session.endSession();
       return { error: e };
     }
   }
@@ -164,6 +211,7 @@ class ReviewsDAO {
             content: 1,
             createdAt: 1,
             updatedAt: 1,
+            isHidden: 1,
             "user.username": 1,
             "user.avatar": 1
           }

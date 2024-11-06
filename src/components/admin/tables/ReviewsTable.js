@@ -31,7 +31,7 @@ export default function ReviewsTable() {
     if (data[MODELS.reviews].length !== 0) return;
     const fetchData = async () => {
       try {
-        const data = await fetchAllPages(api.getReviews, 50);
+        const data = await fetchAllPages(api.getReviews, 100);
         dispatchData({ type: "set", model: MODELS.reviews, data });
       } catch (error) {
         console.error("Error fetching reviews:", error);
@@ -85,7 +85,7 @@ export default function ReviewsTable() {
                 setHideModalOpen(true);
               }}
             >
-              Hide
+              {review.isHidden ? "Show" : "Hide"}
             </Button>
             <Button
               size="sm"
@@ -104,18 +104,37 @@ export default function ReviewsTable() {
     }
   };
 
-  const handleSaveReview = (reviewData) => {
-    console.log("Saving review:", reviewData);
+  const handleSaveReview = async (reviewData) => {
+    try {
+      const res = await api.updateReview(selectedReview._id, reviewData);
+      dispatchData({ type: "update", model: MODELS.reviews, data: res.data });
+    } catch (error) {
+      console.error("Error updating review:", error);
+    }
     setEditModalOpen(false);
   };
 
-  const handleHideReview = (reviewId) => {
-    console.log("Hiding review:", reviewId);
+  const handleHideReview = async (reviewId) => {
+    try {
+      await api.updateReview(reviewId, { isHidden: !selectedReview.isHidden });
+      dispatchData({
+        type: "update",
+        model: MODELS.reviews,
+        data: { ...selectedReview, isHidden: !selectedReview.isHidden },
+      });
+    } catch (error) {
+      console.error("Error hiding review:", error);
+    }
     setHideModalOpen(false);
   };
 
-  const handleDeleteReview = (reviewId) => {
-    console.log("Deleting review:", reviewId);
+  const handleDeleteReview = async (reviewId) => {
+    try {
+      await api.deleteReview(reviewId);
+      dispatchData({ type: "delete", model: MODELS.reviews, _id: reviewId });
+    } catch (error) {
+      console.error("Error deleting review:", error);
+    }
     setDeleteModalOpen(false);
   };
 

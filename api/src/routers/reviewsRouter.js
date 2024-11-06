@@ -1,9 +1,10 @@
 const router = require('express').Router();
 
 const ReviewsController = require('../controllers/reviewsController');
+const { models } = require('../lib/models');
 const Permissions = require('../middleware/permissions');
 const { likeSchema } = require('../middleware/validation/schemas/likeSchema');
-const { createReviewSchema } = require('../middleware/validation/schemas/reviewSchema');
+const { createReviewSchema, updateReviewSchema } = require('../middleware/validation/schemas/reviewSchema');
 const validate = require('../middleware/validation/validate');
 
 router.get('/',
@@ -21,8 +22,14 @@ router.post('/',
   ReviewsController.createReview
 );
 
+router.put('/:id',
+  Permissions.isOwnerOrAdmin(models.reviews),
+  validate(updateReviewSchema),
+  ReviewsController.updateReview
+);
+
 router.delete('/:id',
-  Permissions.isOwnerOrAdmin,
+  Permissions.isOwnerOrAdmin(models.reviews),
   ReviewsController.deleteReview
 );
 

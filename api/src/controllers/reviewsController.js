@@ -55,6 +55,7 @@ class ReviewsController {
         content,
         createdAt: date,
         updatedAt: date,
+        isHidden: false,
       };
 
       const result = await ReviewsDAO.createOne(review);
@@ -69,13 +70,56 @@ class ReviewsController {
     }
   }
 
+  static async updateReview(req, res) {
+    try {
+      const { id } = req.params;
+
+      const review = await ReviewsDAO.getOneById(id);
+      if (!review || review.error) {
+        return res.status(404).send({ error: "Review not found" });
+      }
+
+      const fields = ["rating", "title", "content", "isHidden"];
+      const data = {}
+      fields.forEach(field => {
+        if (Object.keys(req.body).includes(field)) {
+          data[field] = req.body[field];
+        }
+      });
+      data.updatedAt = new Date();
+
+      const result = await ReviewsDAO.updateOne({
+        id,
+        set: data,
+      });
+      if (!result || result.error) {
+        return res.status(500).send({ error: "Error updating review" });
+      }
+      res.status(200).send({ _id: id, ...data });
+    } catch (e) {
+      console.error(e)
+      res.status(500).send({ error: "Error updating review" });
+    }
+  }
+
   static async deleteReview(req, res) {
     try {
       const { id } = req.params;
 
       const review = await ReviewsDAO.getOneById(id);
-      res.status(204).send();
+      if (!review || review.error) {
+        return res.status(404).send({ error: "Review not found" });
+      }
 
+      const result = await ReviewsDAO.deleteOne(id);
+      if (!result || result.error) {
+        return res.status(500).send({ error: "Error deleting review" });
+      }
+      if (result.deletedCount === 0) {
+        return res.status(404).send({ error: "Review not found" });
+      }
+
+      res.status(204).send();
     } catch (e) {
       console.error(e)
       res.status(500).send({ error: "Error deleting review" });
