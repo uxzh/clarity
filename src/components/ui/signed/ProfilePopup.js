@@ -41,14 +41,24 @@ const ProfilePopup = ({ isOpen, onClose, user, onSave }) => {
 
   const checkUsernameAvailability = useCallback(async (username) => {
     try {
-      const response = await api.checkUsername(username);
-      return response.data.isAvailable;
+      if (!username.trim()) {
+        throw new Error("Username cannot be empty");
+      }
+      if (username.length < 5) {
+        throw new Error("Username must be at least 5 characters long");
+      }
+      try {
+        const response = await api.checkUsername(username);
+        return response.data.isAvailable;
+      } catch (err) {
+        throw new Error("Failed to check username availability. Please try again.");
+      }
     } catch (err) {
-      setError("Failed to check username availability. Please try again.");
+      setError(err.message);
       console.error("Username availability check error:", err);
       return false;
     }
-  }, []);
+  }, [api]);
 
   const debouncedCheckUsername = useCallback(
     debounce(async (username) => {
@@ -71,6 +81,9 @@ const ProfilePopup = ({ isOpen, onClose, user, onSave }) => {
       if (!username.trim()) {
         throw new Error("Username cannot be empty");
       }
+      if (username.length < 5) {
+        throw new Error("Username must be at least 5 characters long");
+      }
       if (!isUsernameAvailable) {
         throw new Error("Username is not available");
       }
@@ -83,9 +96,12 @@ const ProfilePopup = ({ isOpen, onClose, user, onSave }) => {
         }
       }
       onSave({
-        avatarUrl,
+        avatar: avatarUrl,
         username,
-        ...(isChangingPassword ? { newPassword } : {}),
+        ...(isChangingPassword ? 
+            { password: newPassword, confirmPassword } : 
+            {}
+          ),
       });
       onClose();
     } catch (err) {

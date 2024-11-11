@@ -73,8 +73,6 @@ class Api {
   deleteReviewLike = async (id) =>
     await this.axios.delete(`/reviews/${id}/like`);
 
-  deleteReview = async (id) => await this.axios.delete(`/reviews/${id}`);
-
   // replies
   getRepliesByReviewId = async ({ reviewId, page = 0, perPage = 20 }) =>
     await this.axios.get(
