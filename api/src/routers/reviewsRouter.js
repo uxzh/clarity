@@ -2,6 +2,7 @@ const router = require('express').Router();
 
 const ReviewsController = require('../controllers/reviewsController');
 const { models } = require('../lib/models');
+const { setCacheHeaders } = require('../middleware/cacheHeaders');
 const Permissions = require('../middleware/permissions');
 const { likeSchema } = require('../middleware/validation/schemas/likeSchema');
 const { createReviewSchema, updateReviewSchema } = require('../middleware/validation/schemas/reviewSchema');
@@ -53,6 +54,7 @@ router.delete('/:id/like',
 
 // replies
 router.get('/:id/replies',
+  setCacheHeaders(300),
   ReviewsController.getRepliesByReview
 );
 
