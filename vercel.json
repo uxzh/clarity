@@ -2,8 +2,10 @@
   "rewrites": [
     { "source": "/api/(.*)", "destination": "/api" }
   ],
-  "crons": {
-    "path": "/api/src/lib/manage/updateRating",
-    "schedule": "0 0,12 * * *"
-  }
+  "crons": [
+    {
+      "path": "/api/src/lib/manage/updateRating",
+      "schedule": "0 0,12 * * *"
+    }
+  ]
 }
