@@ -1,5 +1,9 @@
 {
   "rewrites": [
     { "source": "/api/(.*)", "destination": "/api" }
-  ]
+  ],
+  "cron": {
+    "path": "/api/src/lib/manage/updateRating",
+    "schedule": "0 0,12 * * *"
+  }
 }
