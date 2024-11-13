@@ -1,11 +1,15 @@
 const router = require('express').Router();
 
 const CardsController = require('../controllers/cardsController');
+const { setCacheHeaders } = require('../middleware/cacheHeaders');
 const Permissions = require('../middleware/permissions');
 const { updateCardSchema, createCardSchema } = require('../middleware/validation/schemas/cardSchema');
 const validate = require('../middleware/validation/validate');
 
-router.get('/', CardsController.getCards);
+router.get('/',
+  setCacheHeaders(300),
+  CardsController.getCards
+);
 
 router.post('/',
   Permissions.isAdmin,
@@ -23,13 +27,25 @@ router.delete('/:id',
   CardsController.deleteCard
 );
 
-router.get('/top-cards', CardsController.getTopCards);
+router.get('/top-cards',
+  setCacheHeaders(300),
+  CardsController.getTopCards
+);
 
-router.get('/default-search', CardsController.getDefaultSearchCards);
+router.get('/default-search',
+  setCacheHeaders(300),
+  CardsController.getDefaultSearchCards
+);
 
-router.get('/:id', CardsController.getCard);
+router.get('/:id',
+  setCacheHeaders(300),
+  CardsController.getCard
+);
 
-router.get('/:id/reviews', CardsController.getReviewsByCard);
+router.get('/:id/reviews',
+  setCacheHeaders(300),
+  CardsController.getReviewsByCard
+);
 
 
 

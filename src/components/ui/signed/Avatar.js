@@ -1,4 +1,4 @@
-import React, { useContext, useState, useCallback } from "react";
+import React, { useState, useCallback } from "react";
 import {
   Dropdown,
   DropdownTrigger,
@@ -6,11 +6,11 @@ import {
   DropdownItem,
   Avatar as NextUIAvatar,
 } from "@nextui-org/react";
-import { AuthContext } from "../../../contexts/AuthContext";
+import { useAuthContext } from "../../../contexts/AuthContext";
 import ProfilePopup from "./ProfilePopup";
 
 const Avatar = React.memo(() => {
-  const { user, logout, updateUser } = useContext(AuthContext);
+  const { user, logout, api } = useAuthContext();
   const [isProfilePopupOpen, setIsProfilePopupOpen] = useState(false);
 
   const handleProfilePopupOpen = useCallback(() => {
@@ -22,11 +22,15 @@ const Avatar = React.memo(() => {
   }, []);
 
   const handleSaveProfile = useCallback(
-    (updatedData) => {
-      updateUser(updatedData);
+    async (updatedData) => {
+      try {
+        await api.updateUser(user._id, updatedData);
+      } catch (err) {
+        console.error("Failed to update user profile:", err);
+      }
       handleProfilePopupClose();
     },
-    [updateUser]
+    []
   );
 
   // console log user's info

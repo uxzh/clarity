@@ -48,7 +48,11 @@ class AuthController {
         role: "user",
         avatar: `https://api.dicebear.com/9.x/notionists/svg?seed=${username}`,
         loginMethod: "email",
-        emailVerified: false,
+        // temp until verification is on
+        // emailVerified: false, // should be false
+        emailVerified: true,
+        emailReallyVerified: false,
+        //
         isBlocked: false,
         createdAt: createdAt,
         updatedAt: createdAt,
@@ -61,6 +65,7 @@ class AuthController {
       }
       delete user.password;
       delete user.role;
+      delete user.emailReallyVerified; // temp until verification is on
 
       const token = jwt.sign({ _id: user._id });
       user.token = token;
@@ -97,6 +102,7 @@ class AuthController {
 
       delete user.password;
       delete user.previousUsernames;
+      delete user.emailReallyVerified; // temp until verification is on
       const token = jwt.sign({ _id: user._id });
       user.token = token;
 
@@ -126,7 +132,10 @@ class AuthController {
 
         await UsersDAO.updateOne({
           id: user._id,
-          set: { emailVerified: true },
+          set: {
+            emailVerified: true,
+            emailReallyVerified: true, // temp until verification is on
+          },
         });
         return res.status(200).send({ message: "Email verified" });
       } catch (error) {
