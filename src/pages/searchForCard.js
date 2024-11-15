@@ -90,7 +90,7 @@ function ReviewSearch() {
   };
 
   const handleKeyPress = (event) => {
-    if (event.key === 'Enter' && searchResults.length > 0) {
+    if (event.key === "Enter" && searchResults.length > 0) {
       handleClickSearchResult(searchResults[0]._id);
     }
   };
@@ -188,7 +188,7 @@ function ReviewSearch() {
                       "h-[56px] sm:h-[64px] bg-white dark:bg-gray-900",
                   },
                   onClick: handleInputClick,
-                  onKeyPress: handleKeyPress,
+                  onKeyDown: handleKeyPress,
                 }}
                 listboxProps={{
                   emptyContent:
