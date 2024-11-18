@@ -20,7 +20,7 @@ export const useAuthContext = () => {
   return useContext(AuthContext);
 };
 
-export const isUserSignedIn = () => {
+export const useIsUserSignedIn = () => {
   const { user } = useAuthContext();
   return user?.isLoggedIn;
 };

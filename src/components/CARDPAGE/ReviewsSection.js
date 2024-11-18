@@ -4,6 +4,7 @@ import React, { useMemo, useState, useContext } from "react";
 import { AuthContext } from "../../contexts/AuthContext";
 import CardReview from "../ui/reviews/user_review_cards/card-review";
 import SummaryFromTheWeb from "./from-the-web/summary";
+import SignUpModal from "../ui/signing/SignUpModal";
 
 const ReviewsSection = React.memo(
   ({
@@ -42,6 +43,10 @@ const ReviewsSection = React.memo(
       } else {
         setIsSignUpModalOpen(true);
       }
+    };
+
+    const handleModalClose = () => {
+      setIsSignUpModalOpen(false);
     };
 
     return (
@@ -138,6 +143,12 @@ const ReviewsSection = React.memo(
               Share your honest experience with other users
             </p>
           </div>
+        )}
+        {isSignUpModalOpen && (
+          <SignUpModal
+            isOpen={isSignUpModalOpen}
+            onClose={handleModalClose}
+          />
         )}
       </div>
     );
