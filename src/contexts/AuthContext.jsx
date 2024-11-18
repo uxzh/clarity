@@ -19,3 +19,8 @@ export const AuthProvider = ({children}) => {
 export const useAuthContext = () => {
   return useContext(AuthContext);
 };
+
+export const isUserSignedIn = () => {
+  const { user } = useAuthContext();
+  return user?.isLoggedIn;
+};

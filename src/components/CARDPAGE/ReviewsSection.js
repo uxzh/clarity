@@ -1,6 +1,7 @@
 import { Icon } from "@iconify/react";
 import { Button, Input, Select, SelectItem, Card, Pagination } from "@nextui-org/react";
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useContext } from "react";
+import { AuthContext } from "../../contexts/AuthContext";
 import CardReview from "../ui/reviews/user_review_cards/card-review";
 import SummaryFromTheWeb from "./from-the-web/summary";
 
@@ -16,6 +17,8 @@ const ReviewsSection = React.memo(
   }) => {
     const [currentPage, setCurrentPage] = useState(1);
     const reviewsPerPage = 5;
+    const { user } = useContext(AuthContext);
+    const [isSignUpModalOpen, setIsSignUpModalOpen] = useState(false);
 
     const averageRating = useMemo(() => {
       if (reviews.length === 0) return 0;
@@ -31,6 +34,14 @@ const ReviewsSection = React.memo(
 
     const handlePageChange = (page) => {
       setCurrentPage(page);
+    };
+
+    const handleWriteReviewClick = () => {
+      if (user?.isLoggedIn) {
+        handleWriteReview();
+      } else {
+        setIsSignUpModalOpen(true);
+      }
     };
 
     return (
@@ -119,7 +130,7 @@ const ReviewsSection = React.memo(
               color="primary"
               startContent={<Icon icon="solar:pen-bold" />}
               variant="flat"
-              onClick={handleWriteReview}
+              onClick={handleWriteReviewClick}
             >
               Write a review
             </Button>
