@@ -1,4 +1,3 @@
-// cardPage.js
 import React, {
   useState,
   useEffect,
@@ -38,10 +37,11 @@ function Review() {
   const reviewsPerPage = 5;
   const pollingInterval = useRef(null);
   const [lastUpdateTime, setLastUpdateTime] = useState(Date.now());
+  const [isSignUpModalOpen, setIsSignUpModalOpen] = useState(false);
 
   const searchParams = new URLSearchParams(location.search);
   const cardId = searchParams.get("cardId");
-  const { api } = useContext(AuthContext);
+  const { api, user } = useContext(AuthContext);
 
   const fetchData = useCallback(async () => {
     if (!cardId) {
@@ -161,8 +161,12 @@ function Review() {
   }, [reviews]);
 
   const handleWriteReview = useCallback(() => {
-    onOpen();
-  }, [onOpen]);
+    if (user?.isLoggedIn) {
+      onOpen();
+    } else {
+      setIsSignUpModalOpen(true);
+    }
+  }, [onOpen, user]);
 
   const handleGoBack = useCallback(() => {
     navigate(-1);
@@ -180,6 +184,10 @@ function Review() {
   const handlePageChange = useCallback((page) => {
     setCurrentPage(page);
   }, []);
+
+  const handleModalClose = () => {
+    setIsSignUpModalOpen(false);
+  };
 
   if (isLoading) {
     return (
@@ -262,6 +270,12 @@ function Review() {
         cardName={cardData.cardName}
         onReviewSubmit={handleReviewSubmit}
       />
+      {isSignUpModalOpen && (
+        <SignUpModal
+          isOpen={isSignUpModalOpen}
+          onClose={handleModalClose}
+        />
+      )}
     </div>
   );
 }

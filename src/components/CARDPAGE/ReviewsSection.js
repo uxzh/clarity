@@ -1,7 +1,7 @@
 import { Icon } from "@iconify/react";
 import { Button, Input, Select, SelectItem, Card, Pagination } from "@nextui-org/react";
 import React, { useMemo, useState, useContext } from "react";
-import { useAuthContext } from "../../contexts/AuthContext";
+import { AuthContext } from "../../contexts/AuthContext";
 import CardReview from "../ui/reviews/user_review_cards/card-review";
 import SummaryFromTheWeb from "./from-the-web/summary";
 import SignUpModal from "../ui/signing/SignUpModal";
@@ -18,7 +18,7 @@ const ReviewsSection = React.memo(
   }) => {
     const [currentPage, setCurrentPage] = useState(1);
     const reviewsPerPage = 5;
-    const { user } = useAuthContext();
+    const { user } = useContext(AuthContext);
     const [isSignUpModalOpen, setIsSignUpModalOpen] = useState(false);
 
     const averageRating = useMemo(() => {
