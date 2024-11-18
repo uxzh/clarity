@@ -20,6 +20,7 @@ import FeedbackModal from "../components/FEEDBACK/feedbackModal";
 import ReviewSearch from "./searchForCard";
 import { Spinner } from "@nextui-org/react";
 import { AuthContext } from "../contexts/AuthContext";
+import SignUpModal from "../components/ui/signing/SignUpModal";
 
 function Review() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
