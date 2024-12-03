@@ -2,7 +2,6 @@ import React from "react";
 import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
 import AdminPanel from "./pages/adminPanel";
 import Wallet from "./pages/wallet";
-import Rating from "./pages/rating";
 import PageNotFound from "./pages/notFound";
 import Review from "./pages/cardPage";
 import ReviewSearch from "./pages/searchForCard";
