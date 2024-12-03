@@ -1,8 +1,7 @@
 import React from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
 import AdminPanel from "./pages/adminPanel";
 import Wallet from "./pages/wallet";
-import Rating from "./pages/rating";
 import PageNotFound from "./pages/notFound";
 import Review from "./pages/cardPage";
 import ReviewSearch from "./pages/searchForCard";
@@ -22,7 +21,7 @@ export default function App() {
             <Route path="/wallet" element={<Wallet />} />
             <Route path="/admin" element={<AdminPanel />} />
             <Route path="/review" element={<Review />} />
-            <Route path="/rating" element={<Rating />} />
+            <Route path="/rating" element={<Navigate to="/" />} />
             <Route path="/legal-stuff" element={<LegalStuff />} />
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             <Route path="*" element={<PageNotFound />} />
