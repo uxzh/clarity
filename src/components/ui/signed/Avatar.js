@@ -32,9 +32,8 @@ const Avatar = React.memo(() => {
     },
     []
   );
-
   // console log user's info
-  console.log(user);
+  // console.log(user);
 
   return (
     <>

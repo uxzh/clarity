@@ -18,7 +18,7 @@ const CardDetails = ({
   useEffect(() => {
     const handleResize = (entries) => {
       for (let entry of entries) {
-        console.log("Resized:", entry.target);
+      // console.log("Resized:", entry.target);
       }
     };
 
