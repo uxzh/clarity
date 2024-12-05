@@ -34,7 +34,9 @@ const Avatar = React.memo(() => {
   );
 
   // console log user's info
-  console.log(user);
+  if (process.env.NODE_ENV === 'development') {
+    console.log(user);
+  }
 
   return (
     <>
