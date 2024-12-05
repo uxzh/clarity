@@ -400,7 +400,13 @@ export default function SignUpModal({ isOpen, onClose }) {
   return (
     <>
       <LazyMotion features={domAnimation}>
-        <Modal isOpen={isOpen} onClose={onClose} size="lg">
+        <Modal
+          isOpen={isOpen}
+          onClose={onClose}
+          size="lg"
+          fullScreen={false}
+          className="my-auto flex items-center justify-center"
+        >
           <ModalContent>
             <ModalHeader className="flex flex-col gap-1">
               {isSignUp ? "Create an account" : "Welcome back"}

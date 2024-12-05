@@ -1,4 +1,3 @@
-// cardPage.js
 import React, {
   useState,
   useEffect,
@@ -232,7 +231,7 @@ function Review() {
                   </h2>
                 </div>
                 <Spacer y={2} />
-                <Button
+                {/* <Button
                   style={{ border: "1px solid #1a202c" }}
                   target="_blank"
                   variant="bordered"
@@ -241,7 +240,7 @@ function Review() {
                   startContent={<IconCreditCardFilled stroke={1} />}
                 >
                   Apply
-                </Button>
+                </Button> */}
                 <Spacer y={4} />
                 <CardDetails
                   selectedTab={selectedTab}

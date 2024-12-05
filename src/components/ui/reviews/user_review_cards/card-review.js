@@ -81,8 +81,10 @@ const CardReview = React.forwardRef(
 
     // Debug logging to see full user object
     useEffect(() => {
-      console.log("Full user object:", user);
-      console.log("Full author object:", author);
+      if (process.env.NODE_ENV === 'development') {
+        console.log("Full user object:", user);
+        console.log("Full author object:", author);
+      }
     }, [user, author]);
 
     // Updated user comparison logic
@@ -95,13 +97,15 @@ const CardReview = React.forwardRef(
     useEffect(() => {
       // Debug logging
       if (user?.isLoggedIn) {
-        console.log("Review ownership check:", {
-          userLoggedIn: user.isLoggedIn,
-          userId: user._id,
-          authorId: author?._id,
-          reviewUserId: review.userId,
-          isMatch: isUserReview,
-        });
+        if (process.env.NODE_ENV === 'development') {
+          console.log("Review ownership check:", {
+            userLoggedIn: user.isLoggedIn,
+            userId: user._id,
+            authorId: author?._id,
+            reviewUserId: review.userId,
+            isMatch: isUserReview,
+          });
+        }
       }
     }, [user, author, review.userId, isUserReview]);
 
@@ -109,9 +113,11 @@ const CardReview = React.forwardRef(
     const handleLikeDislike = useCallback(
       (action) => {
         if (!canInteract) {
-          console.log(
-            "You need to be logged in with a verified email to interact."
-          );
+          if (process.env.NODE_ENV === 'development') {
+            console.log(
+              "You need to be logged in with a verified email to interact."
+            );
+          }
           return;
         }
 
@@ -160,7 +166,9 @@ const CardReview = React.forwardRef(
     // Handle reply button click
     const handleReply = () => {
       if (!canInteract) {
-        console.log("You need to be logged in with a verified email to reply.");
+        if (process.env.NODE_ENV === 'development') {
+          console.log("You need to be logged in with a verified email to reply.");
+        }
         return;
       }
       setIsReplying(true);
@@ -182,9 +190,11 @@ const CardReview = React.forwardRef(
     // Handle submit reply
     const handleSubmitReply = async () => {
       if (!canInteract) {
-        console.log(
-          "You need to be logged in with a verified email to submit a reply."
-        );
+        if (process.env.NODE_ENV === 'development') {
+          console.log(
+            "You need to be logged in with a verified email to submit a reply."
+          );
+        }
         return;
       }
       if (replyContent.trim().length < 1) {
@@ -192,14 +202,18 @@ const CardReview = React.forwardRef(
         return;
       }
       // Logic for submitting reply to server
-      console.log("Submitting reply:", replyContent);
+      if (process.env.NODE_ENV === 'development') {
+        console.log("Submitting reply:", replyContent);
+      }
       try {
         // Submit reply to server
         const response = await api.createReply({
           reviewId: _id,
           content: replyContent.trim(),
         });
-        console.log("Reply submitted:", response);
+        if (process.env.NODE_ENV === 'development') {
+          console.log("Reply submitted:", response);
+        }
       } catch (error) {
         console.error("Error submitting reply:", error);
       }
@@ -222,7 +236,9 @@ const CardReview = React.forwardRef(
 
       try {
         clearTimeout(deleteTimer);
-        console.log("Deleting review:", _id);
+        if (process.env.NODE_ENV === 'development') {
+          console.log("Deleting review:", _id);
+        }
         await api.deleteReview(_id);
         if (onDelete) {
           onDelete(_id);
