@@ -191,6 +191,7 @@ export default function UsersTable() {
           placeholder="Items per page"
           value={perPage}
           onChange={(value) => setPerPage(Number(value))}
+          className="w-24"
         >
           <SelectItem value={10}>10</SelectItem>
           <SelectItem value={20}>20</SelectItem>
