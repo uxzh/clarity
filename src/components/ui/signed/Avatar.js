@@ -62,7 +62,8 @@ const Avatar = React.memo(() => {
           <DropdownItem key="help_and_feedback">Help & Feedback</DropdownItem>
           <DropdownItem key="logout" color="danger" onPress={logout}>
             Log Out
-          </DropdownMenu>
+          </DropdownItem>
+        </DropdownMenu>
       </Dropdown>
       <ProfilePopup
         isOpen={isProfilePopupOpen}
