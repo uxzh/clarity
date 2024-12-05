@@ -34,7 +34,9 @@ const Avatar = React.memo(() => {
   );
 
   // console log user's info
-  console.log(user);
+  if (process.env.NODE_ENV === 'development') {
+    console.log(user);
+  }
 
   return (
     <>
@@ -60,8 +62,7 @@ const Avatar = React.memo(() => {
           <DropdownItem key="help_and_feedback">Help & Feedback</DropdownItem>
           <DropdownItem key="logout" color="danger" onPress={logout}>
             Log Out
-          </DropdownItem>
-        </DropdownMenu>
+          </DropdownMenu>
       </Dropdown>
       <ProfilePopup
         isOpen={isProfilePopupOpen}
