@@ -7,6 +7,9 @@ import {
   TableRow,
   TableCell,
   Button,
+  Pagination,
+  Select,
+  SelectItem,
 } from "@nextui-org/react";
 import {
   ReviewEditModal,
@@ -15,7 +18,6 @@ import {
 } from "../modals/ReviewModals";
 import { useAuthContext } from "../../../contexts/AuthContext";
 import { useAdminContext } from "../contexts/AdminContext";
-import { fetchAllPages } from "../utils";
 import { MODELS } from "../../../lib/models";
 
 export default function ReviewsTable() {
@@ -23,22 +25,23 @@ export default function ReviewsTable() {
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [hideModalOpen, setHideModalOpen] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [perPage, setPerPage] = useState(10);
 
   const { api } = useAuthContext();
   const { data, dispatchData } = useAdminContext();
 
   useEffect(() => {
-    if (data[MODELS.reviews].length !== 0) return;
     const fetchData = async () => {
       try {
-        const data = await fetchAllPages(api.getReviews, 100);
-        dispatchData({ type: "set", model: MODELS.reviews, data });
+        const response = await api.getReviews({ page: currentPage - 1, perPage });
+        dispatchData({ type: "set", model: MODELS.reviews, data: response.data });
       } catch (error) {
         console.error("Error fetching reviews:", error);
       }
     };
     fetchData();
-  }, []);
+  }, [currentPage, perPage]);
 
   const columns = [
     { name: "USER", uid: "user" },
@@ -140,6 +143,23 @@ export default function ReviewsTable() {
 
   return (
     <>
+      <div className="flex justify-between items-center mb-4">
+        <Pagination
+          total={Math.ceil(data[MODELS.reviews].length / perPage)}
+          initialPage={currentPage}
+          onChange={(page) => setCurrentPage(page)}
+        />
+        <Select
+          placeholder="Items per page"
+          value={perPage}
+          onChange={(value) => setPerPage(Number(value))}
+        >
+          <SelectItem value={10}>10</SelectItem>
+          <SelectItem value={20}>20</SelectItem>
+          <SelectItem value={50}>50</SelectItem>
+          <SelectItem value={100}>100</SelectItem>
+        </Select>
+      </div>
       <Table aria-label="Reviews table">
         <TableHeader columns={columns}>
           {(column) => (

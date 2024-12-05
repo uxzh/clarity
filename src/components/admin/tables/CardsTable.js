@@ -7,6 +7,9 @@ import {
   TableRow,
   TableCell,
   Button,
+  Pagination,
+  Select,
+  SelectItem,
 } from "@nextui-org/react";
 import {
   CardDetailsModal,
@@ -23,22 +26,23 @@ export default function CardsTable() {
   const [detailsModalOpen, setDetailsModalOpen] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [perPage, setPerPage] = useState(10);
 
   const { api } = useAuthContext();
   const { data, dispatchData } = useAdminContext();
 
   useEffect(() => {
-    if (data[MODELS.cards].length !== 0) return;
     const fetchData = async () => {
       try {
-        const data = await fetchAllPages(api.getCards, 50);
-        dispatchData({ type: "set", model: MODELS.cards, data });
+        const response = await api.getCards({ page: currentPage - 1, perPage });
+        dispatchData({ type: "set", model: MODELS.cards, data: response.data });
       } catch (error) {
         console.error("Error fetching cards:", error);
       }
     };
     fetchData();
-  }, []);
+  }, [currentPage, perPage]);
 
   const columns = [
     { name: "NAME", uid: "cardName" },
@@ -50,6 +54,18 @@ export default function CardsTable() {
 
   const renderCell = (card, columnKey) => {
     switch (columnKey) {
+      case "cardName":
+        return (
+          <div className="flex items-center gap-2">
+            <img
+              src={card.cardImageUrl}
+              alt={card.cardName}
+              className="w-8 h-8 object-contain"
+              loading="lazy"
+            />
+            <span>{card.cardName}</span>
+          </div>
+        );
       case "bayesianRating":
         return (
           <div className="flex items-center gap-1">
@@ -122,6 +138,23 @@ export default function CardsTable() {
 
   return (
     <>
+      <div className="flex justify-between items-center mb-4">
+        <Pagination
+          total={Math.ceil(data[MODELS.cards].length / perPage)}
+          initialPage={currentPage}
+          onChange={(page) => setCurrentPage(page)}
+        />
+        <Select
+          placeholder="Items per page"
+          value={perPage}
+          onChange={(value) => setPerPage(Number(value))}
+        >
+          <SelectItem value={10}>10</SelectItem>
+          <SelectItem value={20}>20</SelectItem>
+          <SelectItem value={50}>50</SelectItem>
+          <SelectItem value={100}>100</SelectItem>
+        </Select>
+      </div>
       <Table aria-label="Cards table">
         <TableHeader columns={columns}>
           {(column) => (
