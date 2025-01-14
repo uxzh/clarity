@@ -6,7 +6,7 @@ import {
   Link,
   Spacer,
 } from "@nextui-org/react";
-import "../../CSS/FAQ.css";
+import "../../css/FAQ.css";
 
 export default function FAQ() {
   return (

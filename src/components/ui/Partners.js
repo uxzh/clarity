@@ -1,5 +1,5 @@
 import { Image } from "@nextui-org/react";
-import "../../CSS/Partners.css";
+import "../../css/Partners.css";
 import { useEffect, useState } from "react";
 import Amex from "../../lib/icons/amex.png";
 

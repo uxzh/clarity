@@ -1,4 +1,4 @@
-import "../../CSS/Hero.css";
+import "../../css/Hero.css";
 export default function CheckmarksHero() {
   return (
     <div className="flex justify-center space-x-8 py-4" id="checkmarkshero">

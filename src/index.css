@@ -19,7 +19,7 @@ img {
   -webkit-user-select: none;
   -ms-user-select: none;
 }
-/* In your global CSS file or styled-components */
+/* In your global css file or styled-components */
 @media (max-width: 640px) {
   body {
     padding-bottom: 4rem; /* Adjust this value based on your mobile menu height */

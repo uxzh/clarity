@@ -7,7 +7,7 @@ import Image4 from "../../lib/img/tools/chart.png";
 import ComingSoon from "../../lib/img/coming-soon.png";
 
 // Assuming this is the image for the investment planning tools
-import "../../CSS/Services.css";
+import "../../css/Services.css";
 
 export default function Services() {
   return (

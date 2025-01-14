@@ -5,7 +5,7 @@ import Step1 from "../lib/img/step1.png";
 import Step2 from "../lib/img/step2.png";
 import Step3 from "../lib/img/step3.png";
 import Step4 from "../lib/img/step4.png";
-import "../CSS/ExplanationHero.css";
+import "../css/ExplanationHero.css";
 import { useEffect, useState } from "react";
 
 export default function ExplanationHero() {

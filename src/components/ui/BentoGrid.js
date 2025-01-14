@@ -1,6 +1,6 @@
 import React from "react";
 import { Card, CardHeader, CardBody, Image } from "@nextui-org/react";
-import "../../CSS/BentoGrid.css";
+import "../../css/BentoGrid.css";
 
 function NextUIGrid() {
   return (
