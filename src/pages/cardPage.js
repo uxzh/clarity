@@ -7,7 +7,7 @@ import React, {
   useRef,
 } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Card, Spacer, Button } from "@nextui-org/react";
+import { Card, Spacer, Button, Pagination } from "@nextui-org/react";
 import { IconCreditCardFilled } from "@tabler/icons-react";
 import TopNavbar from "../components/navbar/activeNavbar";
 import { FloatingCard } from "../components/ui/floatingCard";
@@ -20,7 +20,6 @@ import FeedbackModal from "../components/FEEDBACK/feedbackModal";
 import ReviewSearch from "./searchForCard";
 import { Spinner } from "@nextui-org/react";
 import { AuthContext } from "../contexts/AuthContext";
-import { Pagination } from "@heroui/react";
 
 function Review() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();

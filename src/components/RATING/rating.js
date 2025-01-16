@@ -15,8 +15,8 @@ import {
   Chip,
   User,
   Spinner,
+  Pagination,
 } from "@nextui-org/react";
-import { Pagination } from "@heroui/react";
 import { PlusIcon } from "./PlusIcon";
 import { VerticalDotsIcon } from "./VerticalDotsIcon";
 import { SearchIcon } from "./SearchIcon";
