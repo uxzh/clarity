@@ -14,9 +14,9 @@ import {
   DropdownItem,
   Chip,
   User,
-  Pagination,
   Spinner,
 } from "@nextui-org/react";
+import { Pagination } from "@heroui/react";
 import { PlusIcon } from "./PlusIcon";
 import { VerticalDotsIcon } from "./VerticalDotsIcon";
 import { SearchIcon } from "./SearchIcon";
@@ -228,12 +228,9 @@ export default function App() {
     return (
       <div className="py-2 px-2 flex justify-between items-center">
         <Pagination
-          isCompact
           showControls
-          showShadow
-          color="primary"
-          page={page}
-          total={pages}
+          initialPage={1}
+          total={Math.min(10, pages)}
           onChange={setPage}
         />
         <div className="hidden sm:flex w-[30%] justify-end gap-2">

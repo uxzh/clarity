@@ -20,6 +20,7 @@ import FeedbackModal from "../components/FEEDBACK/feedbackModal";
 import ReviewSearch from "./searchForCard";
 import { Spinner } from "@nextui-org/react";
 import { AuthContext } from "../contexts/AuthContext";
+import { Pagination } from "@heroui/react";
 
 function Review() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -212,6 +213,7 @@ function Review() {
               totalReviews={filteredReviews.length}
               lastUpdateTime={lastUpdateTime}
             />
+            <Pagination showControls initialPage={1} total={Math.min(10, Math.ceil(reviews.length / reviewsPerPage))} />
           </section>
           <section className="lg:col-span-1 lg:sticky lg:top-16 lg:h-screen lg:overflow-y-auto order-1 lg:order-2">
             <Card shadow="sm" className="p-4 pt-2 scale-95">
