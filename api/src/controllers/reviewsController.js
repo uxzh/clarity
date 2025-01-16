@@ -33,7 +33,6 @@ class ReviewsController {
 
   static async createReview(req, res) {
     try {
-      console.log('create review', req.body)
       const { cardId, rating, title, content, 
         isAdminReview, username // for admin review
       } = req.body;
@@ -68,7 +67,10 @@ class ReviewsController {
       };
       if (isAdminReview) {
         review.isAdminReview = true;
-        review.user = { username, avatar: username };
+        review.displayedUser = {
+          username,
+          avatar: `https://api.dicebear.com/6.x/notionists/svg?seed=${username}`
+        };
       }
 
       const result = await ReviewsDAO.createOne(review);
@@ -100,6 +102,13 @@ class ReviewsController {
         }
       });
       data.updatedAt = new Date();
+      if (req.user.isAdmin && review.isAdminReview && req.body.username) {
+        data.isAdminReview = true;
+        data.displayedUser = {
+          username: req.body.username,
+          avatar: `https://api.dicebear.com/6.x/notionists/svg?seed=${req.body.username}`
+        };
+      }
 
       const result = await ReviewsDAO.updateOne({
         id,

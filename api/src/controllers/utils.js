@@ -40,6 +40,11 @@ const getReviewsByCardIdWithLikes = async ({
       if (user) {
         review.likedByUser = userLikedReviewsMap[review._id] || 0;
       }
+      
+      if (!review.isAdminReview) return;
+      delete review.isAdminReview;
+      review.user = {...review.displayedUser};
+      delete review.displayedUser;
     });
     return reviews;
   } catch (e) {

@@ -1,6 +1,7 @@
 const { ObjectId } = require("mongodb");
 const { models } = require("../lib/models");
 const { getMongoClient, getDB } = require("../lib/connectToDB");
+const { is } = require("../middleware/validation/schemas/signupSchema");
 
 let reviews;
 
@@ -62,6 +63,9 @@ class ReviewsDAO {
             content: 1,
             createdAt: 1,
             updatedAt: 1,
+            isHidden: 1,
+            isAdminReview: 1,
+            displayedUser: 1,
             "user.username": 1,
             "user.avatar": 1,
             "user.email": 1,
@@ -117,7 +121,7 @@ class ReviewsDAO {
     updatedAt = new Date(),
     isHidden = false,
     isAdminReview = false,
-    user = null
+    displayedUser = null
   }) {
     const review = {
       cardId: new ObjectId(cardId),
@@ -130,11 +134,8 @@ class ReviewsDAO {
       isHidden,
       isAdminReview,
     };
-    if (isAdminReview && user) {
-      review.user = {
-        username: user.username,
-        avatar: user.avatar
-      }
+    if (isAdminReview && displayedUser) {
+      review.displayedUser = displayedUser;
     }
     try {
       return await reviews.insertOne(review);
@@ -223,7 +224,9 @@ class ReviewsDAO {
             updatedAt: 1,
             isHidden: 1,
             "user.username": 1,
-            "user.avatar": 1
+            "user.avatar": 1,
+            isAdminReview: 1,
+            displayedUser: 1
           }
         },
         {
