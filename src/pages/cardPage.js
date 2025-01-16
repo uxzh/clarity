@@ -7,7 +7,7 @@ import React, {
   useRef,
 } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Card, Spacer, Button, Pagination } from "@nextui-org/react";
+import { Card, Spacer, Button } from "@nextui-org/react";
 import { IconCreditCardFilled } from "@tabler/icons-react";
 import TopNavbar from "../components/navbar/activeNavbar";
 import { FloatingCard } from "../components/ui/floatingCard";
@@ -180,6 +180,22 @@ function Review() {
     setCurrentPage(page);
   }, []);
 
+  const handleScroll = useCallback(() => {
+    if (
+      window.innerHeight + document.documentElement.scrollTop !==
+      document.documentElement.offsetHeight
+    )
+      return;
+    setCurrentPage((prevPage) => prevPage + 1);
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [handleScroll]);
+
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-screen">
@@ -212,7 +228,6 @@ function Review() {
               totalReviews={filteredReviews.length}
               lastUpdateTime={lastUpdateTime}
             />
-            <Pagination showControls initialPage={1} total={Math.min(10, Math.ceil(reviews.length / reviewsPerPage))} />
           </section>
           <section className="lg:col-span-1 lg:sticky lg:top-16 lg:h-screen lg:overflow-y-auto order-1 lg:order-2">
             <Card shadow="sm" className="p-4 pt-2 scale-95">
@@ -232,16 +247,6 @@ function Review() {
                   </h2>
                 </div>
                 <Spacer y={2} />
-                {/* <Button
-                  style={{ border: "1px solid #1a202c" }}
-                  target="_blank"
-                  variant="bordered"
-                  fullWidth
-                  className="shadow-[0px_3px_0px_0px_#1a202c] font-bold hover:scale-105"
-                  startContent={<IconCreditCardFilled stroke={1} />}
-                >
-                  Apply
-                </Button> */}
                 <Spacer y={4} />
                 <CardDetails
                   selectedTab={selectedTab}

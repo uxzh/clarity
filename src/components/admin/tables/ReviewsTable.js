@@ -7,7 +7,6 @@ import {
   TableRow,
   TableCell,
   Button,
-  Pagination,
   Select,
   SelectItem,
   Spinner,
@@ -20,6 +19,7 @@ import {
 import { useAuthContext } from "../../../contexts/AuthContext";
 import { useAdminContext } from "../contexts/AdminContext";
 import { MODELS } from "../../../lib/models";
+import { useInfiniteScroll } from "@nextui-org/use-infinite-scroll";
 
 export default function ReviewsTable() {
   const [selectedReview, setSelectedReview] = useState(null);
@@ -34,20 +34,28 @@ export default function ReviewsTable() {
   const { api } = useAuthContext();
   const { data, dispatchData } = useAdminContext();
 
+  const fetchData = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await api.getReviews({ page: currentPage - 1, perPage });
+      dispatchData({ type: "set", model: MODELS.reviews, data: response.data });
+    } catch (error) {
+      console.error("Error fetching reviews:", error);
+      setError("Error fetching reviews. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useInfiniteScroll({
+    loading,
+    hasNextPage: data[MODELS.reviews].length === currentPage * perPage,
+    onLoadMore: () => setCurrentPage((prev) => prev + 1),
+    threshold: 300,
+  });
+
   useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        const response = await api.getReviews({ page: currentPage - 1, perPage });
-        dispatchData({ type: "set", model: MODELS.reviews, data: response.data });
-      } catch (error) {
-        console.error("Error fetching reviews:", error);
-        setError("Error fetching reviews. Please try again.");
-      } finally {
-        setLoading(false);
-      }
-    };
     fetchData();
   }, [currentPage, perPage]);
 
@@ -152,11 +160,6 @@ export default function ReviewsTable() {
   return (
     <>
       <div className="flex justify-between items-center mb-4">
-        <Pagination
-          total={Math.ceil(data[MODELS.reviews].length / perPage)}
-          initialPage={currentPage}
-          onChange={(page) => setCurrentPage(page)}
-        />
         <Select
           placeholder="Items per page"
           value={perPage}

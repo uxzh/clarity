@@ -7,7 +7,6 @@ import {
   TableRow,
   TableCell,
   Button,
-  Pagination,
   Select,
   SelectItem,
   Spinner,
@@ -20,7 +19,7 @@ import {
 import { useAuthContext } from "../../../contexts/AuthContext";
 import { useAdminContext } from "../contexts/AdminContext";
 import { MODELS } from "../../../lib/models";
-import { fetchAllPages } from "../utils";
+import { useInfiniteScroll } from "@nextui-org/use-infinite-scroll";
 
 export default function CardsTable() {
   const [selectedCard, setSelectedCard] = useState(null);
@@ -35,20 +34,28 @@ export default function CardsTable() {
   const { api } = useAuthContext();
   const { data, dispatchData } = useAdminContext();
 
+  const fetchData = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await api.getCards({ page: currentPage - 1, perPage });
+      dispatchData({ type: "set", model: MODELS.cards, data: response.data });
+    } catch (error) {
+      console.error("Error fetching cards:", error);
+      setError("Error fetching cards. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useInfiniteScroll({
+    loading,
+    hasNextPage: data[MODELS.cards].length === currentPage * perPage,
+    onLoadMore: () => setCurrentPage((prev) => prev + 1),
+    threshold: 300,
+  });
+
   useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        const response = await api.getCards({ page: currentPage - 1, perPage });
-        dispatchData({ type: "set", model: MODELS.cards, data: response.data });
-      } catch (error) {
-        console.error("Error fetching cards:", error);
-        setError("Error fetching cards. Please try again.");
-      } finally {
-        setLoading(false);
-      }
-    };
     fetchData();
   }, [currentPage, perPage]);
 
@@ -147,11 +154,6 @@ export default function CardsTable() {
   return (
     <>
       <div className="flex justify-between items-center mb-4">
-        <Pagination
-          total={Math.ceil(data[MODELS.cards].length / perPage)}
-          initialPage={currentPage}
-          onChange={(page) => setCurrentPage(page)}
-        />
         <Select
           placeholder="Items per page"
           value={perPage}

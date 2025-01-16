@@ -9,7 +9,6 @@ import {
   User,
   Tooltip,
   Chip,
-  Pagination,
   Select,
   SelectItem,
   Spinner,
@@ -24,6 +23,7 @@ import { formatDate } from "../../../utils/dateFormatter";
 import { useAdminContext } from "../contexts/AdminContext";
 import { MODELS } from "../../../lib/models";
 import { useAuthContext } from "../../../contexts/AuthContext";
+import { useInfiniteScroll } from "@nextui-org/use-infinite-scroll";
 
 export default function UsersTable() {
   const [selectedUser, setSelectedUser] = useState(null);
@@ -38,20 +38,28 @@ export default function UsersTable() {
   const { api } = useAuthContext();
   const { data, dispatchData } = useAdminContext();
 
+  const fetchData = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await api.getUsers({ page: currentPage - 1, perPage });
+      dispatchData({ type: "set", model: MODELS.users, data: response.data });
+    } catch (error) {
+      console.error("Error fetching users:", error);
+      setError("Error fetching users. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useInfiniteScroll({
+    loading,
+    hasNextPage: data[MODELS.users].length === currentPage * perPage,
+    onLoadMore: () => setCurrentPage((prev) => prev + 1),
+    threshold: 300,
+  });
+
   useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        const response = await api.getUsers({ page: currentPage - 1, perPage });
-        dispatchData({ type: "set", model: MODELS.users, data: response.data });
-      } catch (error) {
-        console.error("Error fetching users:", error);
-        setError("Error fetching users. Please try again.");
-      } finally {
-        setLoading(false);
-      }
-    };
     fetchData();
   }, [currentPage, perPage]);
 
@@ -190,11 +198,6 @@ export default function UsersTable() {
   return (
     <>
       <div className="flex justify-between items-center mb-4">
-        <Pagination
-          total={Math.ceil(data[MODELS.users].length / perPage)}
-          initialPage={currentPage}
-          onChange={(page) => setCurrentPage(page)}
-        />
         <Select
           placeholder="Items per page"
           value={perPage}

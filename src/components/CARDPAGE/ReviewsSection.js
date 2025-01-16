@@ -1,6 +1,6 @@
 import { Icon } from "@iconify/react";
-import { Button, Input, Select, SelectItem, Card, Pagination } from "@nextui-org/react";
-import React, { useMemo, useState } from "react";
+import { Button, Input, Select, SelectItem, Card } from "@nextui-org/react";
+import React, { useMemo, useState, useEffect, useCallback } from "react";
 import CardReview from "../ui/reviews/user_review_cards/card-review";
 import SummaryFromTheWeb from "./from-the-web/summary";
 
@@ -13,9 +13,13 @@ const ReviewsSection = React.memo(
     selectedFilter,
     handleSelectionChange,
     handleGoBack,
+    currentPage,
+    reviewsPerPage,
+    handlePageChange,
+    totalReviews,
+    lastUpdateTime,
   }) => {
-    const [currentPage, setCurrentPage] = useState(1);
-    const reviewsPerPage = 5;
+    const [isFetching, setIsFetching] = useState(false);
 
     const averageRating = useMemo(() => {
       if (reviews.length === 0) return 0;
@@ -27,11 +31,31 @@ const ReviewsSection = React.memo(
       const startIndex = (currentPage - 1) * reviewsPerPage;
       const endIndex = startIndex + reviewsPerPage;
       return reviews.slice(startIndex, endIndex);
-    }, [currentPage, reviews]);
+    }, [currentPage, reviews, reviewsPerPage]);
 
-    const handlePageChange = (page) => {
-      setCurrentPage(page);
-    };
+    const handleScroll = useCallback(() => {
+      if (
+        window.innerHeight + document.documentElement.scrollTop !==
+        document.documentElement.offsetHeight
+      )
+        return;
+      if (isFetching) return;
+      setIsFetching(true);
+      handlePageChange(currentPage + 1);
+    }, [isFetching, handlePageChange, currentPage]);
+
+    useEffect(() => {
+      window.addEventListener("scroll", handleScroll);
+      return () => {
+        window.removeEventListener("scroll", handleScroll);
+      };
+    }, [handleScroll]);
+
+    useEffect(() => {
+      if (isFetching) {
+        setIsFetching(false);
+      }
+    }, [reviews]);
 
     return (
       <div className="flex flex-col gap-4">
@@ -89,13 +113,11 @@ const ReviewsSection = React.memo(
             {paginatedReviews.map((review, index) => (
               <CardReview key={index} {...review} />
             ))}
-            <Pagination
-              total={Math.ceil(reviews.length / reviewsPerPage)}
-              initialPage={1}
-              page={currentPage}
-              onChange={handlePageChange}
-              className="self-center mt-4"
-            />
+            {isFetching && (
+              <div className="flex justify-center items-center mt-4">
+                <Spinner />
+              </div>
+            )}
           </>
         ) : (
           <div className="text-center max-w-[500px] mx-auto py-8">
