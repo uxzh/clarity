@@ -12,6 +12,7 @@ import {
   Pagination,
   Select,
   SelectItem,
+  Spinner,
 } from "@nextui-org/react";
 import {
   UserHistoryModal,
@@ -31,17 +32,24 @@ export default function UsersTable() {
   const [blockModalOpen, setBlockModalOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage, setPerPage] = useState(10);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const { api } = useAuthContext();
   const { data, dispatchData } = useAdminContext();
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
+      setError(null);
       try {
         const response = await api.getUsers({ page: currentPage - 1, perPage });
         dispatchData({ type: "set", model: MODELS.users, data: response.data });
       } catch (error) {
         console.error("Error fetching users:", error);
+        setError("Error fetching users. Please try again.");
+      } finally {
+        setLoading(false);
       }
     };
     fetchData();
@@ -199,33 +207,43 @@ export default function UsersTable() {
           <SelectItem value={100}>100</SelectItem>
         </Select>
       </div>
-      <Table
-        aria-label="Users table"
-        selectionMode="multiple"
-        classNames={{
-          table: "min-h-[100px]",
-        }}
-      >
-        <TableHeader columns={columns}>
-          {(column) => (
-            <TableColumn
-              key={column.uid}
-              align={column.uid === "actions" ? "center" : "start"}
-            >
-              {column.name}
-            </TableColumn>
-          )}
-        </TableHeader>
-        <TableBody items={data[MODELS.users]}>
-          {(item) => (
-            <TableRow key={item._id}>
-              {(columnKey) => (
-                <TableCell>{renderCell(item, columnKey)}</TableCell>
-              )}
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
+      {loading ? (
+        <div className="flex justify-center items-center">
+          <Spinner />
+        </div>
+      ) : error ? (
+        <div className="text-center text-red-500">{error}</div>
+      ) : data[MODELS.users].length === 0 ? (
+        <div className="text-center">No users to display</div>
+      ) : (
+        <Table
+          aria-label="Users table"
+          selectionMode="multiple"
+          classNames={{
+            table: "min-h-[100px]",
+          }}
+        >
+          <TableHeader columns={columns}>
+            {(column) => (
+              <TableColumn
+                key={column.uid}
+                align={column.uid === "actions" ? "center" : "start"}
+              >
+                {column.name}
+              </TableColumn>
+            )}
+          </TableHeader>
+          <TableBody items={data[MODELS.users]}>
+            {(item) => (
+              <TableRow key={item._id}>
+                {(columnKey) => (
+                  <TableCell>{renderCell(item, columnKey)}</TableCell>
+                )}
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      )}
 
       <UserHistoryModal
         isOpen={historyModalOpen}

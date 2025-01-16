@@ -10,6 +10,7 @@ import {
   Pagination,
   Select,
   SelectItem,
+  Spinner,
 } from "@nextui-org/react";
 import {
   CardDetailsModal,
@@ -28,17 +29,24 @@ export default function CardsTable() {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage, setPerPage] = useState(10);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const { api } = useAuthContext();
   const { data, dispatchData } = useAdminContext();
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
+      setError(null);
       try {
         const response = await api.getCards({ page: currentPage - 1, perPage });
         dispatchData({ type: "set", model: MODELS.cards, data: response.data });
       } catch (error) {
         console.error("Error fetching cards:", error);
+        setError("Error fetching cards. Please try again.");
+      } finally {
+        setLoading(false);
       }
     };
     fetchData();
@@ -156,22 +164,32 @@ export default function CardsTable() {
           <SelectItem value={100}>100</SelectItem>
         </Select>
       </div>
-      <Table aria-label="Cards table">
-        <TableHeader columns={columns}>
-          {(column) => (
-            <TableColumn key={column.uid}>{column.name}</TableColumn>
-          )}
-        </TableHeader>
-        <TableBody items={data[MODELS.cards]}>
-          {(item) => (
-            <TableRow key={item._id}>
-              {(columnKey) => (
-                <TableCell>{renderCell(item, columnKey)}</TableCell>
-              )}
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
+      {loading ? (
+        <div className="flex justify-center items-center">
+          <Spinner />
+        </div>
+      ) : error ? (
+        <div className="text-center text-red-500">{error}</div>
+      ) : data[MODELS.cards].length === 0 ? (
+        <div className="text-center">No cards to display</div>
+      ) : (
+        <Table aria-label="Cards table">
+          <TableHeader columns={columns}>
+            {(column) => (
+              <TableColumn key={column.uid}>{column.name}</TableColumn>
+            )}
+          </TableHeader>
+          <TableBody items={data[MODELS.cards]}>
+            {(item) => (
+              <TableRow key={item._id}>
+                {(columnKey) => (
+                  <TableCell>{renderCell(item, columnKey)}</TableCell>
+                )}
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      )}
 
       <CardDetailsModal
         isOpen={detailsModalOpen}

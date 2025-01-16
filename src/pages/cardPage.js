@@ -70,7 +70,7 @@ function Review() {
       });
     } catch (error) {
       console.error("Error fetching data:", error);
-      setError(error);
+      setError("Error fetching data. Please try again.");
       if (error.message === "Card not found") {
         navigate("/review");
       }

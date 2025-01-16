@@ -15,6 +15,7 @@ import {
   Chip,
   User,
   Pagination,
+  Spinner,
 } from "@nextui-org/react";
 import { PlusIcon } from "./PlusIcon";
 import { VerticalDotsIcon } from "./VerticalDotsIcon";
@@ -44,6 +45,8 @@ export default function App() {
     direction: "ascending",
   });
   const [page, setPage] = React.useState(1);
+  const [loading, setLoading] = React.useState(false);
+  const [error, setError] = React.useState(null);
 
   const hasSearchFilter = Boolean(filterValue);
 
@@ -256,42 +259,54 @@ export default function App() {
   }, [selectedKeys, items.length, page, pages, hasSearchFilter]);
 
   return (
-    <Table
-      aria-label="Example table with custom cells, pagination and sorting"
-      isHeaderSticky
-      bottomContent={bottomContent}
-      bottomContentPlacement="outside"
-      classNames={{
-        wrapper: "max-h-[80vh]",
-      }}
-      selectedKeys={selectedKeys}
-      selectionMode="multiple"
-      sortDescriptor={sortDescriptor}
-      topContent={topContent}
-      topContentPlacement="outside"
-      onSelectionChange={setSelectedKeys}
-      onSortChange={setSortDescriptor}
-    >
-      <TableHeader columns={headerColumns}>
-        {(column) => (
-          <TableColumn
-            key={column.uid}
-            align={column.uid === "actions" ? "center" : "start"}
-            allowsSorting={column.sortable}
-          >
-            {column.name}
-          </TableColumn>
-        )}
-      </TableHeader>
-      <TableBody emptyContent={"No cards found"} items={sortedItems}>
-        {(item) => (
-          <TableRow key={item.id}>
-            {(columnKey) => (
-              <TableCell>{renderCell(item, columnKey)}</TableCell>
+    <div>
+      {loading ? (
+        <div className="flex justify-center items-center">
+          <Spinner />
+        </div>
+      ) : error ? (
+        <div className="text-center text-red-500">{error}</div>
+      ) : sortedItems.length === 0 ? (
+        <div className="text-center">No cards to display</div>
+      ) : (
+        <Table
+          aria-label="Example table with custom cells, pagination and sorting"
+          isHeaderSticky
+          bottomContent={bottomContent}
+          bottomContentPlacement="outside"
+          classNames={{
+            wrapper: "max-h-[80vh]",
+          }}
+          selectedKeys={selectedKeys}
+          selectionMode="multiple"
+          sortDescriptor={sortDescriptor}
+          topContent={topContent}
+          topContentPlacement="outside"
+          onSelectionChange={setSelectedKeys}
+          onSortChange={setSortDescriptor}
+        >
+          <TableHeader columns={headerColumns}>
+            {(column) => (
+              <TableColumn
+                key={column.uid}
+                align={column.uid === "actions" ? "center" : "start"}
+                allowsSorting={column.sortable}
+              >
+                {column.name}
+              </TableColumn>
             )}
-          </TableRow>
-        )}
-      </TableBody>
-    </Table>
+          </TableHeader>
+          <TableBody emptyContent={"No cards found"} items={sortedItems}>
+            {(item) => (
+              <TableRow key={item.id}>
+                {(columnKey) => (
+                  <TableCell>{renderCell(item, columnKey)}</TableCell>
+                )}
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      )}
+    </div>
   );
 }

@@ -10,6 +10,7 @@ import {
   Pagination,
   Select,
   SelectItem,
+  Spinner,
 } from "@nextui-org/react";
 import {
   ReviewEditModal,
@@ -27,17 +28,24 @@ export default function ReviewsTable() {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage, setPerPage] = useState(10);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const { api } = useAuthContext();
   const { data, dispatchData } = useAdminContext();
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
+      setError(null);
       try {
         const response = await api.getReviews({ page: currentPage - 1, perPage });
         dispatchData({ type: "set", model: MODELS.reviews, data: response.data });
       } catch (error) {
         console.error("Error fetching reviews:", error);
+        setError("Error fetching reviews. Please try again.");
+      } finally {
+        setLoading(false);
       }
     };
     fetchData();
@@ -161,22 +169,32 @@ export default function ReviewsTable() {
           <SelectItem value={100}>100</SelectItem>
         </Select>
       </div>
-      <Table aria-label="Reviews table">
-        <TableHeader columns={columns}>
-          {(column) => (
-            <TableColumn key={column.uid}>{column.name}</TableColumn>
-          )}
-        </TableHeader>
-        <TableBody items={data[MODELS.reviews]}>
-          {(item) => (
-            <TableRow key={item._id}>
-              {(columnKey) => (
-                <TableCell>{renderCell(item, columnKey)}</TableCell>
-              )}
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
+      {loading ? (
+        <div className="flex justify-center items-center">
+          <Spinner />
+        </div>
+      ) : error ? (
+        <div className="text-center text-red-500">{error}</div>
+      ) : data[MODELS.reviews].length === 0 ? (
+        <div className="text-center">No reviews to display</div>
+      ) : (
+        <Table aria-label="Reviews table">
+          <TableHeader columns={columns}>
+            {(column) => (
+              <TableColumn key={column.uid}>{column.name}</TableColumn>
+            )}
+          </TableHeader>
+          <TableBody items={data[MODELS.reviews]}>
+            {(item) => (
+              <TableRow key={item._id}>
+                {(columnKey) => (
+                  <TableCell>{renderCell(item, columnKey)}</TableCell>
+                )}
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      )}
 
       <ReviewEditModal
         isOpen={editModalOpen}
