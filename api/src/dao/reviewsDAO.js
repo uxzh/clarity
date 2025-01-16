@@ -116,18 +116,28 @@ class ReviewsDAO {
     createdAt = new Date(),
     updatedAt = new Date(),
     isHidden = false,
+    isAdminReview = false,
+    user = null
   }) {
+    const review = {
+      cardId: new ObjectId(cardId),
+      userId: new ObjectId(userId),
+      rating,
+      title,
+      content,
+      createdAt,
+      updatedAt,
+      isHidden,
+      isAdminReview,
+    };
+    if (isAdminReview && user) {
+      review.user = {
+        username: user.username,
+        avatar: user.avatar
+      }
+    }
     try {
-      return await reviews.insertOne({
-        cardId: new ObjectId(cardId),
-        userId: new ObjectId(userId),
-        rating,
-        title,
-        content,
-        createdAt,
-        updatedAt,
-        isHidden,
-      });
+      return await reviews.insertOne(review);
     } catch (e) {
       console.error(`Unable to create review: ${e}`);
       return { error: e };

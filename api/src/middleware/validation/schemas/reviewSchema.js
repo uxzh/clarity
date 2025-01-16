@@ -9,8 +9,15 @@ const schema = (isCreate) => yup.object().shape({
 
   content: yup.string().test('content', 'Content is required', (value) => !isCreate || value),
 
-  isHidden: yup.boolean()
+  isHidden: yup.boolean(),
 
+  isAdminReview: yup.boolean(),
+
+  username: yup.string().when('isAdminReview', {
+    is: true,
+    then: () => yup.string().required('Username is required'),
+    otherwise: () => yup.string().notRequired()
+  }),
 });
 
 module.exports = {
