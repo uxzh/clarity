@@ -15,7 +15,7 @@ import * as yup from "yup";
 import { useAuthContext } from "../../../contexts/AuthContext";
 import { useAdminContext } from "../contexts/AdminContext";
 import { MODELS } from "../../../lib/models";
-import { debounce } from "../../../lib/utils";
+import { debounce } from "../../../lib/utils.ts";
 
 const validationSchema = yup.object({
   username: yup.string().required("Username is required"),
