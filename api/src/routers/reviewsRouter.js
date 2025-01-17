@@ -23,6 +23,12 @@ router.post('/',
   ReviewsController.createReview
 );
 
+router.post('/admin',
+  Permissions.isAdmin,
+  validate(createReviewSchema),
+  ReviewsController.createReview
+);
+
 router.put('/:id',
   Permissions.isOwnerOrAdmin(models.reviews),
   validate(updateReviewSchema),

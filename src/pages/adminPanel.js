@@ -8,10 +8,12 @@ import ReviewsTable from "../components/admin/tables/ReviewsTable";
 import { AuthContext } from "../contexts/AuthContext";
 import { AdminProvider } from "../components/admin/contexts/AdminContext";
 import { MODELS } from "../lib/models";
+import ReviewCreateModal from "../components/admin/modals/ReviewCreateModal";
 
 export default function AdminPanel() {
   const [activeTab, setActiveTab] = useState(MODELS.users);
   const { user } = useContext(AuthContext);
+  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
 
   if (user.role !== "admin") {
     return (
@@ -26,16 +28,30 @@ export default function AdminPanel() {
 
   return (
     <AdminProvider>
-    <div className="min-h-screen bg-gray-100">
-      <TopNavbar className="mb-0 !important" />
-      <AdminHeader activeTab={activeTab} setActiveTab={setActiveTab} />
-      <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-        <StatisticsCards />
-        {activeTab === "users" && <UsersTable />}
-        {activeTab === "cards" && <CardsTable />}
-        {activeTab === "reviews" && <ReviewsTable />}
+      <div className="min-h-screen bg-gray-100">
+        <TopNavbar className="mb-0 !important" />
+        <AdminHeader activeTab={activeTab} setActiveTab={setActiveTab} />
+        <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+          <StatisticsCards />
+          {activeTab === "users" && <UsersTable />}
+          {activeTab === "cards" && <CardsTable />}
+          {activeTab === "reviews" && (
+            <>
+              <Button
+                color="primary"
+                onPress={() => setIsReviewModalOpen(true)}
+              >
+                Create Review
+              </Button>
+              <ReviewsTable />
+              <ReviewCreateModal
+                isOpen={isReviewModalOpen}
+                onClose={() => setIsReviewModalOpen(false)}
+              />
+            </>
+          )}
+        </div>
       </div>
-    </div>
     </AdminProvider>
   );
 }

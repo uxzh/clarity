@@ -13,6 +13,7 @@ import {
   ReviewHideModal,
   ReviewDeleteModal,
 } from "../modals/ReviewModals";
+import ReviewCreateModal from "../modals/ReviewCreateModal";
 import { useAuthContext } from "../../../contexts/AuthContext";
 import { useAdminContext } from "../contexts/AdminContext";
 import { fetchAllPages } from "../utils";
@@ -23,6 +24,7 @@ export default function ReviewsTable() {
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [hideModalOpen, setHideModalOpen] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [createModalOpen, setCreateModalOpen] = useState(false);
 
   const { api } = useAuthContext();
   const { data, dispatchData } = useAdminContext();
@@ -140,6 +142,12 @@ export default function ReviewsTable() {
 
   return (
     <>
+      <Button
+        color="primary"
+        onPress={() => setCreateModalOpen(true)}
+      >
+        Create Review
+      </Button>
       <Table aria-label="Reviews table">
         <TableHeader columns={columns}>
           {(column) => (
@@ -174,6 +182,10 @@ export default function ReviewsTable() {
         onClose={() => setDeleteModalOpen(false)}
         review={selectedReview}
         onConfirm={handleDeleteReview}
+      />
+      <ReviewCreateModal
+        isOpen={createModalOpen}
+        onClose={() => setCreateModalOpen(false)}
       />
     </>
   );
