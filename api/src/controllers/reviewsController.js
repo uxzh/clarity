@@ -33,16 +33,24 @@ class ReviewsController {
 
   static async createReview(req, res) {
     try {
-      const { cardId, rating, title, content } = req.body;
+      const { cardId, rating, title, content, 
+        isAdminReview, username // for admin review
+      } = req.body;
+
+      if (isAdminReview && !req.user.isAdmin) {
+        return res.status(403).send({ error: "User is not authorized to create admin review" });
+      }
 
       const card = await CardsDAO.getOneById(cardId);
       if (!card || card.error) {
         return res.status(404).send({ error: "Card not found" });
       }
 
-      const existingReview = await ReviewsDAO.getOneByCardAndUser(cardId, req.user._id);
-      if (existingReview && !existingReview.error) {
-        return res.status(400).send({ error: "Review already exists" });
+      if (!isAdminReview) {
+        const existingReview = await ReviewsDAO.getOneByCardAndUser(cardId, req.user._id);
+        if (existingReview && !existingReview.error) {
+          return res.status(400).send({ error: "Review already exists" });
+        }
       }
 
       const date = new Date();
@@ -57,6 +65,13 @@ class ReviewsController {
         updatedAt: date,
         isHidden: false,
       };
+      if (isAdminReview) {
+        review.isAdminReview = true;
+        review.displayedUser = {
+          username,
+          avatar: `https://api.dicebear.com/6.x/notionists/svg?seed=${username}`
+        };
+      }
 
       const result = await ReviewsDAO.createOne(review);
       if (!result || result.error) {
@@ -87,6 +102,13 @@ class ReviewsController {
         }
       });
       data.updatedAt = new Date();
+      if (req.user.isAdmin && review.isAdminReview && req.body.username) {
+        data.isAdminReview = true;
+        data.displayedUser = {
+          username: req.body.username,
+          avatar: `https://api.dicebear.com/6.x/notionists/svg?seed=${req.body.username}`
+        };
+      }
 
       const result = await ReviewsDAO.updateOne({
         id,
