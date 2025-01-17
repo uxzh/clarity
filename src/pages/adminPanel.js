@@ -38,12 +38,6 @@ export default function AdminPanel() {
           {activeTab === "cards" && <CardsTable />}
           {activeTab === "reviews" && (
             <>
-              <Button
-                color="primary"
-                onPress={() => setIsReviewModalOpen(true)}
-              >
-                Create Review
-              </Button>
               <ReviewsTable />
               <ReviewCreateModal
                 isOpen={isReviewModalOpen}
