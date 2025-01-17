@@ -8,13 +8,14 @@ import {
   Button,
   Input,
   Textarea,
-  Select,
-  SelectItem,
+  Autocomplete,
+  AutocompleteItem,
 } from "@nextui-org/react";
 import * as yup from "yup";
 import { useAuthContext } from "../../../contexts/AuthContext";
 import { useAdminContext } from "../contexts/AdminContext";
 import { MODELS } from "../../../lib/models";
+import { debounce } from "../../../lib/utils";
 
 const validationSchema = yup.object({
   username: yup.string().required("Username is required"),
@@ -27,6 +28,8 @@ const ReviewCreateModal = ({ isOpen, onClose }) => {
   const { api } = useAuthContext();
   const { data, dispatchData } = useAdminContext();
   const [cards, setCards] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCard, setSelectedCard] = useState(null);
 
   useEffect(() => {
     const fetchCards = async () => {
@@ -80,6 +83,37 @@ const ReviewCreateModal = ({ isOpen, onClose }) => {
     }
   };
 
+  const fetchSearchResults = debounce(async (term) => {
+    if (!term.trim()) {
+      setCards([]);
+      return;
+    }
+    try {
+      const { data } = await api.getCards({
+        search: term,
+        perPage: 20,
+        page: 0,
+      });
+      setCards(data);
+    } catch (error) {
+      console.error("Error fetching search results:", error);
+      setCards([]);
+    }
+  }, 300);
+
+  useEffect(() => {
+    fetchSearchResults(searchTerm);
+  }, [searchTerm]);
+
+  const handleCardSelection = (cardId) => {
+    const card = cards.find((card) => card._id === cardId);
+    setSelectedCard(card);
+    setFormValues({
+      ...formValues,
+      cardId: cardId,
+    });
+  };
+
   return (
     <Modal size="lg" isOpen={isOpen} onClose={onClose}>
       <ModalContent>
@@ -111,20 +145,40 @@ const ReviewCreateModal = ({ isOpen, onClose }) => {
                 error={formErrors.content}
                 required
               />
-              <Select
+              <Autocomplete
                 label="Card"
-                name="cardId"
-                value={formValues.cardId}
-                onChange={handleChange}
+                items={cards}
+                inputValue={searchTerm}
+                onInputChange={(value) => setSearchTerm(value)}
+                onSelectionChange={handleCardSelection}
                 error={formErrors.cardId}
                 required
               >
-                {cards.map((card) => (
-                  <SelectItem key={card._id} value={card._id}>
-                    {card.cardName}
-                  </SelectItem>
-                ))}
-              </Select>
+                {(item) => (
+                  <AutocompleteItem key={item._id} textValue={item.cardName}>
+                    <div className="flex items-center">
+                      <img
+                        src={item.cardImageUrl}
+                        alt={item.cardName}
+                        className="w-16 h-10 object-contain mr-3"
+                      />
+                      <div className="flex flex-col">
+                        <span className="text-small font-bold">
+                          {item.cardName}
+                        </span>
+                        <span className="text-tiny text-default-400">
+                          {item.bankName}
+                        </span>
+                      </div>
+                    </div>
+                  </AutocompleteItem>
+                )}
+              </Autocomplete>
+              {selectedCard && (
+                <div className="mt-2">
+                  <strong>Selected Card:</strong> {selectedCard.cardName}
+                </div>
+              )}
             </div>
           </ModalBody>
           <ModalFooter>
