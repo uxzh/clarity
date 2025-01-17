@@ -1,4 +1,4 @@
-const jwt = require('../lib/jwt');
+const jwt = require('../config/jwt');
 const UsersDAO = require('../dao/usersDAO');
 
 const auth = async (req, res, next) => {

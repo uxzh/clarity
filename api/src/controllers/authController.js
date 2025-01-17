@@ -2,10 +2,10 @@ const bcrypt = require("bcrypt");
 const { validate } = require("deep-email-validator");
 
 const UsersDAO = require("../dao/usersDAO");
-const jwt = require("../lib/jwt");
+const jwt = require("../config/jwt");
 const verifyGoogleToken = require("../lib/verifyGoogleToken");
-const { MailSender } = require("../lib/mail/mailSender");
-const { MAIL_TEMPLATES } = require("../lib/mail/templates");
+const { MailSender } = require("../lib/services/mailService");
+const { MAIL_TEMPLATES } = require("../lib/services/templates");
 const { HOST } = require("../lib/const");
 
 class AuthController {

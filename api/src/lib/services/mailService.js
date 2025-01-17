@@ -1,6 +1,6 @@
 const nodemailer = require('nodemailer');
 
-class MailSender {
+class MailService {
   static config = {
     host: process.env.MAIL_HOST,
     port: process.env.MAIL_PORT,
@@ -11,23 +11,23 @@ class MailSender {
     }
   }
 
-  static transporter = nodemailer.createTransport(MailSender.config);
+  static transporter = nodemailer.createTransport(MailService.config);
 
   static from = process.env.MAIL_FROM;
 
   static async send(to, message) {
     const mailOptions = {
-      from: MailSender.from,
+      from: MailService.from,
       to,
       subject: message.subject,
       text: message.text,
       html: message.html
     };
 
-    await MailSender.transporter.sendMail(mailOptions);
+    await MailService.transporter.sendMail(mailOptions);
   }
 }
 
 module.exports = {
-  MailSender
+  MailSender: MailService
 }
