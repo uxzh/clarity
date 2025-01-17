@@ -11,7 +11,6 @@ import {
   Select,
   SelectItem,
 } from "@nextui-org/react";
-import { useFormik } from "formik";
 import * as yup from "yup";
 import { useAuthContext } from "../../../contexts/AuthContext";
 import { useAdminContext } from "../contexts/AdminContext";
@@ -41,69 +40,83 @@ const ReviewCreateModal = ({ isOpen, onClose }) => {
     fetchCards();
   }, []);
 
-  const formik = useFormik({
-    initialValues: {
-      username: "",
-      title: "",
-      content: "",
-      cardId: "",
-    },
-    validationSchema: validationSchema,
-    onSubmit: async (values) => {
-      try {
-        const res = await api.createReview({
-          ...values,
-          isAdminReview: true,
+  const [formValues, setFormValues] = useState({
+    username: "",
+    title: "",
+    content: "",
+    cardId: "",
+  });
+
+  const [formErrors, setFormErrors] = useState({});
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormValues({
+      ...formValues,
+      [name]: value,
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await validationSchema.validate(formValues, { abortEarly: false });
+      const res = await api.createReview({
+        ...formValues,
+        isAdminReview: true,
+      });
+      dispatchData({ type: "add", model: MODELS.reviews, data: res.data });
+      onClose();
+    } catch (error) {
+      if (error.inner) {
+        const errors = {};
+        error.inner.forEach((err) => {
+          errors[err.path] = err.message;
         });
-        dispatchData({ type: "add", model: MODELS.reviews, data: res.data });
-        onClose();
-      } catch (error) {
+        setFormErrors(errors);
+      } else {
         console.error("Error creating review:", error);
       }
-    },
-  });
+    }
+  };
 
   return (
     <Modal size="lg" isOpen={isOpen} onClose={onClose}>
       <ModalContent>
-        <form onSubmit={formik.handleSubmit}>
+        <form onSubmit={handleSubmit}>
           <ModalHeader>Create Review</ModalHeader>
           <ModalBody>
             <div className="space-y-4">
               <Input
                 label="Username"
                 name="username"
-                value={formik.values.username}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                error={formik.touched.username && formik.errors.username}
+                value={formValues.username}
+                onChange={handleChange}
+                error={formErrors.username}
                 required
               />
               <Input
                 label="Title"
                 name="title"
-                value={formik.values.title}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                error={formik.touched.title && formik.errors.title}
+                value={formValues.title}
+                onChange={handleChange}
+                error={formErrors.title}
                 required
               />
               <Textarea
                 label="Content"
                 name="content"
-                value={formik.values.content}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                error={formik.touched.content && formik.errors.content}
+                value={formValues.content}
+                onChange={handleChange}
+                error={formErrors.content}
                 required
               />
               <Select
                 label="Card"
                 name="cardId"
-                value={formik.values.cardId}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                error={formik.touched.cardId && formik.errors.cardId}
+                value={formValues.cardId}
+                onChange={handleChange}
+                error={formErrors.cardId}
                 required
               >
                 {cards.map((card) => (
