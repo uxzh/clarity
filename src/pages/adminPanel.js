@@ -9,6 +9,7 @@ import { AuthContext } from "../contexts/AuthContext";
 import { AdminProvider } from "../components/admin/contexts/AdminContext";
 import { MODELS } from "../lib/models";
 import ReviewCreateModal from "../components/admin/modals/ReviewCreateModal";
+import { Button } from "@nextui-org/react";
 
 export default function AdminPanel() {
   const [activeTab, setActiveTab] = useState(MODELS.users);
