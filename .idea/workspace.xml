@@ -4,10 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="eddb00d2-e851-4ceb-af7b-53370d2e185c" name="Changes" comment="Merge remote-tracking branch 'origin/changing-button-state' into changing-button-state">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ui/reviews/review_summary/summary-rating-card.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/reviews/review_summary/summary-rating-card.js" afterDir="false" />
-    </list>
+    <list default="true" id="eddb00d2-e851-4ceb-af7b-53370d2e185c" name="Changes" comment="Implemented a solution in case the user is not authorized and clicks on the button &quot;Write a Review&quot;, the modal authorization window is displayed" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -116,9 +113,41 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1737227889045</updated>
-      <workItem from="1737227891322" duration="910000" />
+      <workItem from="1737227891322" duration="1282000" />
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Implemented a solution in case the user is not authorized and clicks on the button &quot;Write a Review&quot;, the modal authorization window is displayed">
+      <option name="closed" value="true" />
+      <created>1737228871675</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1737228871676</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Implemented a solution in case the user is not authorized and clicks on the button &quot;Write a Review&quot;, the modal authorization window is displayed">
+      <option name="closed" value="true" />
+      <created>1737228893939</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1737228893939</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Implemented a solution in case the user is not authorized and clicks on the button &quot;Write a Review&quot;, the modal authorization window is displayed">
+      <option name="closed" value="true" />
+      <created>1737229036495</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1737229036495</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Implemented a solution in case the user is not authorized and clicks on the button &quot;Write a Review&quot;, the modal authorization window is displayed">
+      <option name="closed" value="true" />
+      <created>1737229125823</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1737229125823</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -126,6 +155,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Implemented toggle the “Write a Review” button state" />
+    <MESSAGE value="Implemented a solution in case the user is not authorized and clicks on the button &quot;Write a Review&quot;, the modal authorization window is displayed" />
     <MESSAGE value="Merge remote-tracking branch 'origin/changing-button-state' into changing-button-state" />
     <option name="LAST_COMMIT_MESSAGE" value="Merge remote-tracking branch 'origin/changing-button-state' into changing-button-state" />
   </component>
