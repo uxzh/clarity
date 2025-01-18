@@ -4,7 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="76a37aa3-5070-499e-b53d-6617c672e14e" name="Changes" comment="" />
+    <list default="true" id="76a37aa3-5070-499e-b53d-6617c672e14e" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/api/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/controllers/reviewsController.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/controllers/reviewsController.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/controllers/usersController.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/controllers/usersController.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/middleware/cacheHeaders.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/middleware/cacheHeaders.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/routers/reviewsRouter.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/routers/reviewsRouter.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ui/reviews/review_summary/summary-rating-card.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/reviews/review_summary/summary-rating-card.js" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -47,12 +56,13 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
     "git-widget-placeholder": "feature-branch",
-    "last_opened_file_path": "/Users/mbard/Documents/01 Projects/clarity/api",
+    "last_opened_file_path": "/Users/mbard/Documents/01 Projects/clarity/src",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
+    "npm.dev.executor": "Run",
     "ts.external.directory.path": "/Users/mbard/Documents/01 Projects/clarity/node_modules/typescript/lib",
     "vue.rearranger.settings.migration": "true"
   }
@@ -61,6 +71,23 @@
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/api" />
     </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="dev" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/api/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="dev" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="npm.dev" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
@@ -79,10 +106,15 @@
       <updated>1736815550330</updated>
       <workItem from="1736815552310" duration="550000" />
       <workItem from="1736816117267" duration="6039000" />
+      <workItem from="1737169153636" duration="308000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Merge pull request #37 from uxzh/main&#10;&#10;update 1.1" />
+    <option name="LAST_COMMIT_MESSAGE" value="" />
   </component>
 </project>
