@@ -4,6 +4,7 @@ import { Button, Progress, useDisclosure } from "@nextui-org/react";
 import { cn } from "./cn";
 import FeedbackModal from "../../../FEEDBACK/feedbackModal";
 import useAuth from "../../../../hooks/useAuth";
+import SignUpModal from "../../signing/SignUpModal";
 
 const SummaryRatingCard = React.forwardRef(
     (
@@ -11,18 +12,25 @@ const SummaryRatingCard = React.forwardRef(
         ref
     ) => {
       const { isOpen, onOpen, onOpenChange } = useDisclosure();
-      const { user } = useAuth(); // Use the useAuth hook
+      const { user } = useAuth();
       const [isLoggedIn, setIsLoggedIn] = useState(user?.isLoggedIn);
+      const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
 
       useEffect(() => {
         setIsLoggedIn(user?.isLoggedIn);
       }, [user]);
 
+      useEffect(() => {
+        if (isLoggedIn) {
+          setIsLoginModalOpen(false);
+        }
+      }, [isLoggedIn]);
+
       const handleWriteReview = () => {
         if (isLoggedIn) {
           onOpen();
         } else {
-          alert("Please log in to write a review.");
+          setIsLoginModalOpen(true);
         }
       };
 
@@ -102,7 +110,6 @@ const SummaryRatingCard = React.forwardRef(
                   startContent={<Icon icon="solar:pen-bold" />}
                   variant="flat"
                   onClick={handleWriteReview}
-                  isDisabled={!isLoggedIn}
               >
                 Write a review
               </Button>
@@ -114,6 +121,10 @@ const SummaryRatingCard = React.forwardRef(
                 isOpen={isOpen}
                 onOpenChange={onOpenChange}
                 cardName={cardName}
+            />
+            <SignUpModal
+                isOpen={isLoginModalOpen}
+                onClose={() => setIsLoginModalOpen(false)}
             />
           </div>
       );
