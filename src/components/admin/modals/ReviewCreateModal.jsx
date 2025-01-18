@@ -10,6 +10,9 @@ import {
   Textarea,
   Autocomplete,
   AutocompleteItem,
+  Select,
+  SelectItem,
+  Avatar,
 } from "@nextui-org/react";
 import * as yup from "yup";
 import { useAuthContext } from "../../../contexts/AuthContext";
@@ -22,6 +25,7 @@ const validationSchema = yup.object({
   title: yup.string().required("Title is required"),
   content: yup.string().required("Content is required"),
   cardId: yup.string().required("Card selection is required"),
+  rating: yup.number().required("Rating is required").min(1).max(5),
 });
 
 const ReviewCreateModal = ({ isOpen, onClose }) => {
@@ -30,6 +34,7 @@ const ReviewCreateModal = ({ isOpen, onClose }) => {
   const [cards, setCards] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCard, setSelectedCard] = useState(null);
+  const [avatarUrl, setAvatarUrl] = useState("");
 
   useEffect(() => {
     const fetchCards = async () => {
@@ -48,6 +53,7 @@ const ReviewCreateModal = ({ isOpen, onClose }) => {
     title: "",
     content: "",
     cardId: "",
+    rating: "",
   });
 
   const [formErrors, setFormErrors] = useState({});
@@ -114,6 +120,15 @@ const ReviewCreateModal = ({ isOpen, onClose }) => {
     });
   };
 
+  const handleUsernameChange = (e) => {
+    const { value } = e.target;
+    setFormValues({
+      ...formValues,
+      username: value,
+    });
+    setAvatarUrl(`https://api.dicebear.com/6.x/notionists/svg?seed=${value}`);
+  };
+
   return (
     <Modal size="lg" isOpen={isOpen} onClose={onClose}>
       <ModalContent>
@@ -121,14 +136,17 @@ const ReviewCreateModal = ({ isOpen, onClose }) => {
           <ModalHeader>Create Review</ModalHeader>
           <ModalBody>
             <div className="space-y-4">
-              <Input
-                label="Username"
-                name="username"
-                value={formValues.username}
-                onChange={handleChange}
-                error={formErrors.username}
-                required
-              />
+              <div className="flex items-center space-x-4">
+                <Avatar src={avatarUrl} alt="User Avatar" />
+                <Input
+                  label="Username"
+                  name="username"
+                  value={formValues.username}
+                  onChange={handleUsernameChange}
+                  error={formErrors.username}
+                  required
+                />
+              </div>
               <Input
                 label="Title"
                 name="title"
@@ -145,6 +163,22 @@ const ReviewCreateModal = ({ isOpen, onClose }) => {
                 error={formErrors.content}
                 required
               />
+              <Select
+                label="Rating"
+                name="rating"
+                value={formValues.rating}
+                onChange={(value) =>
+                  setFormValues({ ...formValues, rating: value })
+                }
+                error={formErrors.rating}
+                required
+              >
+                {[1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5].map((rating) => (
+                  <SelectItem key={rating} value={rating}>
+                    {rating}
+                  </SelectItem>
+                ))}
+              </Select>
               <Autocomplete
                 label="Card"
                 items={cards}
