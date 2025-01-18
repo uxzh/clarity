@@ -35,6 +35,7 @@ const ReviewCreateModal = ({ isOpen, onClose }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCard, setSelectedCard] = useState(null);
   const [avatarUrl, setAvatarUrl] = useState("");
+  const [apiError, setApiError] = useState(""); // Pa33c
 
   useEffect(() => {
     const fetchCards = async () => {
@@ -86,6 +87,7 @@ const ReviewCreateModal = ({ isOpen, onClose }) => {
       } else {
         console.error("Error creating review:", error);
         setFormErrors({ general: "Error creating review. Please try again." });
+        setApiError(error.message); // Pef04
       }
     }
   };
@@ -212,6 +214,11 @@ const ReviewCreateModal = ({ isOpen, onClose }) => {
               {selectedCard && (
                 <div className="mt-2">
                   <strong>Selected Card:</strong> {selectedCard.cardName}
+                </div>
+              )}
+              {apiError && ( // Pfe57
+                <div className="text-red-500 text-sm mt-2">
+                  {apiError}
                 </div>
               )}
             </div>

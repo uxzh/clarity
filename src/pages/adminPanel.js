@@ -9,7 +9,6 @@ import { AuthContext } from "../contexts/AuthContext";
 import { AdminProvider } from "../components/admin/contexts/AdminContext";
 import { MODELS } from "../lib/models";
 import ReviewCreateModal from "../components/admin/modals/ReviewCreateModal";
-import { Button } from "@nextui-org/react";
 
 export default function AdminPanel() {
   const [activeTab, setActiveTab] = useState(MODELS.users);
@@ -38,12 +37,6 @@ export default function AdminPanel() {
           {activeTab === "cards" && <CardsTable />}
           {activeTab === "reviews" && (
             <>
-              <Button
-                color="primary"
-                onPress={() => setIsReviewModalOpen(true)}
-              >
-                Create Review
-              </Button>
               <ReviewsTable />
               <ReviewCreateModal
                 isOpen={isReviewModalOpen}
