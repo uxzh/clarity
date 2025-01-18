@@ -142,6 +142,13 @@ export default function ReviewsTable() {
 
   return (
     <>
+      <Button
+        size="sm"
+        color="primary"
+        onPress={() => setCreateModalOpen(true)}
+      >
+        Create Review
+      </Button>
       <Table aria-label="Reviews table">
         <TableHeader columns={columns}>
           {(column) => (
