@@ -35,7 +35,7 @@ const ReviewCreateModal = ({ isOpen, onClose }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCard, setSelectedCard] = useState(null);
   const [avatarUrl, setAvatarUrl] = useState("");
-  const [apiError, setApiError] = useState(""); // Pa33c
+  const [apiError, setApiError] = useState("");
 
   useEffect(() => {
     const fetchCards = async () => {
@@ -72,7 +72,11 @@ const ReviewCreateModal = ({ isOpen, onClose }) => {
     try {
       await validationSchema.validate(formValues, { abortEarly: false });
       const res = await api.createReview({
-        ...formValues,
+        username: formValues.username,
+        title: formValues.title,
+        content: formValues.content,
+        cardId: formValues.cardId,
+        rating: formValues.rating,
         isAdminReview: true,
       });
       dispatchData({ type: "add", model: MODELS.reviews, data: res.data });
@@ -87,7 +91,7 @@ const ReviewCreateModal = ({ isOpen, onClose }) => {
       } else {
         console.error("Error creating review:", error);
         setFormErrors({ general: "Error creating review. Please try again." });
-        setApiError(error.message); // Pef04
+        setApiError(error.message);
       }
     }
   };
@@ -216,7 +220,7 @@ const ReviewCreateModal = ({ isOpen, onClose }) => {
                   <strong>Selected Card:</strong> {selectedCard.cardName}
                 </div>
               )}
-              {apiError && ( // Pfe57
+              {apiError && (
                 <div className="text-red-500 text-sm mt-2">
                   {apiError}
                 </div>
