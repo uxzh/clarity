@@ -85,6 +85,7 @@ const ReviewCreateModal = ({ isOpen, onClose }) => {
         setFormErrors(errors);
       } else {
         console.error("Error creating review:", error);
+        setFormErrors({ general: "Error creating review. Please try again." });
       }
     }
   };
