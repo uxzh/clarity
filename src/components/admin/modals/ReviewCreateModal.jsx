@@ -40,7 +40,10 @@ const ReviewCreateModal = ({ isOpen, onClose }) => {
   useEffect(() => {
     const fetchCards = async () => {
       try {
-        const res = await api.getCards();
+        const res = await api.getCards({
+          perPage: 20,
+          page: 0,
+        });
         setCards(res.data);
       } catch (error) {
         console.error("Error fetching cards:", error);
@@ -79,7 +82,11 @@ const ReviewCreateModal = ({ isOpen, onClose }) => {
         rating: formValues.rating,
         isAdminReview: true,
       });
-      dispatchData({ type: "add", model: MODELS.reviews, data: res.data });
+      dispatchData({ type: "add", model: MODELS.reviews, data: {
+        ...res.data,
+        user: res.data.displayedUser,
+        card: selectedCard,
+      }});
       onClose();
     } catch (error) {
       if (error.inner) {
@@ -174,9 +181,9 @@ const ReviewCreateModal = ({ isOpen, onClose }) => {
                 label="Rating"
                 name="rating"
                 value={formValues.rating}
-                onChange={(value) =>
-                  setFormValues({ ...formValues, rating: value })
-                }
+                onChange={({target}) => {
+                  setFormValues({ ...formValues, rating: Number(target.value) })
+                }}
                 error={formErrors.rating}
                 required
               >
