@@ -7,6 +7,7 @@ import {
   TableRow,
   TableCell,
   Button,
+  Chip,
 } from "@nextui-org/react";
 import {
   ReviewEditModal,
@@ -48,13 +49,14 @@ export default function ReviewsTable() {
     { name: "RATING", uid: "rating" },
     { name: "TITLE", uid: "title" },
     { name: "CONTENT", uid: "content" },
+    { name: "TYPE", uid: "type" },
     { name: "ACTIONS", uid: "actions" },
   ];
 
   const renderCell = (review, columnKey) => {
     switch (columnKey) {
       case "user":
-        return review.user.username;
+        return review?.displayedUser?.username || review.user.username;
       case "card":
         return review.card.cardName;
       case "rating":
@@ -66,6 +68,11 @@ export default function ReviewsTable() {
         );
       case "content":
         return <div className="max-w-xs truncate">{review.content}</div>;
+      case "type":
+        return <Chip
+          color={review.isAdminReview ? "secondary" : "primary"}
+          variant="flat"
+          >{review.isAdminReview ? "Admin" : "User"}</Chip>;
       case "actions":
         return (
           <div className="flex gap-2">

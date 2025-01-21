@@ -7,16 +7,22 @@ import {
   Button,
   Input,
   Textarea,
+  Select,
+  SelectItem,
 } from "@nextui-org/react";
 
 export const ReviewEditModal = ({ isOpen, onClose, review, onSave }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSave({
+    const data = {
       title: e.target.title.value,
       content: e.target.content.value,
-      rating: parseInt(e.target.rating.value),
-    });
+      rating: Number(e.target.rating.value),
+    }
+    if (review?.displayedUser?.username) {
+      data.username = e.target.username.value;
+    }
+    onSave(data);
   };
 
   return (
@@ -38,15 +44,24 @@ export const ReviewEditModal = ({ isOpen, onClose, review, onSave }) => {
                 defaultValue={review?.content}
                 required
               />
-              <Input
+              <Select
                 label="Rating"
                 name="rating"
-                type="number"
-                min="1"
-                max="5"
                 defaultValue={review?.rating}
                 required
-              />
+              >
+                {[1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5].map((rating) => (
+                  <SelectItem key={rating} value={rating}>
+                    {rating}
+                  </SelectItem>
+                ))}
+              </Select>
+              {review?.displayedUser?.username && <Input
+                label="Username"
+                name="username"
+                defaultValue={review?.displayedUser?.username}
+                required
+              />}
             </div>
           </ModalBody>
           <ModalFooter>
