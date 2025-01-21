@@ -25,12 +25,12 @@ export default function FeedbackModal({
   const { api } = useContext(AuthContext);
   const [errorMessage, setErrorMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [rating, setRating] = useState(0); // P3043
+  const [rating, setRating] = useState(0);
 
   const resetForm = useCallback((form) => {
     form.reset();
     setErrorMessage("");
-    setRating(0); // P3043
+    setRating(0);
   }, []);
 
   const handleSubmit = useCallback(
@@ -43,7 +43,7 @@ export default function FeedbackModal({
       const data = {
         title: formData.get("title"),
         content: formData.get("content"),
-        rating: rating, // P2433
+        rating: rating,
         cardId: cardId,
       };
 
@@ -69,7 +69,7 @@ export default function FeedbackModal({
         setIsSubmitting(false);
       }
     },
-    [api, cardId, onReviewSubmit, onOpenChange, resetForm, rating] // P2433
+    [api, cardId, onReviewSubmit, onOpenChange, resetForm, rating]
   );
 
   return (
@@ -119,7 +119,7 @@ export default function FeedbackModal({
               )}
               <Spacer y={2} />
               <div className="flex w-full items-center justify-between pb-4">
-                <FeedbackRating name="rating" size="lg" value={rating} onValueChange={setRating} /> {/* P3043 */}
+                <FeedbackRating name="rating" size="lg" value={rating} onValueChange={setRating} />
                 <div className="flex gap-2">
                   <Button
                     color="danger"
