@@ -11,7 +11,7 @@ import {
   Textarea,
 } from "@nextui-org/react";
 
-import FeedbackRating from "../REVIEW/rating/stars";
+import Stars from "../REVIEW/rating/stars";
 import { AuthContext } from "../../contexts/AuthContext";
 
 export default function FeedbackModal({
@@ -119,7 +119,7 @@ export default function FeedbackModal({
               )}
               <Spacer y={2} />
               <div className="flex w-full items-center justify-between pb-4">
-                <FeedbackRating name="rating" size="lg" value={rating} onValueChange={setRating} />
+                <Stars value={rating} onChange={setRating} />
                 <div className="flex gap-2">
                   <Button
                     color="danger"

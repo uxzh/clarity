@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Icon } from "@iconify/react";
+import { Tooltip } from "@nextui-org/react";
 
 const Stars = ({ value, onChange }) => {
   const [hoverValue, setHoverValue] = useState(undefined);
@@ -25,17 +26,20 @@ const Stars = ({ value, onChange }) => {
   const renderStar = (index) => {
     const isFilled = hoverValue ? hoverValue > index : value > index;
     const isHalfFilled = value === index + 0.5;
+    const ratingValue = isHalfFilled ? index + 0.5 : index + 1;
+    const tooltipText = `${ratingValue} star${ratingValue > 1 ? "s" : ""}`;
 
     return (
-      <Icon
-        key={index}
-        icon={isFilled || isHalfFilled ? "solar:star-bold" : "solar:star-outline"}
-        width={32}
-        onClick={() => handleClick(index)}
-        onMouseOver={() => handleMouseOver(index)}
-        onMouseLeave={handleMouseLeave}
-        className={isFilled || isHalfFilled ? "text-primary" : "text-default-600"}
-      />
+      <Tooltip key={index} content={tooltipText}>
+        <Icon
+          icon={isFilled || isHalfFilled ? "solar:star-bold" : "solar:star-outline"}
+          width={32}
+          onClick={() => handleClick(index)}
+          onMouseOver={() => handleMouseOver(index)}
+          onMouseLeave={handleMouseLeave}
+          className={isFilled || isHalfFilled ? "text-primary" : "text-default-600"}
+        />
+      </Tooltip>
     );
   };
 
