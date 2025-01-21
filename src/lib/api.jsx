@@ -57,8 +57,12 @@ class Api {
   // reviews
   getReviews = async ({ page = 0, perPage = 20 }) => await this.axios.get(`/reviews?page=${page}&perPage=${perPage}`);
 
-  createReview = async ({ cardId, title, content, rating }) =>
-    await this.axios.post(`/reviews`, { cardId, title, content, rating });
+  createReview = async ({ cardId, title, content, rating, isAdminReview = false, username = null }) => {
+    if (isAdminReview && username) {
+      return await this.axios.post(`/reviews`, { cardId, title, content, rating, isAdminReview, username });
+    }
+    return await this.axios.post(`/reviews`, { cardId, title, content, rating });
+  }
 
   updateReview = async (id, data) => await this.axios.put(`/reviews/${id}`, data);
 

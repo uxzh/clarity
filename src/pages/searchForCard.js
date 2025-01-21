@@ -271,3 +271,4 @@ function ReviewSearch() {
 }
 
 export default ReviewSearch;
+export { ReviewSearch as CardSearch };

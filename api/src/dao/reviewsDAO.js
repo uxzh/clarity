@@ -1,6 +1,7 @@
 const { ObjectId } = require("mongodb");
 const { models } = require("../lib/models");
 const { getMongoClient, getDB } = require("../lib/connectToDB");
+const { is } = require("../middleware/validation/schemas/signupSchema");
 
 let reviews;
 
@@ -62,6 +63,9 @@ class ReviewsDAO {
             content: 1,
             createdAt: 1,
             updatedAt: 1,
+            isHidden: 1,
+            isAdminReview: 1,
+            displayedUser: 1,
             "user.username": 1,
             "user.avatar": 1,
             "user.email": 1,
@@ -116,18 +120,25 @@ class ReviewsDAO {
     createdAt = new Date(),
     updatedAt = new Date(),
     isHidden = false,
+    isAdminReview = false,
+    displayedUser = null
   }) {
+    const review = {
+      cardId: new ObjectId(cardId),
+      userId: new ObjectId(userId),
+      rating,
+      title,
+      content,
+      createdAt,
+      updatedAt,
+      isHidden,
+      isAdminReview,
+    };
+    if (isAdminReview && displayedUser) {
+      review.displayedUser = displayedUser;
+    }
     try {
-      return await reviews.insertOne({
-        cardId: new ObjectId(cardId),
-        userId: new ObjectId(userId),
-        rating,
-        title,
-        content,
-        createdAt,
-        updatedAt,
-        isHidden,
-      });
+      return await reviews.insertOne(review);
     } catch (e) {
       console.error(`Unable to create review: ${e}`);
       return { error: e };
@@ -213,7 +224,9 @@ class ReviewsDAO {
             updatedAt: 1,
             isHidden: 1,
             "user.username": 1,
-            "user.avatar": 1
+            "user.avatar": 1,
+            isAdminReview: 1,
+            displayedUser: 1
           }
         },
         {

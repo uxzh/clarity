@@ -7,12 +7,14 @@ import {
   TableRow,
   TableCell,
   Button,
+  Chip,
 } from "@nextui-org/react";
 import {
   ReviewEditModal,
   ReviewHideModal,
   ReviewDeleteModal,
 } from "../modals/ReviewModals";
+import ReviewCreateModal from "../modals/ReviewCreateModal";
 import { useAuthContext } from "../../../contexts/AuthContext";
 import { useAdminContext } from "../contexts/AdminContext";
 import { fetchAllPages } from "../utils";
@@ -23,6 +25,7 @@ export default function ReviewsTable() {
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [hideModalOpen, setHideModalOpen] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [createModalOpen, setCreateModalOpen] = useState(false);
 
   const { api } = useAuthContext();
   const { data, dispatchData } = useAdminContext();
@@ -46,13 +49,14 @@ export default function ReviewsTable() {
     { name: "RATING", uid: "rating" },
     { name: "TITLE", uid: "title" },
     { name: "CONTENT", uid: "content" },
+    { name: "TYPE", uid: "type" },
     { name: "ACTIONS", uid: "actions" },
   ];
 
   const renderCell = (review, columnKey) => {
     switch (columnKey) {
       case "user":
-        return review.user.username;
+        return review?.displayedUser?.username || review.user.username;
       case "card":
         return review.card.cardName;
       case "rating":
@@ -64,6 +68,11 @@ export default function ReviewsTable() {
         );
       case "content":
         return <div className="max-w-xs truncate">{review.content}</div>;
+      case "type":
+        return <Chip
+          color={review.isAdminReview ? "secondary" : "primary"}
+          variant="flat"
+          >{review.isAdminReview ? "Admin" : "User"}</Chip>;
       case "actions":
         return (
           <div className="flex gap-2">
@@ -140,6 +149,13 @@ export default function ReviewsTable() {
 
   return (
     <>
+      <Button
+        size="sm"
+        color="primary"
+        onPress={() => setCreateModalOpen(true)}
+      >
+        Create Review
+      </Button>
       <Table aria-label="Reviews table">
         <TableHeader columns={columns}>
           {(column) => (
@@ -174,6 +190,10 @@ export default function ReviewsTable() {
         onClose={() => setDeleteModalOpen(false)}
         review={selectedReview}
         onConfirm={handleDeleteReview}
+      />
+      <ReviewCreateModal
+        isOpen={createModalOpen}
+        onClose={() => setCreateModalOpen(false)}
       />
     </>
   );

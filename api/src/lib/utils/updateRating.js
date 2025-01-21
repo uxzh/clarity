@@ -1,4 +1,4 @@
-const DB = require("./db");
+const DB = require("../../config/db");
 
 // Bayesian score calculation
 const INITIAL_BELIEF = 2.5;

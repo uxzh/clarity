@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="eddb00d2-e851-4ceb-af7b-53370d2e185c" name="Changes" comment="Implemented a solution in case the user is not authorized and clicks on the button &quot;Write a Review&quot;, the modal authorization window is displayed" />
+    <list default="true" id="76a37aa3-5070-499e-b53d-6617c672e14e" name="Changes" comment="Implemented a solution in case the user is not authorized and clicks on the button &quot;Write a Review&quot;, the modal authorization window is displayed" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -19,7 +19,10 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
-  &quot;lastFilter&quot;: {}
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;Zu9zwan9&quot;
+  }
 }</component>
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
@@ -37,29 +40,39 @@
     &quot;repository&quot;: &quot;clarity&quot;
   }
 }</component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 0
-}]]></component>
-  <component name="ProjectId" id="2roaTCxCYz9znCBOLfaIAFi4s23" />
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/api/src/controllers/authController.js" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/src/components/admin/modals/CardModals.jsx" root0="SKIP_INSPECTION" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 8
+}</component>
+  <component name="ProjectId" id="2rb6hvat7bCZ7pSicl5C45EXFQw" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
+  <component name="PropertiesComponent">{
   "keyToString": {
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
     "SONARLINT_PRECOMMIT_ANALYSIS": "true",
-    "git-widget-placeholder": "#47 on changing-button-state",
+    "git-widget-placeholder": "feature-branch",
+    "last_opened_file_path": "/Users/mbard/Documents/01 Projects/clarity/api",
     "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
     "npm.dev.executor": "Run",
+    "ts.external.directory.path": "/Users/mbard/Documents/01 Projects/clarity/node_modules/typescript/lib",
     "vue.rearranger.settings.migration": "true"
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/api" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/src" />
@@ -91,70 +104,22 @@
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
-    <task id="LOCAL-00001" summary="Implemented toggle the “Write a Review” button state">
-      <option name="closed" value="true" />
-      <created>1737170883920</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1737170883920</updated>
-    </task>
-    <task id="LOCAL-00002" summary="Implemented toggle the “Write a Review” button state">
-      <option name="closed" value="true" />
-      <created>1737172839689</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1737172839689</updated>
-    </task>
     <task active="true" id="Default" summary="Default task">
-      <changelist id="eddb00d2-e851-4ceb-af7b-53370d2e185c" name="Changes" comment="Merge remote-tracking branch 'origin/changing-button-state' into changing-button-state" />
-      <created>1737227889045</created>
+      <changelist id="76a37aa3-5070-499e-b53d-6617c672e14e" name="Changes" comment="" />
+      <created>1736815550330</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1737227889045</updated>
-      <workItem from="1737227891322" duration="1282000" />
+      <updated>1736815550330</updated>
+      <workItem from="1736815552310" duration="550000" />
+      <workItem from="1736816117267" duration="6039000" />
     </task>
-    <task id="LOCAL-00003" summary="Implemented a solution in case the user is not authorized and clicks on the button &quot;Write a Review&quot;, the modal authorization window is displayed">
-      <option name="closed" value="true" />
-      <created>1737228871675</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1737228871676</updated>
-    </task>
-    <task id="LOCAL-00004" summary="Implemented a solution in case the user is not authorized and clicks on the button &quot;Write a Review&quot;, the modal authorization window is displayed">
-      <option name="closed" value="true" />
-      <created>1737228893939</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1737228893939</updated>
-    </task>
-    <task id="LOCAL-00005" summary="Implemented a solution in case the user is not authorized and clicks on the button &quot;Write a Review&quot;, the modal authorization window is displayed">
-      <option name="closed" value="true" />
-      <created>1737229036495</created>
-      <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1737229036495</updated>
-    </task>
-    <task id="LOCAL-00006" summary="Implemented a solution in case the user is not authorized and clicks on the button &quot;Write a Review&quot;, the modal authorization window is displayed">
-      <option name="closed" value="true" />
-      <created>1737229125823</created>
-      <option name="number" value="00006" />
-      <option name="presentableId" value="LOCAL-00006" />
-      <option name="project" value="LOCAL" />
-      <updated>1737229125823</updated>
-    </task>
-    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Implemented toggle the “Write a Review” button state" />
+    <MESSAGE value="Implemented toggle the &quot;Write a Review&quot; button state" />
     <MESSAGE value="Implemented a solution in case the user is not authorized and clicks on the button &quot;Write a Review&quot;, the modal authorization window is displayed" />
     <MESSAGE value="Merge remote-tracking branch 'origin/changing-button-state' into changing-button-state" />
     <option name="LAST_COMMIT_MESSAGE" value="Merge remote-tracking branch 'origin/changing-button-state' into changing-button-state" />
