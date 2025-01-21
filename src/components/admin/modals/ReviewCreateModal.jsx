@@ -82,11 +82,15 @@ const ReviewCreateModal = ({ isOpen, onClose }) => {
         rating: formValues.rating,
         isAdminReview: true,
       });
-      dispatchData({ type: "add", model: MODELS.reviews, data: {
-        ...res.data,
-        user: res.data.displayedUser,
-        card: selectedCard,
-      }});
+      dispatchData({
+        type: "add",
+        model: MODELS.reviews,
+        data: {
+          ...res.data,
+          user: res.data.displayedUser,
+          card: selectedCard,
+        },
+      });
       onClose();
     } catch (error) {
       if (error.inner) {
@@ -179,20 +183,34 @@ const ReviewCreateModal = ({ isOpen, onClose }) => {
               />
               <Select
                 label="Rating"
-                name="rating"
-                value={formValues.rating}
-                onChange={({target}) => {
-                  setFormValues({ ...formValues, rating: Number(target.value) })
+                placeholder="Select a rating"
+                selectedKeys={
+                  new Set(
+                    formValues.rating ? [formValues.rating.toString()] : []
+                  )
+                }
+                value={formValues.rating ? formValues.rating.toString() : ""}
+                onSelectionChange={(keys) => {
+                  const selectedKey = Array.from(keys)[0];
+                  setFormValues({
+                    ...formValues,
+                    rating: selectedKey ? Number(selectedKey) : "",
+                  });
                 }}
                 error={formErrors.rating}
                 required
               >
                 {[1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5].map((rating) => (
-                  <SelectItem key={rating} value={rating}>
+                  <SelectItem
+                    key={rating.toString()}
+                    value={rating}
+                    textValue={rating.toString()}
+                  >
                     {rating}
                   </SelectItem>
                 ))}
               </Select>
+
               <Autocomplete
                 label="Card"
                 items={cards}
@@ -228,9 +246,7 @@ const ReviewCreateModal = ({ isOpen, onClose }) => {
                 </div>
               )}
               {apiError && (
-                <div className="text-red-500 text-sm mt-2">
-                  {apiError}
-                </div>
+                <div className="text-red-500 text-sm mt-2">{apiError}</div>
               )}
             </div>
           </ModalBody>
