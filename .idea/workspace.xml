@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="76a37aa3-5070-499e-b53d-6617c672e14e" name="Changes" comment="" />
+    <list default="true" id="76a37aa3-5070-499e-b53d-6617c672e14e" name="Changes" comment="Implemented a solution in case the user is not authorized and clicks on the button &quot;Write a Review&quot;, the modal authorization window is displayed" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -13,7 +13,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="feature-branch" />
+        <entry key="$PROJECT_DIR$" value="changing-button-state" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -28,6 +28,16 @@
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/uxzh/clarity&quot;,
     &quot;accountId&quot;: &quot;f90a5303-64fb-4cb1-b5bc-190918c7c066&quot;
+  },
+  &quot;recentNewPullRequestHead&quot;: {
+    &quot;server&quot;: {
+      &quot;useHttp&quot;: false,
+      &quot;host&quot;: &quot;github.com&quot;,
+      &quot;port&quot;: null,
+      &quot;suffix&quot;: null
+    },
+    &quot;owner&quot;: &quot;uxzh&quot;,
+    &quot;repository&quot;: &quot;clarity&quot;
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
@@ -42,10 +52,11 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
+  <component name="PropertiesComponent">{
   "keyToString": {
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
+    "SONARLINT_PRECOMMIT_ANALYSIS": "true",
     "git-widget-placeholder": "feature-branch",
     "last_opened_file_path": "/Users/mbard/Documents/01 Projects/clarity/api",
     "node.js.detected.package.eslint": "true",
@@ -53,14 +64,36 @@
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
+    "npm.dev.executor": "Run",
     "ts.external.directory.path": "/Users/mbard/Documents/01 Projects/clarity/node_modules/typescript/lib",
     "vue.rearranger.settings.migration": "true"
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/api" />
     </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/src" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="dev" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/api/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="dev" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="npm.dev" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
@@ -84,5 +117,11 @@
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Implemented toggle the &quot;Write a Review&quot; button state" />
+    <MESSAGE value="Implemented a solution in case the user is not authorized and clicks on the button &quot;Write a Review&quot;, the modal authorization window is displayed" />
+    <MESSAGE value="Merge remote-tracking branch 'origin/changing-button-state' into changing-button-state" />
+    <option name="LAST_COMMIT_MESSAGE" value="Merge remote-tracking branch 'origin/changing-button-state' into changing-button-state" />
   </component>
 </project>
