@@ -1,4 +1,3 @@
-// feedbackModal.js
 import React, { useContext, useState, useCallback } from "react";
 import { useLocation } from "react-router-dom";
 import {
@@ -12,9 +11,8 @@ import {
   Textarea,
 } from "@nextui-org/react";
 
-import FeedbackRating from "./feedback-rating";
+import FeedbackRating from "../REVIEW/rating/stars";
 import { AuthContext } from "../../contexts/AuthContext";
-import { ratingToNumber } from "./feedback-rating-item";
 
 export default function FeedbackModal({
   isOpen,
@@ -27,10 +25,12 @@ export default function FeedbackModal({
   const { api } = useContext(AuthContext);
   const [errorMessage, setErrorMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [rating, setRating] = useState(0); // P3043
 
   const resetForm = useCallback((form) => {
     form.reset();
     setErrorMessage("");
+    setRating(0); // P3043
   }, []);
 
   const handleSubmit = useCallback(
@@ -43,7 +43,7 @@ export default function FeedbackModal({
       const data = {
         title: formData.get("title"),
         content: formData.get("content"),
-        rating: ratingToNumber(formData.get("rating")),
+        rating: rating, // P2433
         cardId: cardId,
       };
 
@@ -69,7 +69,7 @@ export default function FeedbackModal({
         setIsSubmitting(false);
       }
     },
-    [api, cardId, onReviewSubmit, onOpenChange, resetForm]
+    [api, cardId, onReviewSubmit, onOpenChange, resetForm, rating] // P2433
   );
 
   return (
@@ -119,7 +119,7 @@ export default function FeedbackModal({
               )}
               <Spacer y={2} />
               <div className="flex w-full items-center justify-between pb-4">
-                <FeedbackRating name="rating" size="lg" />
+                <FeedbackRating name="rating" size="lg" value={rating} onValueChange={setRating} /> {/* P3043 */}
                 <div className="flex gap-2">
                   <Button
                     color="danger"
