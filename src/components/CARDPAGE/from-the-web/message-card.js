@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Avatar, Badge, Button } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
 
@@ -8,8 +8,23 @@ const MessageCard = React.forwardRef(
   ({ avatar, message, className, messageClassName, ...props }, ref) => {
     const [isExpanded, setIsExpanded] = useState(true);
 
+    useEffect(() => {
+      const mediaQuery = window.matchMedia("(max-width: 768px)");
+      setIsExpanded(!mediaQuery.matches);
+
+      const handleResize = (e) => {
+        setIsExpanded(!e.matches);
+      };
+
+      mediaQuery.addEventListener("change", handleResize);
+
+      return () => {
+        mediaQuery.removeEventListener("change", handleResize);
+      };
+    }, []);
+
     const toggleExpand = () => {
-      setIsExpanded(!isExpanded);
+      setIsExpanded((prev) => !prev);
     };
 
     return (
