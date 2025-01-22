@@ -29,7 +29,6 @@ const RatingRadioItem = React.forwardRef<HTMLInputElement, RadioProps>(
       Number(groupContext.groupState.selectedValue) >= Number(props.value);
     const isReadOnly = groupContext.groupState.isReadOnly;
     const size = props.size || groupContext.size || "md";
-    const color = props.color || groupContext.color || "primary";
 
     const starWidth = React.useMemo(() => {
       switch (size) {
@@ -41,23 +40,6 @@ const RatingRadioItem = React.forwardRef<HTMLInputElement, RadioProps>(
           return 32;
       }
     }, [size]);
-
-    const starColor = React.useMemo(() => {
-      switch (color) {
-        case "primary":
-          return "text-primary";
-        case "secondary":
-          return "text-secondary";
-        case "success":
-          return "text-success";
-        case "warning":
-          return "text-warning";
-        case "danger":
-          return "text-danger";
-        default:
-          return "text-primary";
-      }
-    }, [color]);
 
     const baseProps = getBaseProps();
 
@@ -72,10 +54,10 @@ const RatingRadioItem = React.forwardRef<HTMLInputElement, RadioProps>(
         <VisuallyHidden>
           <input {...getInputProps()} />
         </VisuallyHidden>
-        <IconStarFilled
+        <IconStar
           className={cn(
             "pointer-events-none transition-transform-colors",
-            isSelected ? starColor : "text-default-600",
+            isSelected ? "text-primary" : "text-default-600",
             {
               "ring-2 ring-focus ring-offset-2 ring-offset-content1":
                 isFocusVisible,

@@ -68,27 +68,27 @@ const FeedbackRatingItem = React.forwardRef((props, ref) => {
       case RatingValueEnum.ANGRY:
         return {
           icon: IconStar,
-          color: "text-danger",
+          color: "text-default-400",
         };
       case RatingValueEnum.BAD:
         return {
-          icon: IconStarFilled,
-          color: "text-warning",
+          icon: IconStar,
+          color: "text-default-400",
         };
       case RatingValueEnum.NEUTRAL:
         return {
-          icon: IconStarHalf,
-          color: "text-foreground",
+          icon: IconStar,
+          color: "text-default-400",
         };
       case RatingValueEnum.GOOD:
         return {
-          icon: IconStarFilled,
-          color: "text-primary",
+          icon: IconStar,
+          color: "text-default-400",
         };
       case RatingValueEnum.GREAT:
         return {
-          icon: IconStarFilled,
-          color: "text-success",
+          icon: IconStar,
+          color: "text-default-400",
         };
     }
   }, [props.value]);
@@ -110,7 +110,7 @@ const FeedbackRatingItem = React.forwardRef((props, ref) => {
         className={cn(
           "pointer-events-none transition-transform-colors",
           isSelected
-            ? iconData.color
+            ? "text-primary"
             : "text-default-400 dark:text-default-300",
           {
             "ring-2 ring-focus ring-offset-2 ring-offset-content1":

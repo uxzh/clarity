@@ -18,35 +18,23 @@ const RatingRadioGroup = React.forwardRef<
   RatingRadioGroupProps
 >(({ className, label, hideStarsText, ...props }, ref) => {
   const [value, setValue] = React.useState("1");
-  //   const starsText = React.useMemo(() => {
-  //     // Special case for 5 stars
-  //     if (value === "5") {
-  //       return "5 stars";
-  //     }
+  const starsText = React.useMemo(() => {
+    // Special case for 5 stars
+    if (value === "5") {
+      return "5 stars";
+    }
 
-  //     // For 1 to 4 stars, use a generic approach
-  //     return `${value} stars & up`;
-  //   }, [value]);
-  const rating = "4.5";
-  const starsText = (
-    <>
-      <span style={{ fontSize: "1.4em", marginRight: 8, color: "black" }}>
-        {rating}
-      </span>{" "}
-      12 reviews
-    </>
-  );
+    // For 1 to 4 stars, use a generic approach
+    return `${value} stars & up`;
+  }, [value]);
 
   return (
-    <div className={cn("items-center", className)}>
-      {!hideStarsText && (
-        <p className="text-medium text-default-400">{starsText}</p>
-      )}
+    <div className={cn("flex items-center gap-3", className)}>
       <RadioGroup
         ref={ref}
         value={value}
         {...props}
-        defaultValue="5"
+        defaultValue="1"
         orientation="horizontal"
         onValueChange={setValue}
       >
@@ -57,6 +45,7 @@ const RatingRadioGroup = React.forwardRef<
         <RatingRadioItem value="5" />
       </RadioGroup>
       {label ? label : null}
+      {!hideStarsText && <p className="text-medium text-default-400">{starsText}</p>}
     </div>
   );
 });
