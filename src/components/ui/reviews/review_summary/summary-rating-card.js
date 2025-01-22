@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Icon } from "@iconify/react";
+import { IconStar, IconStarFilled, IconStarHalf } from "@tabler/icons-react";
 import { Button, Progress, useDisclosure } from "@nextui-org/react";
 import { cn } from "./cn";
 import FeedbackModal from "../../../FEEDBACK/feedbackModal";
@@ -48,9 +48,8 @@ const SummaryRatingCard = React.forwardRef(
             {hasReviews ? (
                 <>
                   <div className="flex items-center gap-2">
-                    <Icon
+                    <IconStarFilled
                         className="text-primary-500"
-                        icon="solar:star-bold"
                         width={20}
                     />
                     <span className="text-large font-semibold">{averageRating}</span>
@@ -107,7 +106,7 @@ const SummaryRatingCard = React.forwardRef(
                   className="hover:scale-105"
                   radius="md"
                   color="primary"
-                  startContent={<Icon icon="solar:pen-bold" />}
+                  startContent={<IconStar />}
                   variant="flat"
                   onClick={handleWriteReview}
               >

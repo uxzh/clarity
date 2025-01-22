@@ -8,7 +8,7 @@ import {
   useRadio,
   useRadioGroupContext,
 } from "@nextui-org/react";
-import { Icon } from "@iconify/react";
+import { IconStar, IconStarFilled, IconStarHalf } from "@tabler/icons-react";
 
 import { cn } from "./cn.ts";
 
@@ -72,7 +72,7 @@ const RatingRadioItem = React.forwardRef<HTMLInputElement, RadioProps>(
         <VisuallyHidden>
           <input {...getInputProps()} />
         </VisuallyHidden>
-        <Icon
+        <IconStarFilled
           className={cn(
             "pointer-events-none transition-transform-colors",
             isSelected ? starColor : "text-default-600",
@@ -82,7 +82,6 @@ const RatingRadioItem = React.forwardRef<HTMLInputElement, RadioProps>(
               "group-data-[pressed=true]:scale-90": !isReadOnly,
             }
           )}
-          icon="solar:star-bold"
           width={starWidth}
         />
       </Component>

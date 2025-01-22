@@ -4,7 +4,7 @@ import {
   useRadio,
   useRadioGroupContext,
 } from "@nextui-org/react";
-import { Icon } from "@iconify/react";
+import { IconStar, IconStarFilled, IconStarHalf } from "@tabler/icons-react";
 
 import { cn } from "./cn";
 
@@ -63,33 +63,31 @@ const FeedbackRatingItem = React.forwardRef((props, ref) => {
     }
   }, [size]);
 
-  const angryIconSize = 28; // Larger size for angry icon
-
   const iconData = React.useMemo(() => {
     switch (props.value) {
       case RatingValueEnum.ANGRY:
         return {
-          icon: "fluent:emoji-angry-24-regular",
+          icon: IconStar,
           color: "text-danger",
         };
       case RatingValueEnum.BAD:
         return {
-          icon: "fluent-mdl2:emoji-disappointed",
+          icon: IconStarFilled,
           color: "text-warning",
         };
       case RatingValueEnum.NEUTRAL:
         return {
-          icon: "fluent-mdl2:emoji-neutral",
+          icon: IconStarHalf,
           color: "text-foreground",
         };
       case RatingValueEnum.GOOD:
         return {
-          icon: "fluent-mdl2:emoji-2",
+          icon: IconStarFilled,
           color: "text-primary",
         };
       case RatingValueEnum.GREAT:
         return {
-          icon: "fluent-mdl2:emoji",
+          icon: IconStarFilled,
           color: "text-success",
         };
     }
@@ -108,21 +106,19 @@ const FeedbackRatingItem = React.forwardRef((props, ref) => {
       <VisuallyHidden>
         <input {...getInputProps()} />
       </VisuallyHidden>
-      <Icon
+      <iconData.icon
         className={cn(
           "pointer-events-none transition-transform-colors",
           isSelected
             ? iconData.color
             : "text-default-400 dark:text-default-300",
-          props.value === RatingValueEnum.ANGRY ? "text-2xl" : "",
           {
             "ring-2 ring-focus ring-offset-2 ring-offset-content1":
               isFocusVisible,
             "group-data-[pressed=true]:scale-90": !isReadOnly,
           }
         )}
-        icon={iconData.icon}
-        width={props.value === RatingValueEnum.ANGRY ? angryIconSize : iconSize}
+        width={iconSize}
       />
     </Component>
   );
