@@ -4,7 +4,7 @@ import {
   useRadio,
   useRadioGroupContext,
 } from "@nextui-org/react";
-import { Icon } from "@iconify/react";
+import { IconStar, IconStarFilled, IconStarHalf } from "@tabler/icons-react";
 
 import { cn } from "./cn";
 
@@ -63,34 +63,32 @@ const FeedbackRatingItem = React.forwardRef((props, ref) => {
     }
   }, [size]);
 
-  const angryIconSize = 28; // Larger size for angry icon
-
   const iconData = React.useMemo(() => {
     switch (props.value) {
       case RatingValueEnum.ANGRY:
         return {
-          icon: "fluent:emoji-angry-24-regular",
-          color: "text-danger",
+          icon: IconStar,
+          color: "text-default-400",
         };
       case RatingValueEnum.BAD:
         return {
-          icon: "fluent-mdl2:emoji-disappointed",
-          color: "text-warning",
+          icon: IconStar,
+          color: "text-default-400",
         };
       case RatingValueEnum.NEUTRAL:
         return {
-          icon: "fluent-mdl2:emoji-neutral",
-          color: "text-foreground",
+          icon: IconStar,
+          color: "text-default-400",
         };
       case RatingValueEnum.GOOD:
         return {
-          icon: "fluent-mdl2:emoji-2",
-          color: "text-primary",
+          icon: IconStar,
+          color: "text-default-400",
         };
       case RatingValueEnum.GREAT:
         return {
-          icon: "fluent-mdl2:emoji",
-          color: "text-success",
+          icon: IconStar,
+          color: "text-default-400",
         };
     }
   }, [props.value]);
@@ -108,21 +106,19 @@ const FeedbackRatingItem = React.forwardRef((props, ref) => {
       <VisuallyHidden>
         <input {...getInputProps()} />
       </VisuallyHidden>
-      <Icon
+      <iconData.icon
         className={cn(
           "pointer-events-none transition-transform-colors",
           isSelected
-            ? iconData.color
+            ? "text-primary"
             : "text-default-400 dark:text-default-300",
-          props.value === RatingValueEnum.ANGRY ? "text-2xl" : "",
           {
             "ring-2 ring-focus ring-offset-2 ring-offset-content1":
               isFocusVisible,
             "group-data-[pressed=true]:scale-90": !isReadOnly,
           }
         )}
-        icon={iconData.icon}
-        width={props.value === RatingValueEnum.ANGRY ? angryIconSize : iconSize}
+        width={iconSize}
       />
     </Component>
   );

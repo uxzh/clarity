@@ -2,7 +2,7 @@
 
 import type { RadioGroupProps } from "@nextui-org/react";
 
-import React from "react";
+import React, { useState } from "react";
 import { RadioGroup } from "@nextui-org/react";
 
 import { cn } from "./cn.ts";
@@ -17,46 +17,46 @@ const RatingRadioGroup = React.forwardRef<
   HTMLDivElement,
   RatingRadioGroupProps
 >(({ className, label, hideStarsText, ...props }, ref) => {
-  const [value, setValue] = React.useState("1");
-  //   const starsText = React.useMemo(() => {
-  //     // Special case for 5 stars
-  //     if (value === "5") {
-  //       return "5 stars";
-  //     }
+  const [value, setValue] = useState("1");
+  const [clickedStar, setClickedStar] = useState<number | null>(null);
 
-  //     // For 1 to 4 stars, use a generic approach
-  //     return `${value} stars & up`;
-  //   }, [value]);
-  const rating = "4.5";
-  const starsText = (
-    <>
-      <span style={{ fontSize: "1.4em", marginRight: 8, color: "black" }}>
-        {rating}
-      </span>{" "}
-      12 reviews
-    </>
-  );
+  const starsText = React.useMemo(() => {
+    if (value === "5") {
+      return "5 stars";
+    }
+    return `${value} stars & up`;
+  }, [value]);
+
+  const handleStarClick = (starValue: number) => {
+    if (clickedStar === starValue) {
+      setClickedStar(null);
+      setValue(starValue.toString());
+    } else {
+      setClickedStar(starValue);
+      setValue(starValue.toString());
+    }
+  };
 
   return (
-    <div className={cn("items-center", className)}>
-      {!hideStarsText && (
-        <p className="text-medium text-default-400">{starsText}</p>
-      )}
+    <div className={cn("flex items-center gap-3", className)}>
       <RadioGroup
         ref={ref}
         value={value}
         {...props}
-        defaultValue="5"
+        defaultValue="1"
         orientation="horizontal"
         onValueChange={setValue}
       >
-        <RatingRadioItem value="1" />
-        <RatingRadioItem value="2" />
-        <RatingRadioItem value="3" />
-        <RatingRadioItem value="4" />
-        <RatingRadioItem value="5" />
+        {[1, 2, 3, 4, 5].map((star) => (
+          <RatingRadioItem
+            key={star}
+            value={star.toString()}
+            onClick={() => handleStarClick(star)}
+          />
+        ))}
       </RadioGroup>
       {label ? label : null}
+      {!hideStarsText && <p className="text-medium text-default-400">{starsText}</p>}
     </div>
   );
 });
