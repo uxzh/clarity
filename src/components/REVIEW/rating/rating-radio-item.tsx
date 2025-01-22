@@ -2,7 +2,7 @@
 
 import type { RadioProps } from "@nextui-org/react";
 
-import React from "react";
+import React, { useState } from "react";
 import {
   VisuallyHidden,
   useRadio,
@@ -23,6 +23,7 @@ const RatingRadioItem = React.forwardRef<HTMLInputElement, RadioProps>(
     } = useRadio(props);
 
     const groupContext = useRadioGroupContext();
+    const [isHalfStar, setIsHalfStar] = useState(false);
 
     const isSelected =
       isSelfSelected ||
@@ -41,6 +42,14 @@ const RatingRadioItem = React.forwardRef<HTMLInputElement, RadioProps>(
       }
     }, [size]);
 
+    const handleClick = () => {
+      if (isSelected) {
+        setIsHalfStar(!isHalfStar);
+      } else {
+        setIsHalfStar(false);
+      }
+    };
+
     const baseProps = getBaseProps();
 
     return (
@@ -50,22 +59,29 @@ const RatingRadioItem = React.forwardRef<HTMLInputElement, RadioProps>(
         className={cn(baseProps["className"], {
           "cursor-default": isReadOnly,
         })}
+        onClick={handleClick}
       >
         <VisuallyHidden>
           <input {...getInputProps()} />
         </VisuallyHidden>
-        <IconStar
-          className={cn(
-            "pointer-events-none transition-transform-colors",
-            isSelected ? "text-primary" : "text-default-600",
-            {
-              "ring-2 ring-focus ring-offset-2 ring-offset-content1":
-                isFocusVisible,
-              "group-data-[pressed=true]:scale-90": !isReadOnly,
-            }
-          )}
-          width={starWidth}
-        />
+        {isSelected ? (
+          isHalfStar ? (
+            <IconStarHalf
+              className="pointer-events-none transition-transform-colors text-primary"
+              width={starWidth}
+            />
+          ) : (
+            <IconStarFilled
+              className="pointer-events-none transition-transform-colors text-primary"
+              width={starWidth}
+            />
+          )
+        ) : (
+          <IconStar
+            className="pointer-events-none transition-transform-colors text-default-600"
+            width={starWidth}
+          />
+        )}
       </Component>
     );
   }
