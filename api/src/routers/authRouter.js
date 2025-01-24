@@ -6,25 +6,25 @@ const loginSchema = require('../middleware/validation/schemas/loginSchema');
 const validate = require('../middleware/validation/validate');
 
 router.post('/signup',
-  validate(signupSchema),
-  AuthController.signup
+    validate(signupSchema),
+    AuthController.signup
 );
 
 router.post('/login',
-  validate(loginSchema),
-  AuthController.login
+    validate(loginSchema),
+    AuthController.login
 );
 
 router.get('/verify-email/:token',
-  AuthController.verifyEmail
+    AuthController.verifyEmail
 );
 
 router.post('/signup/google',
-  AuthController.signupGoogle
+    AuthController.signupGoogle
 );
 
 router.post('/login/google',
-  AuthController.loginGoogle
+    AuthController.loginGoogle
 );
 
 module.exports = router;

@@ -4,7 +4,56 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="76a37aa3-5070-499e-b53d-6617c672e14e" name="Changes" comment="Implemented a solution in case the user is not authorized and clicks on the button &quot;Write a Review&quot;, the modal authorization window is displayed" />
+    <list default="true" id="76a37aa3-5070-499e-b53d-6617c672e14e" name="Changes" comment="Implemented a solution in case the user is not authorized and clicks on the button &quot;Write a Review&quot;, the modal authorization window is displayed">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/app.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/config/db.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/config/db.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/config/jwt.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/config/jwt.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/controllers/adminController.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/controllers/adminController.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/controllers/authController.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/controllers/authController.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/controllers/cardsController.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/controllers/cardsController.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/controllers/repliesController.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/controllers/repliesController.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/controllers/reviewsController.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/controllers/reviewsController.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/controllers/usersController.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/controllers/usersController.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/controllers/utils.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/controllers/utils.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/dao/cardsDAO.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/dao/cardsDAO.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/dao/likesDAO.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/dao/likesDAO.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/dao/repliesDAO.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/dao/repliesDAO.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/dao/reviewsDAO.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/dao/reviewsDAO.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/dao/usersDAO.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/dao/usersDAO.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/lib/connectToDB.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/lib/connectToDB.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/lib/const.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/lib/const.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/lib/models.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/lib/models.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/lib/modelsToDAO.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/lib/modelsToDAO.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/lib/services/mailService.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/lib/services/mailService.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/lib/services/templates.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/lib/services/templates.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/lib/utils/prepareCardsFile.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/lib/utils/prepareCardsFile.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/lib/verifyGoogleToken.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/lib/verifyGoogleToken.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/middleware/auth.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/middleware/auth.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/middleware/cacheHeaders.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/middleware/cacheHeaders.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/middleware/permissions.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/middleware/permissions.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/middleware/validation/schemas/cardSchema.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/middleware/validation/schemas/cardSchema.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/middleware/validation/schemas/likeSchema.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/middleware/validation/schemas/likeSchema.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/middleware/validation/schemas/loginSchema.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/middleware/validation/schemas/loginSchema.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/middleware/validation/schemas/replySchema.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/middleware/validation/schemas/replySchema.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/middleware/validation/schemas/reviewSchema.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/middleware/validation/schemas/reviewSchema.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/middleware/validation/schemas/signupSchema.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/middleware/validation/schemas/signupSchema.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/middleware/validation/schemas/userSchema.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/middleware/validation/schemas/userSchema.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/middleware/validation/schemas/usernameSchema.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/middleware/validation/schemas/usernameSchema.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/middleware/validation/validate.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/middleware/validation/validate.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/routers/adminRouter.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/routers/adminRouter.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/routers/apiRouter.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/routers/apiRouter.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/routers/authRouter.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/routers/authRouter.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/routers/cardsRouter.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/routers/cardsRouter.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/routers/repliesRouter.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/routers/repliesRouter.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/routers/reviewsRouter.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/routers/reviewsRouter.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/routers/usersRouter.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/routers/usersRouter.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ui/reviews/user_review_cards/card-review.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/reviews/user_review_cards/card-review.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ui/reviews/user_review_cards/review.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/reviews/user_review_cards/review.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/api.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/api.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/adminPanel.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/adminPanel.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/cardPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/cardPage.js" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -13,7 +62,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="changing-button-state" />
+        <entry key="$PROJECT_DIR$" value="dev" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -53,20 +102,24 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">{
-  "keyToString": {
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "SONARLINT_PRECOMMIT_ANALYSIS": "true",
-    "git-widget-placeholder": "feature-branch",
-    "last_opened_file_path": "/Users/mbard/Documents/01 Projects/clarity/api",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "npm.dev.executor": "Run",
-    "ts.external.directory.path": "/Users/mbard/Documents/01 Projects/clarity/node_modules/typescript/lib",
-    "vue.rearranger.settings.migration": "true"
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;SONARLINT_PRECOMMIT_ANALYSIS&quot;: &quot;true&quot;,
+    &quot;dart.analysis.tool.window.visible&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;replies&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/mbard/Documents/01Projects/clarity&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;npm.dev.executor&quot;: &quot;Run&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;show.migrate.to.gradle.popup&quot;: &quot;false&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;/Users/mbard/Documents/01Projects/clarity/node_modules/typescript/lib&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
   <component name="RecentsManager">
@@ -74,6 +127,7 @@
       <recent name="$PROJECT_DIR$/api" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/components/ui/replies" />
       <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/src" />
     </key>
@@ -98,11 +152,16 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-d6986cc7102b-e768b9ed790e-JavaScript-WS-243.21565.180" />
+        <option value="bundled-jdk-9823dce3aa75-125ca727e0f0-intellij.indexing.shared.core-IU-243.23654.153" />
+        <option value="bundled-js-predefined-d6986cc7102b-822845ee3bb5-JavaScript-IU-243.23654.153" />
       </set>
     </attachedChunks>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="SwiftWorkspaceSettings">
+    <option name="detectedToolchain" value="true" />
+    <option name="toolchainPathValue" value="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain" />
+  </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="76a37aa3-5070-499e-b53d-6617c672e14e" name="Changes" comment="" />
@@ -112,6 +171,12 @@
       <updated>1736815550330</updated>
       <workItem from="1736815552310" duration="550000" />
       <workItem from="1736816117267" duration="6039000" />
+      <workItem from="1737683766304" duration="68000" />
+      <workItem from="1737683853696" duration="198000" />
+      <workItem from="1737684058957" duration="269000" />
+      <workItem from="1737684347503" duration="190000" />
+      <workItem from="1737684557487" duration="791000" />
+      <workItem from="1737685461598" duration="8385000" />
     </task>
     <servers />
   </component>

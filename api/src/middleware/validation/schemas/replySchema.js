@@ -1,15 +1,15 @@
 const yup = require("yup");
 
 const schema = (isCreate) => yup.object().shape({
-  _id: yup.string().test('id', 'ID is required', (value) => isCreate || value),
+    _id: yup.string().test('id', 'ID is required', (value) => isCreate || value),
 
-  reviewId: yup.string().required('Review ID is required'),
+    reviewId: yup.string().required('Review ID is required'),
 
-  content: yup.string().required('Content is required'),
+    content: yup.string().required('Content is required'),
 
 });
 
 module.exports = {
-  createReplySchema: schema(true),
-  updateReplySchema: schema(false),
+    createReplySchema: schema(true),
+    updateReplySchema: schema(false),
 }
