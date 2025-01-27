@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { IconStar, IconStarFilled, IconStarHalf } from "@tabler/icons-react";
+import { IconStar, IconStarFilled, IconStarHalf, IconStarHalfFilled } from "@tabler/icons-react";
 import { RadioGroup } from "@nextui-org/react";
 import { cn } from "./cn";
 
 const StarRating = ({ classNames, ...props }) => {
   const [ratings, setRatings] = useState([0, 0, 0, 0, 0]);
+  const formValue = ratings.reduce((a, b) => a + b, 0);
 
   const handleStarClick = (index) => {
     const newRatings = [...ratings];
@@ -48,7 +49,7 @@ const StarRating = ({ classNames, ...props }) => {
       );
     } else if (rating === 0.5) {
       return (
-        <IconStarHalf
+        <IconStarHalfFilled
           className="text-primary cursor-pointer"
           size={24}
           fill="currentColor"
@@ -76,12 +77,14 @@ const StarRating = ({ classNames, ...props }) => {
       }}
       orientation="horizontal"
       size="lg"
+      value={formValue}
     >
       {ratings.map((rating, index) => (
         <div key={index} className="p-0.5">
           {renderStar(rating, index)}
         </div>
       ))}
+      <input type="hidden" name="rating" value={formValue} />
     </RadioGroup>
   );
 };

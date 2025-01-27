@@ -24,6 +24,7 @@ router.put('/:id',
 );
 
 router.delete('/:id',
+    Permissions.isAdmin,
     CardsController.deleteCard
 );
 
