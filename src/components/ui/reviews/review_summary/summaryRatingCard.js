@@ -15,7 +15,6 @@ export default function Component({reviews, cardName}) {
         let halfRatingCount = 0;
         let halfRatingTotal = 0;
         reviews.forEach((review) => {
-            // ratingCounts[review.rating]++;
             totalRating += review.rating;
             if (review.rating % 1 !== 0) {
                 halfRatingCount++;
