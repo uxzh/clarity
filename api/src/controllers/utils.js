@@ -3,17 +3,20 @@ const LikesDAO = require("../dao/likesDAO");
 const ReviewsDAO = require("../dao/reviewsDAO");
 
 const getReviewsByCardIdWithLikes = async ({
-                                               id,
-                                               user,
-                                               perPage,
-                                               page
-                                           }) => {
+    id,
+    user,
+    sort = "createdAt",
+    sortDirection = -1,
+    perPage,
+    page
+}) => {
     try {
         // TODO: optimize db queries
         const reviews = await ReviewsDAO.getManyByField({
             field: "cardId",
             value: new ObjectId(id),
-            sort: "createdAt",
+            sort,
+            sortDirection,
             page,
             perPage,
         });
