@@ -1,7 +1,6 @@
 const {ObjectId} = require("mongodb");
 const {models} = require("../lib/models");
 const {getMongoClient, getDB} = require("../lib/connectToDB");
-const {is} = require("../middleware/validation/schemas/signupSchema");
 
 let reviews;
 
@@ -193,6 +192,7 @@ class ReviewsDAO {
                                     field,
                                     value,
                                     sort = "createdAt",
+                                    sortDirection = -1,
                                     page = 0,
                                     perPage = 20,
                                 } = {}) {
@@ -230,7 +230,7 @@ class ReviewsDAO {
                     }
                 },
                 {
-                    $sort: {[sort]: -1}
+                    $sort: {[sort]: sortDirection}
                 },
                 {
                     $skip: perPage * page

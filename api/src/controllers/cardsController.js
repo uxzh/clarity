@@ -65,6 +65,8 @@ class CardsController {
             const reviews = await getReviewsByCardIdWithLikes({
                 id,
                 user: req.user,
+                sort: req.query.sort,
+                sortDirection: parseInt(req.query.sortDirection) || -1,
                 perPage: parseInt(req.query.perPage) || 20,
                 page: parseInt(req.query.page) || 0,
             });
