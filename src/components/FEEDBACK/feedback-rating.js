@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { IconStar, IconStarFilled, IconStarHalf } from "@tabler/icons-react";
+import { IconStar, IconStarFilled, IconStarHalf, IconStarHalfFilled } from "@tabler/icons-react";
 import { RadioGroup } from "@nextui-org/react";
 import { cn } from "./cn";
 
@@ -48,7 +48,7 @@ const StarRating = ({ classNames, ...props }) => {
       );
     } else if (rating === 0.5) {
       return (
-        <IconStarHalf
+        <IconStarHalfFilled
           className="text-primary cursor-pointer"
           size={24}
           fill="currentColor"
