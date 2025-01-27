@@ -12,10 +12,22 @@ export default function Component({reviews, cardName}) {
         };
 
         let totalRating = 0;
+        let halfRatingCount = 0;
+        let halfRatingTotal = 0;
         reviews.forEach((review) => {
-            ratingCounts[review.rating]++;
+            // ratingCounts[review.rating]++;
             totalRating += review.rating;
+            if (review.rating % 1 !== 0) {
+                halfRatingCount++;
+                halfRatingTotal += review.rating;
+            } else {
+                ratingCounts[review.rating]++;
+            }
         });
+        if (halfRatingCount > 0) {
+            const RoundedHalfRating = Math.round(halfRatingTotal / halfRatingCount);
+            ratingCounts[RoundedHalfRating] += halfRatingCount;
+        }
 
         const totalCount = reviews.length;
         const avgRating =

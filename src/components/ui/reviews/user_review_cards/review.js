@@ -19,7 +19,7 @@ const formatDate = (dateString) => {
 const StarRating = ({rating}) => (
     <div className="flex items-center gap-1">
         {[...Array(5)].map((_, i) => {
-            if (i < rating) {
+            if (i <= rating - 1) {
                 return (
                     <IconStarFilled
                         key={i}
