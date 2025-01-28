@@ -30,7 +30,7 @@ class EvalScore {
         'averageRating': {
           '$avg': '$reviews.rating'
         }, 
-        'reviewCount': {
+        'reviewStaticCount': {
           '$size': '$reviews'
         }
       }
@@ -42,7 +42,7 @@ class EvalScore {
             '$averageRating', ROUND_TO
           ]
         }, 
-        'reviewCount': 1
+        'reviewStaticCount': 1
       }
     }, 
     {
@@ -56,11 +56,11 @@ class EvalScore {
                     {
                       '$multiply': [INITIAL_BELIEF, INITIAL_BELIEF_WEIGHT]
                     }, {
-                      '$multiply': ['$averageRating', '$reviewCount']
+                      '$multiply': ['$averageRating', '$reviewStaticCount']
                     }
                   ]
                 }, {
-                  '$add': [INITIAL_BELIEF_WEIGHT, '$reviewCount']
+                  '$add': [INITIAL_BELIEF_WEIGHT, '$reviewStaticCount']
                 }
               ]
             }, 4
@@ -73,7 +73,7 @@ class EvalScore {
         '_id': 1,
         'averageRating': 1, 
         'bayesianRating': 1, 
-        'reviewCount': 1
+        'reviewStaticCount': 1
       }
     }, 
     {
