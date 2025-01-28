@@ -6,7 +6,19 @@ class Api {
     // cards
     getTopCards = async () => await this.axios.get(`/cards/top-cards`);
 
-    getCard = async (id) => await this.axios.get(`/cards/${id}`);
+    getCard = async ({
+        id,
+        page = 0,
+        perPage = 20,
+    }) => await this.axios.get(`/cards/${id}?page=${page}&perPage=${perPage}`);
+
+    getReviewsByCard = async ({
+        cardId,
+        sort = "createAt",
+        sortDirection = -1,
+        page = 0,
+        perPage = 20
+    }) => await this.axios.get(`/cards/${cardId}/reviews?page=${page}&perPage=${perPage}&sort=${sort}&sortDirection=${sortDirection}`);
 
     getCards = async ({page = 0, perPage = 20, search = ""}) =>
         await this.axios.get(
