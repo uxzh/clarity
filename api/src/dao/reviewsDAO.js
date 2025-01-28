@@ -202,41 +202,67 @@ class ReviewsDAO {
                     $match: {[field]: new ObjectId(value)}
                 },
                 {
-                    $lookup: {
-                        from: models.users,
-                        localField: "userId",
-                        foreignField: "_id",
-                        as: "user"
+                    $facet: {
+                        reviews: [
+                            {
+                                $lookup: {
+                                    from: models.users,
+                                    localField: "userId",
+                                    foreignField: "_id",
+                                    as: "user"
+                                }
+                            },
+                            {
+                                $unwind: "$user"
+                            },
+                            {
+                                $project: {
+                                    _id: 1,
+                                    cardId: 1,
+                                    userId: 1,
+                                    rating: 1,
+                                    title: 1,
+                                    content: 1,
+                                    createdAt: 1,
+                                    updatedAt: 1,
+                                    isHidden: 1,
+                                    "user.username": 1,
+                                    "user.avatar": 1,
+                                    isAdminReview: 1,
+                                    displayedUser: 1
+                                }
+                            },
+                            {
+                                $sort: {[sort]: sortDirection}
+                            },
+                            {
+                                $skip: perPage * page
+                            },
+                            {
+                                $limit: perPage
+                            }
+                        ],
+                        totalReviewCount: [
+                            {
+                                $count: "count"
+                            }
+                        ],
+                        ratingDistribution: [
+                            {
+                                $group: {
+                                    _id: "$rating",
+                                    count: { $sum: 1 }
+                                }
+                            }
+                        ]
                     }
-                },
-                {
-                    $unwind: "$user"
                 },
                 {
                     $project: {
-                        _id: 1,
-                        cardId: 1,
-                        userId: 1,
-                        rating: 1,
-                        title: 1,
-                        content: 1,
-                        createdAt: 1,
-                        updatedAt: 1,
-                        isHidden: 1,
-                        "user.username": 1,
-                        "user.avatar": 1,
-                        isAdminReview: 1,
-                        displayedUser: 1
+                        reviews: 1,
+                        totalReviewCount: { $arrayElemAt: ["$totalReviewCount.count", 0] },
+                        ratingDistribution: 1
                     }
-                },
-                {
-                    $sort: {[sort]: sortDirection}
-                },
-                {
-                    $skip: perPage * page
-                },
-                {
-                    $limit: perPage
                 }
             ]).toArray();
 

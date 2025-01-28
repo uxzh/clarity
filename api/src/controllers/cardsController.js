@@ -12,13 +12,17 @@ class CardsController {
             if (!card) {
                 return res.status(404).send({error: "Card not found"});
             }
-            const reviews = await getReviewsByCardIdWithLikes({
+            const {reviews, totalReviewCount, ratingDistribution} = await getReviewsByCardIdWithLikes({
                 id,
                 user: req.user,
-                perPage: 20,
-                page: 0,
+                sort: req.query.sort,
+                sortDirection: parseInt(req.query.sortDirection) || -1,
+                perPage: parseInt(req.query.perPage) || 20,
+                page: parseInt(req.query.page) || 0,
             });
             card.reviews = reviews;
+            card.totalReviewCount = totalReviewCount;
+            card.ratingDistribution = ratingDistribution;
             res.status(200).send(card);
         } catch (e) {
             console.error(e)
@@ -62,7 +66,7 @@ class CardsController {
     static async getReviewsByCard(req, res) {
         try {
             const {id} = req.params;
-            const reviews = await getReviewsByCardIdWithLikes({
+            const {reviews} = await getReviewsByCardIdWithLikes({
                 id,
                 user: req.user,
                 sort: req.query.sort,

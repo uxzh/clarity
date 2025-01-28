@@ -12,14 +12,14 @@ const getReviewsByCardIdWithLikes = async ({
 }) => {
     try {
         // TODO: optimize db queries
-        const reviews = await ReviewsDAO.getManyByField({
+        const {reviews, totalReviewCount, ratingDistribution} = (await ReviewsDAO.getManyByField({
             field: "cardId",
             value: new ObjectId(id),
             sort,
             sortDirection,
             page,
             perPage,
-        });
+        }))[0];
         const reviewIds = reviews.map((review) => review._id);
         const likes = await LikesDAO.getManyCountByTargetIds(reviewIds, 'review');
         const likesMap = likes.reduce((acc, like) => {
@@ -49,7 +49,11 @@ const getReviewsByCardIdWithLikes = async ({
             review.user = {...review.displayedUser};
             delete review.displayedUser;
         });
-        return reviews;
+        return {
+            reviews,
+            totalReviewCount,
+            ratingDistribution
+        }
     } catch (e) {
         console.error(e)
         return {error: "Error fetching reviews"};
