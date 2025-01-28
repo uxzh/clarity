@@ -14,7 +14,6 @@ import {
 
 import FeedbackRating from "./feedback-rating";
 import { AuthContext } from "../../contexts/AuthContext";
-import { ratingToNumber } from "./feedback-rating-item";
 
 export default function FeedbackModal({
   isOpen,
@@ -43,7 +42,7 @@ export default function FeedbackModal({
       const data = {
         title: formData.get("title"),
         content: formData.get("content"),
-        rating: ratingToNumber(formData.get("rating")),
+        rating: Number(formData.get("rating")),
         cardId: cardId,
       };
 
