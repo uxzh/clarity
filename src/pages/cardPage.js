@@ -11,20 +11,19 @@ import FeedbackModal from "../components/FEEDBACK/feedbackModal";
 import ReviewSearch from "./searchForCard";
 import {AuthContext} from "../contexts/AuthContext";
 
+const REVIEWS_PER_PAGE = 20;
+
 function Review() {
     const {isOpen, onOpen, onOpenChange} = useDisclosure();
     const location = useLocation();
     const navigate = useNavigate();
     const [cardData, setCardData] = useState(null);
     const [reviews, setReviews] = useState([]);
-    const [selectedFilter, setSelectedFilter] = useState(
-        new Set(["most_recent"])
-    );
+    const [selectedSorting, setSelectedSorting] = useState("most_recent")
     const [selectedTab, setSelectedTab] = useState("reviews");
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
-    const reviewsPerPage = 5;
     const pollingInterval = useRef(null);
     const [lastUpdateTime, setLastUpdateTime] = useState(Date.now());
 
@@ -39,12 +38,16 @@ function Review() {
         }
 
         try {
-            const {data: selectedCard} = await api.getCard(cardId);
+            const {data: selectedCard} = await api.getCard({
+                id: cardId,
+                page: 0,
+                perPage: REVIEWS_PER_PAGE
+            });
 
             setReviews((prevReviews) => {
                 const newReviews = selectedCard.reviews || [];
                 if (JSON.stringify(prevReviews) !== JSON.stringify(newReviews)) {
-                    return newReviews;
+                    return newReviews
                 }
                 return prevReviews;
             });
@@ -74,18 +77,20 @@ function Review() {
         fetchData();
     }, [fetchData]);
 
+    // TODO: remove polling and fix updating state on adding or deleting review
+    
     // Setup polling
-    useEffect(() => {
-        if (!cardId) return;
+    // useEffect(() => {
+    //     if (!cardId) return;
 
-        pollingInterval.current = setInterval(fetchData, 5000);
+    //     pollingInterval.current = setInterval(fetchData, 5000);
 
-        return () => {
-            if (pollingInterval.current) {
-                clearInterval(pollingInterval.current);
-            }
-        };
-    }, [cardId, fetchData]);
+    //     return () => {
+    //         if (pollingInterval.current) {
+    //             clearInterval(pollingInterval.current);
+    //         }
+    //     };
+    // }, [cardId, fetchData]);
 
     // Handle visibility change
     useEffect(() => {
@@ -99,7 +104,7 @@ function Review() {
                 if (pollingInterval.current) {
                     clearInterval(pollingInterval.current);
                 }
-                pollingInterval.current = setInterval(fetchData, 5000);
+                // pollingInterval.current = setInterval(fetchData, 5000);
             }
         };
 
@@ -123,31 +128,68 @@ function Review() {
         [resetPolling]
     );
 
-    const filteredReviews = useMemo(() => {
+    const sortedFetchedReviews = useMemo(() => {
         const reviewsList = [...reviews];
 
-        if (selectedFilter.has("most_recent")) {
-            reviewsList.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-        } else if (selectedFilter.has("highest_rated")) {
-            reviewsList.sort((a, b) => b.rating - a.rating);
-        } else if (selectedFilter.has("lowest_rated")) {
-            reviewsList.sort((a, b) => a.rating - b.rating);
+        switch (selectedSorting) {
+            case "most_recent":
+                reviewsList.sort((a, b) => new Date(b?.createdAt) - new Date(a?.createdAt));
+                break;
+            case "highest_rating":
+                reviewsList.sort((a, b) => b?.rating - a?.rating);
+                break;
+            case "lowest_rating":
+                reviewsList.sort((a, b) => a?.rating - b?.rating);
+                break;
+            default:
+                reviewsList.sort((a, b) => new Date(b?.createdAt) - new Date(a?.createdAt));
+        }
+        return reviewsList;
+    }, [reviews, selectedSorting]);
+
+    const fetchSortedReviews = useCallback(async () => {
+        try {
+            let sorting;
+            let sortDirection;
+            switch (selectedSorting) {
+                case "most_recent":
+                    sorting = "createdAt";
+                    sortDirection = -1;
+                    break;
+                case "highest_rating":
+                    sorting = "rating";
+                    sortDirection = -1;
+                    break;
+                case "lowest_rating":
+                    sorting = "rating";
+                    sortDirection = 1;
+                    break;
+                default:
+                    console.log("default")
+                    sorting = "createdAt";
+                    sortDirection = -1;
+            }
+            const {data} = await api.getReviewsByCard({
+                cardId,
+                sort: sorting,
+                sortDirection,
+                page: currentPage - 1,
+                perPage: REVIEWS_PER_PAGE
+            })
+            
+            setReviews(data);
+        } catch (error) {
+            setReviews([]);
+            console.error("Error fetching reviews:", error);
         }
 
-        return reviewsList;
-    }, [reviews, selectedFilter]);
+    }, [selectedSorting, api, cardId, currentPage]);
 
-    const paginatedReviews = useMemo(() => {
-        const startIndex = (currentPage - 1) * reviewsPerPage;
-        const endIndex = startIndex + reviewsPerPage;
-        return filteredReviews.slice(startIndex, endIndex);
-    }, [currentPage, filteredReviews]);
-
-    const averageRating = useMemo(() => {
-        if (reviews.length === 0) return 0;
-        const sum = reviews.reduce((acc, review) => acc + review.rating, 0);
-        return (sum / reviews.length).toFixed(1);
-    }, [reviews]);
+    useEffect(() => {
+        // if all reviews are fetched, no need to refetch
+        if (reviews.length === cardData?.totalReviewCount) return
+        fetchSortedReviews();
+    }, [selectedSorting, fetchSortedReviews, currentPage, cardData?.totalReviewCount, reviews.length]);
 
     const handleWriteReview = useCallback(() => {
         onOpen();
@@ -159,7 +201,10 @@ function Review() {
 
     const handleSelectionChange = useCallback((keys) => {
         if (keys.size === 0) return;
-        setSelectedFilter(keys);
+        const newSorting = keys.values().next().value;
+        setSelectedSorting(newSorting);
+        // on change sorting reset pagination
+        setCurrentPage(1);
     }, []);
 
     const handleTabChange = useCallback((key) => {
@@ -190,17 +235,18 @@ function Review() {
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     <section className="lg:col-span-2 lg:mt-6 px-2 order-2 lg:order-1">
                         <ReviewsSection
-                            reviews={paginatedReviews}
+                            reviews={sortedFetchedReviews}
                             handleWriteReview={handleWriteReview}
                             cardName={cardData.cardName}
-                            selectedFilter={selectedFilter}
+                            selectedFilter={new Set([selectedSorting])}
                             handleSelectionChange={handleSelectionChange}
                             handleGoBack={handleGoBack}
                             reviewFromTheWeb={cardData.reviewFromTheWeb}
                             currentPage={currentPage}
-                            reviewsPerPage={reviewsPerPage}
+                            setCurrentPage={setCurrentPage}
+                            reviewsPerPage={REVIEWS_PER_PAGE}
                             handlePageChange={handlePageChange}
-                            totalReviews={filteredReviews.length}
+                            totalReviewCount={cardData?.totalReviewCount}
                             lastUpdateTime={lastUpdateTime}
                         />
                     </section>
@@ -238,8 +284,6 @@ function Review() {
                                     selectedTab={selectedTab}
                                     handleTabChange={handleTabChange}
                                     cardData={cardData}
-                                    reviews={reviews}
-                                    averageRating={averageRating}
                                 />
                             </div>
                         </Card>

@@ -9,19 +9,17 @@ const CardDetails = ({
   selectedTab,
   handleTabChange,
   cardData,
-  averageRating,
-  reviews,
 }) => {
   const containerRef = useRef(null);
   const resizeObserverRef = useRef(null);
 
   useEffect(() => {
     const handleResize = (entries) => {
-      for (let entry of entries) {
-        if (process.env.NODE_ENV === 'development') {
-          console.log("Resized:", entry.target);
-        }
-      }
+      // for (let entry of entries) {
+      //   if (process.env.NODE_ENV === 'development') {
+      //     console.log("Resized:", entry.target);
+      //   }
+      // }
     };
 
     resizeObserverRef.current = new ResizeObserver(handleResize);
@@ -55,7 +53,11 @@ const CardDetails = ({
 
       <div className="mt-4">
         {selectedTab === "reviews" && (
-          <Reviews reviews={reviews} cardName={cardData.cardName} />
+          <Reviews
+            ratingDistribution={cardData.ratingDistribution}
+            cardName={cardData.cardName}
+            totalReviewCount={cardData.totalReviewCount}
+          />
         )}
 
         {selectedTab === "cashback" && (
