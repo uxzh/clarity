@@ -18,7 +18,6 @@ class RepliesDAO {
                                reviewId,
                                userId,
                                content,
-                               parentReplyId = null,
                                createdAt = new Date(),
                                updatedAt = new Date(),
                            }) {
@@ -26,7 +25,6 @@ class RepliesDAO {
             return await replies.insertOne({
                 reviewId: new ObjectId(reviewId),
                 userId: new ObjectId(userId),
-                parentReplyId: parentReplyId ? new ObjectId(parentReplyId) : null,
                 content,
                 createdAt,
                 updatedAt,

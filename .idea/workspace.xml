@@ -5,54 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="76a37aa3-5070-499e-b53d-6617c672e14e" name="Changes" comment="Implemented a solution in case the user is not authorized and clicks on the button &quot;Write a Review&quot;, the modal authorization window is displayed">
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_2025-01-17,_23_15_[Changes]1/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_2025-01-17__23_15__Changes_1.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/config/db.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/config/db.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/config/jwt.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/config/jwt.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/controllers/adminController.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/controllers/adminController.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/controllers/authController.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/controllers/authController.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/controllers/cardsController.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/controllers/cardsController.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/controllers/repliesController.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/controllers/repliesController.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/controllers/reviewsController.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/controllers/reviewsController.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/controllers/usersController.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/controllers/usersController.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/controllers/utils.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/controllers/utils.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/dao/cardsDAO.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/dao/cardsDAO.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/dao/likesDAO.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/dao/likesDAO.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api/src/dao/repliesDAO.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/dao/repliesDAO.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/dao/reviewsDAO.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/dao/reviewsDAO.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/dao/usersDAO.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/dao/usersDAO.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/lib/connectToDB.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/lib/connectToDB.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/lib/const.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/lib/const.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/lib/models.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/lib/models.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/lib/modelsToDAO.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/lib/modelsToDAO.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/lib/services/mailService.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/lib/services/mailService.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/lib/services/templates.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/lib/services/templates.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/lib/utils/prepareCardsFile.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/lib/utils/prepareCardsFile.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/lib/verifyGoogleToken.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/lib/verifyGoogleToken.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/middleware/auth.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/middleware/auth.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/middleware/cacheHeaders.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/middleware/cacheHeaders.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/middleware/permissions.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/middleware/permissions.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/middleware/validation/schemas/cardSchema.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/middleware/validation/schemas/cardSchema.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/middleware/validation/schemas/likeSchema.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/middleware/validation/schemas/likeSchema.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/middleware/validation/schemas/loginSchema.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/middleware/validation/schemas/loginSchema.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/middleware/validation/schemas/replySchema.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/middleware/validation/schemas/replySchema.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/middleware/validation/schemas/reviewSchema.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/middleware/validation/schemas/reviewSchema.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/middleware/validation/schemas/signupSchema.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/middleware/validation/schemas/signupSchema.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/middleware/validation/schemas/userSchema.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/middleware/validation/schemas/userSchema.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/middleware/validation/schemas/usernameSchema.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/middleware/validation/schemas/usernameSchema.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/middleware/validation/validate.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/middleware/validation/validate.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/routers/adminRouter.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/routers/adminRouter.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/routers/apiRouter.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/routers/apiRouter.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/routers/authRouter.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/routers/authRouter.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/routers/cardsRouter.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/routers/cardsRouter.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/routers/repliesRouter.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/routers/repliesRouter.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/routers/reviewsRouter.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/routers/reviewsRouter.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/routers/usersRouter.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/routers/usersRouter.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ui/replies/CreateReplyForm.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ui/replies/RepliesList.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/replies/RepliesList.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ui/replies/Reply.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/replies/Reply.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ui/replies/ReviewComponent.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ui/replies/ReviewsList.tsx" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/ui/reviews/user_review_cards/card-review.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/reviews/user_review_cards/card-review.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/ui/reviews/user_review_cards/review.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/reviews/user_review_cards/review.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/api.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/api.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/adminPanel.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/adminPanel.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/cardPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/cardPage.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -68,9 +31,13 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
+  &quot;history&quot;: [
+    {
+      &quot;state&quot;: &quot;OPEN&quot;
+    }
+  ],
   &quot;lastFilter&quot;: {
-    &quot;state&quot;: &quot;OPEN&quot;,
-    &quot;assignee&quot;: &quot;Zu9zwan9&quot;
+    &quot;state&quot;: &quot;OPEN&quot;
   }
 }</component>
   <component name="GithubPullRequestsUISettings">{
@@ -109,13 +76,16 @@
     &quot;dart.analysis.tool.window.visible&quot;: &quot;false&quot;,
     &quot;git-widget-placeholder&quot;: &quot;replies&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/mbard/Documents/01Projects/clarity&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/mbard/Documents/01Projects/clarity/src/components/ui/replies&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
     &quot;npm.dev.executor&quot;: &quot;Run&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
     &quot;show.migrate.to.gradle.popup&quot;: &quot;false&quot;,
     &quot;ts.external.directory.path&quot;: &quot;/Users/mbard/Documents/01Projects/clarity/node_modules/typescript/lib&quot;,
@@ -124,6 +94,7 @@
 }</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/components/ui/replies" />
       <recent name="$PROJECT_DIR$/api" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
@@ -176,7 +147,11 @@
       <workItem from="1737684058957" duration="269000" />
       <workItem from="1737684347503" duration="190000" />
       <workItem from="1737684557487" duration="791000" />
-      <workItem from="1737685461598" duration="8385000" />
+      <workItem from="1737685461598" duration="30481000" />
+      <workItem from="1737848175948" duration="4056000" />
+      <workItem from="1738002502473" duration="623000" />
+      <workItem from="1738160300026" duration="3196000" />
+      <workItem from="1738166882702" duration="4348000" />
     </task>
     <servers />
   </component>

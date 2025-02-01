@@ -27,5 +27,8 @@ router.get('/:id/replies',
     setCacheHeaders(300),
     RepliesController.getRepliesByReview
 );
-
+router.get('/review/:id',
+    setCacheHeaders(300),
+    RepliesController.getRepliesByReview
+);
 module.exports = router;
