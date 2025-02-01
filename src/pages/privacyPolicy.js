@@ -1,5 +1,6 @@
 import React from "react";
 import TopNavbar from "../components/navbar/activeNavbar";
+import SecondaryNavbar from "../components/navbar/secondaryNavbar";
 import Footer from "../components/footer/footer";
 import { Card, CardHeader, CardBody, CardFooter } from "@nextui-org/react";
 
@@ -7,6 +8,7 @@ const PrivacyPolicy = () => {
   return (
     <div>
       <TopNavbar />
+      <SecondaryNavbar />
       <div className="container mx-auto p-4 space-y-4">
         <Card>
           <CardHeader>
@@ -386,29 +388,11 @@ const PrivacyPolicy = () => {
               changes constitutes your acceptance of the new Agreement.
             </p>
           </CardBody>
-        </Card>
-        <Card>
-          <CardHeader>
-            <h2>12. Contact Information</h2>
-          </CardHeader>
-          <CardBody>
-            <p>
-              If you have any questions about this Agreement, please contact us
-              at:
-            </p>
-            <p>CardsClarity, Inc.</p>
-            <p>Email: cardsclarity@gmail.com</p>
-            <p>Phone: +1 (650) 4540709 - Dylan Bardsley (CEO)</p>
-            <p>Phone: +1 (347) 4706644 - Mark Leaf (CTO)</p>
-            <p>
-              By using the CardsClarity Platform, you acknowledge that you have
-              read, understood, and agree to be bound by this Agreement.
-            </p>
-          </CardBody>
           <CardFooter>
-            <p>Last updated: 08/20/2024</p>
+          <p>Last updated: 08/20/2024</p>
           </CardFooter>
         </Card>
+
       </div>
       <Footer />
     </div>

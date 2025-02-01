@@ -1,16 +1,18 @@
 import React from "react";
 import TopNavbar from "../components/navbar/activeNavbar";
+import SecondaryNavbar from "../components/navbar/secondaryNavbar";
 import Footer from "../components/footer/footer";
-import { Card, CardHeader, CardBody, CardFooter } from "@nextui-org/react";
+import { Card, CardHeader, CardBody, CardFooter, Navbar } from "@nextui-org/react";
 
 const LegalStuff = () => {
   return (
     <div>
       <TopNavbar />
+      <SecondaryNavbar />
       <div className="container mx-auto p-4 space-y-4">
         <Card>
           <CardHeader>
-            <h1>Legal Stuff</h1>
+            <h1>Terms Of Service</h1>
           </CardHeader>
           <CardBody>
             <p>

@@ -18,12 +18,8 @@ const navLinks = [
   //     href: "#",
   //   },
   {
-    name: "Legal Stuff",
-    href: "/legal-stuff",
-  },
-  {
-    name: "Privacy Policy",
-    href: "/privacy-policy",
+    name: "Privacy & Terms of Service",
+    href: "/overview",
   },
   {
     name: "Contact",
