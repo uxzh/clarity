@@ -3,9 +3,16 @@ import TopNavbar from "../components/navbar/activeNavbar";
 import SecondaryNavbar from "../components/navbar/secondaryNavbar";
 import Footer from "../components/footer/footer";
 import { Card, CardHeader, CardBody, CardFooter, Navbar } from "@nextui-org/react";
+import { motion } from "framer-motion";
 
 const FAQ = () => {
     return (
+        <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            trasition={{ duration: 0.3 }}
+        >
         <div>
             <TopNavbar />
             <SecondaryNavbar />
@@ -36,6 +43,7 @@ const FAQ = () => {
             </div>
             <Footer />
         </div>
+        </motion.div>
     );
 };
 
