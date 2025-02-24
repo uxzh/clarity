@@ -61,12 +61,43 @@ class RepliesDAO {
                                     perPage = 20,
                                 }) {
         try {
-            return await replies
-                .find({[field]: new ObjectId(value)})
-                .sort({[sort]: -1})
-                .skip(perPage * page)
-                .limit(perPage)
-                .toArray();
+            return await replies.aggregate([
+                {
+                    $match: {[field]: new ObjectId(value)}
+                },
+                {
+                    $lookup: {
+                        from: models.users,
+                        localField: "userId",
+                        foreignField: "_id",
+                        as: "user"
+                    }
+                },
+                {
+                    $unwind: "$user"
+                },
+                {
+                    $project: {
+                        _id: 1,
+                        reviewId: 1,
+                        userId: 1,
+                        content: 1,
+                        createdAt: 1,
+                        updatedAt: 1,
+                        "user.username": 1,
+                        "user.avatar": 1
+                    }
+                },
+                {
+                    $sort: {[sort]: -1}
+                },
+                {
+                    $skip: perPage * page
+                },
+                {
+                    $limit: perPage
+                }
+            ]).toArray();
         } catch (e) {
             console.error(`Unable to get replies: ${e}`);
             return {error: e};

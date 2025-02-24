@@ -3,7 +3,8 @@ import { User } from '@nextui-org/react';
 import { formatDate } from '../../../utils/dateFormatter';
 import { cn } from './cn';
 
-const Reply = ({ reply, user: author, title, content, rating, createdAt, ...props  }) => {
+const Reply = ({ reply, ...props  }) => {
+    const { user: author } = reply;
     return (
         <div className={cn("reply")}>
             <div className="reply-content">

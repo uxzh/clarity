@@ -84,7 +84,6 @@ class RepliesController {
 
     static async getRepliesByReview(req, res) {
         try {
-            const {id} = req.params;
             const replies = await RepliesDAO.getManyByField({
                 field: "reviewId",
                 value: id,
