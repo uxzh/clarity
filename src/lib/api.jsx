@@ -95,8 +95,21 @@ class Api {
             `/api/v1/replies/${reviewId}/replies/`
         );
 
-    createReply = async ({reviewId, content}) =>
-        await this.axios.post(`/replies`, {reviewId, content});
+    async createReply({ reviewId, content, parentReplyId = null }) {
+        return this.axios.post('/replies/', { reviewId, content, parentReplyId });
+    }
+    async likeReply(replyId) {
+        return this.axios.post(`/replies/${replyId}/like`);
+    }
+
+    async dislikeReply(replyId) {
+        return this.axios.post(`/replies/${replyId}/dislike`);
+    }
+
+    async deleteReplyLike(replyId) {
+        return this.axios.delete(`/replies/${replyId}/like`);
+
+}
 
     // admin
     getTotals = async () => await this.axios.get(`/admin/totals`);

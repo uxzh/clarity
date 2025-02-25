@@ -81,14 +81,6 @@ const CardReview = React.forwardRef(
         const canInteract =
             user?.isLoggedIn && !user?.isBlocked && user?.emailVerified;
 
-        // Debug logging to see full user object
-        // useEffect(() => {
-        //     if (process.env.NODE_ENV === 'development') {
-        //         console.log("Full user object:", user);
-        //         console.log("Full author object:", author);
-        //     }
-        // }, [user, author]);
-
         // Updated user comparison logic
         const isUserReview = Boolean(
             user?.isLoggedIn &&
@@ -96,22 +88,6 @@ const CardReview = React.forwardRef(
             (author?._id === user._id || review.userId === user._id)
         );
 
-        // Debug logging
-        // useEffect(() => {
-        //     if (user?.isLoggedIn) {
-        //         if (process.env.NODE_ENV === 'development') {
-        //             console.log("Review ownership check:", {
-        //                 userLoggedIn: user.isLoggedIn,
-        //                 userId: user._id,
-        //                 authorId: author?._id,
-        //                 reviewUserId: review.userId,
-        //                 isMatch: isUserReview,
-        //             });
-        //         }
-        //     }
-        // }, [user, author, review.userId, isUserReview]);
-
-        // Handle like/dislike action
         const handleLikeDislike = useCallback(
             (action) => {
                 if (!canInteract) {
@@ -378,7 +354,12 @@ const CardReview = React.forwardRef(
                         className
                     )}
                 >
-                    <RepliesList reviewId={_id} replies={replies} setReplies={setReplies} />
+                    <RepliesList
+                        reviewId={_id}
+                        replies={replies}
+                        setReplies={setReplies}
+                        canInteract={canInteract}
+                    />
                 </div>
             </>
         );

@@ -1,5 +1,4 @@
 require("dotenv").config();
-
 const app = require('./app');
 const UsersDAO = require('./src/dao/usersDAO');
 const CardsDAO = require('./src/dao/cardsDAO');
