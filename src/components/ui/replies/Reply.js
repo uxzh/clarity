@@ -163,10 +163,10 @@ const Reply = React.memo(({reply, canInteract, reviewId, setReplies, depth = 0})
             <div className={cn("rounded-medium bg-content1 p-4 shadow-small w-full")}>
                 <div className="flex items-start">
                     <User
-                        avatarProps={{src: user.avatar || '', size: "sm"}}
-                        name={user.username || "Anonymous"}
+                        avatarProps={{ src: author.avatar || '', size: "sm" }}
+                        name={author.username || "Anonymous"}
                         description={simplifiedDateFormat(createdAt)}
-                        classNames={{name: "text-sm font-medium", description: "text-xs text-gray-500"}}
+                        classNames={{ name: "text-sm font-medium", description: "text-xs text-gray-500" }}
                     />
                 </div>
                 <p className="mt-1 text-default-600 text-sm">{content}</p>
