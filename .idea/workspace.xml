@@ -4,19 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="76a37aa3-5070-499e-b53d-6617c672e14e" name="Changes" comment="Implemented a solution in case the user is not authorized and clicks on the button &quot;Write a Review&quot;, the modal authorization window is displayed">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/api/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/controllers/repliesController.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/controllers/repliesController.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/dao/repliesDAO.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/dao/repliesDAO.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/middleware/validation/schemas/replySchema.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/middleware/validation/schemas/replySchema.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/routers/repliesRouter.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/routers/repliesRouter.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ui/replies/RepliesList.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/replies/RepliesList.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ui/replies/Reply.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/replies/Reply.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ui/reviews/user_review_cards/card-review.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/reviews/user_review_cards/card-review.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/api.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/api.jsx" afterDir="false" />
-    </list>
+    <list default="true" id="76a37aa3-5070-499e-b53d-6617c672e14e" name="Changes" comment="Implemented a solution in case the user is not authorized and clicks on the button &quot;Write a Review&quot;, the modal authorization window is displayed" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -86,7 +74,7 @@
     "project.structure.last.edited": "Project",
     "project.structure.proportion": "0.0",
     "project.structure.side.proportion": "0.0",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "settings.editor.selected.configurable": "preferences.keymap",
     "show.migrate.to.gradle.popup": "false",
     "ts.external.directory.path": "/Users/mbard/Documents/01 Projects/clarity/node_modules/typescript/lib",
     "vue.rearranger.settings.migration": "true"
@@ -159,10 +147,23 @@
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Implemented toggle the &quot;Write a Review&quot; button state" />
     <MESSAGE value="Implemented a solution in case the user is not authorized and clicks on the button &quot;Write a Review&quot;, the modal authorization window is displayed" />
     <MESSAGE value="Merge remote-tracking branch 'origin/changing-button-state' into changing-button-state" />
     <option name="LAST_COMMIT_MESSAGE" value="Merge remote-tracking branch 'origin/changing-button-state' into changing-button-state" />
+    <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
+    <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
 </project>
