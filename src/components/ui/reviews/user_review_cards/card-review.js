@@ -13,7 +13,7 @@ import {cn} from "./cn";
 import Review from "./review";
 import {AuthContext} from "../../../../contexts/AuthContext";
 import Reply from "../../replies/Reply";
-import RepliesList from "../../replies/RepliesList"; // Replace RepliesList with Reply
+import RepliesList from "../../replies/RepliesList";
 
 const LikeDislikeButton = ({action, count, isActive, onPress, onHover}) => (
     <Button
