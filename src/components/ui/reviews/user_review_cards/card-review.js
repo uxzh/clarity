@@ -1,5 +1,5 @@
-import React, { useCallback, useContext, useEffect, useState } from "react";
-import { Button, Textarea, Tooltip } from "@nextui-org/react";
+import React, {useCallback, useContext, useEffect, useState} from "react";
+import {Button, Textarea, Tooltip} from "@nextui-org/react";
 import {
     IconCheck,
     IconMessage,
@@ -9,9 +9,9 @@ import {
     IconThumbUp,
     IconTrashX,
 } from "@tabler/icons-react";
-import { cn } from "./cn";
+import {cn} from "./cn";
 import Review from "./review";
-import { AuthContext } from "../../../../contexts/AuthContext";
+import {AuthContext} from "../../../../contexts/AuthContext";
 import Reply from "../../replies/Reply";
 import RepliesList from "../../replies/RepliesList"; // Replace RepliesList with Reply
 
@@ -116,7 +116,7 @@ const CardReview = React.forwardRef(
             const fetchReplies = async () => {
                 try {
                     console.log("Fetching replies for reviewId:", _id);
-                    const response = await api.getRepliesByReviewId({ reviewId: _id });
+                    const response = await api.getRepliesByReviewId({reviewId: _id});
                     console.log("Fetched replies:", response.data);
                     setReplies(response.data.reverse());
                 } catch (error) {
@@ -350,29 +350,28 @@ const CardReview = React.forwardRef(
                         />
                     ))}
                 </div>
-                    {showReplies && (
-                        <div className={cn("replies-list space-y-4 p-4", className)}>
-                            <RepliesList
-                                reviewId={_id}
-                                replies={replies}
-                                setReplies={setReplies}
-                                canInteract={canInteract}
-                            />
-                        </div>
-                    )}
-                    <Button
-                        variant="light"
-                        className="text-xs text-gray-500 p-0 min-w-0 pl-8"
-                        size="sm"
-                        onPress={toggleReplies}
-                    >
-                        View {replies.length} more {replies.length === 1 ? "reply" : "replies"}
-                    </Button>
+                {showReplies && (
+                    <div className={cn("replies-list space-y-4 p-4", className)}>
+                        <RepliesList
+                            reviewId={_id}
+                            replies={replies}
+                            setReplies={setReplies}
+                            canInteract={canInteract}
+                        />
+                    </div>
+                )}
+                <Button
+                    variant="light"
+                    className="text-xs text-gray-500 p-0 min-w-0 pl-8"
+                    size="sm"
+                    onPress={toggleReplies}
+                >
+                    View {replies.length} more {replies.length === 1 ? "reply" : "replies"}
+                </Button>
             </>
         );
     }
 );
-
 
 CardReview.displayName = "CardReview";
 
