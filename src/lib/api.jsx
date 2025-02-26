@@ -7,18 +7,18 @@ class Api {
     getTopCards = async () => await this.axios.get(`/cards/top-cards`);
 
     getCard = async ({
-        id,
-        page = 0,
-        perPage = 20,
-    }) => await this.axios.get(`/cards/${id}?page=${page}&perPage=${perPage}`);
+                         id,
+                         page = 0,
+                         perPage = 20,
+                     }) => await this.axios.get(`/cards/${id}?page=${page}&perPage=${perPage}`);
 
     getReviewsByCard = async ({
-        cardId,
-        sort = "createAt",
-        sortDirection = -1,
-        page = 0,
-        perPage = 20
-    }) => await this.axios.get(`/cards/${cardId}/reviews?page=${page}&perPage=${perPage}&sort=${sort}&sortDirection=${sortDirection}`);
+                                  cardId,
+                                  sort = "createAt",
+                                  sortDirection = -1,
+                                  page = 0,
+                                  perPage = 20
+                              }) => await this.axios.get(`/cards/${cardId}/reviews?page=${page}&perPage=${perPage}&sort=${sort}&sortDirection=${sortDirection}`);
 
     getCards = async ({page = 0, perPage = 20, search = ""}) =>
         await this.axios.get(
@@ -95,9 +95,10 @@ class Api {
             `/api/v1/replies/${reviewId}/replies/`
         );
 
-    async createReply({ reviewId, content, parentReplyId = null }) {
-        return this.axios.post('/replies/', { reviewId, content, parentReplyId });
+    async createReply({reviewId, content, parentReplyId = null}) {
+        return this.axios.post('/replies/', {reviewId, content, parentReplyId});
     }
+
     async likeReply(replyId) {
         return this.axios.post(`/replies/${replyId}/like`);
     }
@@ -109,7 +110,7 @@ class Api {
     async deleteReplyLike(replyId) {
         return this.axios.delete(`/replies/${replyId}/like`);
 
-}
+    }
 
     // admin
     getTotals = async () => await this.axios.get(`/admin/totals`);

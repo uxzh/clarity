@@ -1,6 +1,6 @@
-const { ObjectId } = require("mongodb");
-const { models } = require("../lib/models");
-const { getMongoClient, getDB } = require("../lib/connectToDB");
+const {ObjectId} = require("mongodb");
+const {models} = require("../lib/models");
+const {getMongoClient, getDB} = require("../lib/connectToDB");
 
 let replies;
 
@@ -24,7 +24,7 @@ class RepliesDAO {
             });
         } catch (e) {
             console.error(`Unable to create reply: ${e}`);
-            return { error: e };
+            return {error: e};
         }
     }
 
@@ -38,23 +38,23 @@ class RepliesDAO {
             };
             const parentReply = await this.getOneById(parentReplyId);
             if (!parentReply || parentReply.error) {
-                return { error: "Parent reply not found" };
+                return {error: "Parent reply not found"};
             }
             let topLevelId = parentReplyId;
             if (parentReply.parentReplyId) {
                 topLevelId = parentReply.parentReplyId;
             }
             const result = await replies.updateOne(
-                { _id: new ObjectId(topLevelId) },
-                { $push: { replies: newReply } }
+                {_id: new ObjectId(topLevelId)},
+                {$push: {replies: newReply}}
             );
             if (result.modifiedCount === 0) {
-                return { error: "Failed to add nested reply" };
+                return {error: "Failed to add nested reply"};
             }
-            return { insertedId: newReply._id };
+            return {insertedId: newReply._id};
         } catch (e) {
             console.error(`Unable to add nested reply: ${e}`);
-            return { error: e };
+            return {error: e};
         }
     }
 
@@ -63,14 +63,14 @@ class RepliesDAO {
         try {
             const objectId = new ObjectId(id);
             // First, try to find as a top-level reply
-            const topLevelReply = await replies.findOne({ _id: objectId });
+            const topLevelReply = await replies.findOne({_id: objectId});
             if (topLevelReply) {
                 return topLevelReply;
             }
             // If not found, search within nested replies
             const result = await replies.findOne(
-                { "replies._id": objectId },
-                { projection: { "replies.$": 1 } }
+                {"replies._id": objectId},
+                {projection: {"replies.$": 1}}
             );
             if (result && result.replies && result.replies.length > 0) {
                 return result.replies[0];
@@ -78,14 +78,14 @@ class RepliesDAO {
             return null;
         } catch (e) {
             console.error(`Unable to get reply: ${e}`);
-            return { error: e };
+            return {error: e};
         }
     }
 
-    static async getManyByField({ field, value, sort = "createdAt", page = 0, perPage = 20 }) {
+    static async getManyByField({field, value, sort = "createdAt", page = 0, perPage = 20}) {
         try {
             return await replies.aggregate([
-                { $match: { [field]: new ObjectId(value) } },
+                {$match: {[field]: new ObjectId(value)}},
                 {
                     $lookup: {
                         from: models.users,
@@ -94,7 +94,7 @@ class RepliesDAO {
                         as: "user"
                     }
                 },
-                { $unwind: "$user" },
+                {$unwind: "$user"},
                 {
                     $project: {
                         _id: 1,
@@ -109,35 +109,35 @@ class RepliesDAO {
                         "user.avatar": 1
                     }
                 },
-                { $sort: { [sort]: -1 } },
-                { $skip: perPage * page },
-                { $limit: perPage }
+                {$sort: {[sort]: -1}},
+                {$skip: perPage * page},
+                {$limit: perPage}
             ]).toArray();
         } catch (e) {
             console.error(`Unable to get replies: ${e}`);
-            return { error: e };
+            return {error: e};
         }
     }
 
     // Updated to handle nested reply updates
-    static async updateOne({ id, set }) {
+    static async updateOne({id, set}) {
         try {
             const objectId = new ObjectId(id);
-            const topLevelReply = await replies.findOne({ _id: objectId });
+            const topLevelReply = await replies.findOne({_id: objectId});
             if (topLevelReply) {
                 return await replies.updateOne(
-                    { _id: objectId },
-                    { $set: set }
+                    {_id: objectId},
+                    {$set: set}
                 );
             }
             // Update nested reply
             return await replies.updateOne(
-                { "replies._id": objectId },
-                { $set: { "replies.$.content": set.content, "replies.$.updatedAt": set.updatedAt } }
+                {"replies._id": objectId},
+                {$set: {"replies.$.content": set.content, "replies.$.updatedAt": set.updatedAt}}
             );
         } catch (e) {
             console.error(`Unable to update reply: ${e}`);
-            return { error: e };
+            return {error: e};
         }
     }
 
@@ -149,22 +149,22 @@ class RepliesDAO {
             const session = client.startSession();
             const transactionOptions = {
                 readPreference: "primary",
-                readConcern: { level: "local" },
-                writeConcern: { w: "majority" }
+                readConcern: {level: "local"},
+                writeConcern: {w: "majority"}
             };
             let result;
             await session.withTransaction(async () => {
                 const likes = db.collection(models.likes);
-                await likes.deleteMany({ targetId: new ObjectId(id) }, { session });
+                await likes.deleteMany({targetId: new ObjectId(id)}, {session});
 
-                const topLevelReply = await replies.findOne({ _id: new ObjectId(id) });
+                const topLevelReply = await replies.findOne({_id: new ObjectId(id)});
                 if (topLevelReply) {
-                    result = await replies.deleteOne({ _id: new ObjectId(id) }, { session });
+                    result = await replies.deleteOne({_id: new ObjectId(id)}, {session});
                 } else {
                     result = await replies.updateOne(
-                        { "replies._id": new ObjectId(id) },
-                        { $pull: { replies: { _id: new ObjectId(id) } } },
-                        { session }
+                        {"replies._id": new ObjectId(id)},
+                        {$pull: {replies: {_id: new ObjectId(id)}}},
+                        {session}
                     );
                 }
             }, transactionOptions);
@@ -173,7 +173,7 @@ class RepliesDAO {
         } catch (e) {
             console.error(`Unable to delete reply: ${e}`);
             session.endSession();
-            return { error: e };
+            return {error: e};
         }
     }
 }

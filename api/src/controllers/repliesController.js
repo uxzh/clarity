@@ -1,4 +1,4 @@
-const { ObjectId } = require("mongodb");
+const {ObjectId} = require("mongodb");
 const CardsDAO = require("../dao/cardsDAO");
 const ReviewsDAO = require("../dao/reviewsDAO");
 const RepliesDAO = require("../dao/repliesDAO");
@@ -7,17 +7,17 @@ const LikesDAO = require("../dao/likesDAO");
 class RepliesController {
     static async createReply(req, res) {
         try {
-            const { reviewId, content, parentReplyId } = req.body;
+            const {reviewId, content, parentReplyId} = req.body;
 
             const review = await ReviewsDAO.getOneById(reviewId);
             if (!review || review.error) {
-                return res.status(404).send({ error: "Review not found" });
+                return res.status(404).send({error: "Review not found"});
             }
 
             if (parentReplyId) {
                 const parentReply = await RepliesDAO.getOneById(parentReplyId);
                 if (!parentReply || parentReply.error) {
-                    return res.status(404).send({ error: "Parent reply not found" });
+                    return res.status(404).send({error: "Parent reply not found"});
                 }
             }
 
@@ -45,7 +45,7 @@ class RepliesController {
             }
 
             if (!result || result.error) {
-                return res.status(500).send({ error: "Error creating reply" });
+                return res.status(500).send({error: "Error creating reply"});
             }
 
             const response = {
@@ -62,67 +62,67 @@ class RepliesController {
                 updatedAt: date,
                 likes: 0,
                 dislikes: 0,
-                ...(parentReplyId ? {} : { replies: [] })
+                ...(parentReplyId ? {} : {replies: []})
             };
 
             res.status(201).send(response);
         } catch (e) {
             console.error(`Error in createReply: ${e}`);
-            res.status(500).send({ error: "Error creating reply" });
+            res.status(500).send({error: "Error creating reply"});
         }
     }
 
     static async updateReply(req, res) {
         try {
-            const { id } = req.params;
+            const {id} = req.params;
 
             const reply = await RepliesDAO.getOneById(id);
             if (!reply || reply.error) {
-                return res.status(404).send({ error: "Reply not found" });
+                return res.status(404).send({error: "Reply not found"});
             }
 
-            const { content } = req.body;
+            const {content} = req.body;
 
             const updatedReply = {
                 content,
                 updatedAt: new Date(),
             };
 
-            const result = await RepliesDAO.updateOne({ id, set: updatedReply });
+            const result = await RepliesDAO.updateOne({id, set: updatedReply});
             if (!result || result.error) {
-                return res.status(500).send({ error: "Error updating reply" });
+                return res.status(500).send({error: "Error updating reply"});
             }
             updatedReply._id = id;
             res.status(200).send(updatedReply);
         } catch (e) {
             console.error(`Error in updateReply: ${e}`);
-            res.status(500).send({ error: "Error updating reply" });
+            res.status(500).send({error: "Error updating reply"});
         }
     }
 
     static async deleteReply(req, res) {
         try {
-            const { id } = req.params;
+            const {id} = req.params;
 
             const reply = await RepliesDAO.getOneById(id);
             if (!reply || reply.error) {
-                return res.status(404).send({ error: "Reply not found" });
+                return res.status(404).send({error: "Reply not found"});
             }
 
             const result = await RepliesDAO.deleteOne(id);
             if (!result || result.error) {
-                return res.status(500).send({ error: "Error deleting reply" });
+                return res.status(500).send({error: "Error deleting reply"});
             }
             res.status(204).send();
         } catch (e) {
             console.error(`Error in deleteReply: ${e}`);
-            res.status(500).send({ error: "Error deleting reply" });
+            res.status(500).send({error: "Error deleting reply"});
         }
     }
 
     static async getRepliesByReview(req, res) {
         try {
-            const { id } = req.params;
+            const {id} = req.params;
             const replies = await RepliesDAO.getManyByField({
                 field: "reviewId",
                 value: id,
@@ -143,7 +143,10 @@ class RepliesController {
             collectIds(replies);
 
             const likeCounts = await LikesDAO.getManyCountByTargetIds(allReplyIds, 'reply');
-            const likeMap = new Map(likeCounts.map(l => [l._id.toString(), { likes: l.isLike, dislikes: l.count - l.isLike }]));
+            const likeMap = new Map(likeCounts.map(l => [l._id.toString(), {
+                likes: l.isLike,
+                dislikes: l.count - l.isLike
+            }]));
 
             const addLikesToReplies = (replyArray) => {
                 return replyArray.map(reply => ({
@@ -162,39 +165,36 @@ class RepliesController {
             res.status(200).send(repliesWithLikes);
         } catch (e) {
             console.error(`Error in getRepliesByReview: ${e}`);
-            res.status(500).send({ error: "Error fetching replies" });
+            res.status(500).send({error: "Error fetching replies"});
         }
     }
 
     static async likeReply(req, res) {
         try {
-            const { id } = req.params;
+            const {id} = req.params;
             const userId = req.user._id;
 
             const reply = await RepliesDAO.getOneById(id);
             if (!reply || reply.error) {
-                return res.status(404).send({ error: "Reply not found" });
+                return res.status(404).send({error: "Reply not found"});
             }
 
             const existingLike = await LikesDAO.getLikeByUserAndTarget(userId, id);
             if (existingLike && !existingLike.error) {
-                return res.status(400).send({ error: "Like already exists" });
-            }
-
-            const like = {
-                targetId: id,
-                targetType: "reply",
-                userId,
-                isLike: true
-            };
-
-            const result = await LikesDAO.createOne(like);
-            if (!result || result.error) {
-                return res.status(500).send({ error: "Error liking reply" });
+                if (existingLike.isLike) {
+                    // If already liked, remove the like
+                    await LikesDAO.deleteLikeByUserAndTarget(userId, id);
+                } else {
+                    // If disliked, switch to like
+                    await LikesDAO.updateOne({targetId: id, targetType: "reply", userId, isLike: true});
+                }
+            } else {
+                // No existing like, create a new like
+                await LikesDAO.createOne({targetId: id, targetType: "reply", userId, isLike: true});
             }
 
             const likeCounts = await LikesDAO.getManyCountByTargetIds([new ObjectId(id)], 'reply');
-            const counts = likeCounts[0] || { isLike: 0, count: 0 };
+            const counts = likeCounts[0] || {isLike: 0, count: 0};
 
             res.status(200).send({
                 _id: id,
@@ -203,39 +203,36 @@ class RepliesController {
             });
         } catch (e) {
             console.error(`Error in likeReply: ${e}`);
-            res.status(500).send({ error: "Error liking reply" });
+            res.status(500).send({error: "Error liking reply"});
         }
     }
 
     static async dislikeReply(req, res) {
         try {
-            const { id } = req.params;
+            const {id} = req.params;
             const userId = req.user._id;
 
             const reply = await RepliesDAO.getOneById(id);
             if (!reply || reply.error) {
-                return res.status(404).send({ error: "Reply not found" });
+                return res.status(404).send({error: "Reply not found"});
             }
 
             const existingLike = await LikesDAO.getLikeByUserAndTarget(userId, id);
             if (existingLike && !existingLike.error) {
-                return res.status(400).send({ error: "Like already exists" });
-            }
-
-            const like = {
-                targetId: id,
-                targetType: "reply",
-                userId,
-                isLike: false
-            };
-
-            const result = await LikesDAO.createOne(like);
-            if (!result || result.error) {
-                return res.status(500).send({ error: "Error disliking reply" });
+                if (!existingLike.isLike) {
+                    // If already disliked, remove the dislike
+                    await LikesDAO.deleteLikeByUserAndTarget(userId, id);
+                } else {
+                    // If liked, switch to dislike
+                    await LikesDAO.updateOne({targetId: id, targetType: "reply", userId, isLike: false});
+                }
+            } else {
+                // No existing like, create a new dislike
+                await LikesDAO.createOne({targetId: id, targetType: "reply", userId, isLike: false});
             }
 
             const likeCounts = await LikesDAO.getManyCountByTargetIds([new ObjectId(id)], 'reply');
-            const counts = likeCounts[0] || { isLike: 0, count: 0 };
+            const counts = likeCounts[0] || {isLike: 0, count: 0};
 
             res.status(200).send({
                 _id: id,
@@ -244,7 +241,7 @@ class RepliesController {
             });
         } catch (e) {
             console.error(`Error in dislikeReply: ${e}`);
-            res.status(500).send({ error: "Error disliking reply" });
+            res.status(500).send({error: "Error disliking reply"});
         }
     }
 }

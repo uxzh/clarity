@@ -1,10 +1,10 @@
-import React, { useState, useCallback, useContext } from 'react';
-import { User, Button, Textarea } from '@nextui-org/react';
-import { IconMessage, IconThumbUp, IconThumbDown, IconSquareX, IconMessageForward } from "@tabler/icons-react";
-import { AuthContext } from "../../../contexts/AuthContext";
-import { cn } from './cn';
+import React, {useCallback, useContext, useState} from 'react';
+import {Button, Textarea, User} from '@nextui-org/react';
+import {IconMessage, IconMessageForward, IconSquareX, IconThumbDown, IconThumbUp} from "@tabler/icons-react";
+import {AuthContext} from "../../../contexts/AuthContext";
+import {cn} from './cn';
 
-const LikeDislikeButton = ({ action, count, isActive, onPress, onHover }) => (
+const LikeDislikeButton = ({action, count, isActive, onPress, onHover}) => (
     <Button
         isIconOnly
         variant="light"
@@ -19,15 +19,15 @@ const LikeDislikeButton = ({ action, count, isActive, onPress, onHover }) => (
         )}
     >
         <div className="flex items-center">
-            {action === "like" ? <IconThumbUp stroke={2} /> : <IconThumbDown stroke={2} />}
+            {action === "like" ? <IconThumbUp stroke={2}/> : <IconThumbDown stroke={2}/>}
             <span className="ml-1">{count}</span>
         </div>
     </Button>
 );
 
-const Reply = React.memo(({ reply, canInteract, reviewId, setReplies, depth = 0 }) => {
-    const { user: author = {}, _id, content, createdAt, likes = 0, dislikes = 0, replies = [], parentReplyId } = reply;
-    const { api, user } = useContext(AuthContext);
+const Reply = React.memo(({reply, canInteract, reviewId, setReplies, depth = 0}) => {
+    const {user: author = {}, _id, content, createdAt, likes = 0, dislikes = 0, replies = [], parentReplyId} = reply;
+    const {api, user} = useContext(AuthContext);
 
     const [likeStatus, setLikeStatus] = useState("none");
     const [likeCount, setLikeCount] = useState(likes);
@@ -37,14 +37,14 @@ const Reply = React.memo(({ reply, canInteract, reviewId, setReplies, depth = 0 
     const [replyContent, setReplyContent] = useState("");
     const [cancelConfirmation, setCancelConfirmation] = useState(false);
     const [validationError, setValidationError] = useState("");
-    const [showReplies, setShowReplies] = useState(false); // Folded by default
+    const [showReplies, setShowReplies] = useState(false);
 
     const simplifiedDateFormat = (dateString) => {
         if (!dateString) return "Unknown Date";
         const date = new Date(dateString);
         return isNaN(date.getTime())
             ? "Invalid Date"
-            : new Intl.DateTimeFormat("en-US", { month: "long", day: "numeric", year: "numeric" }).format(date);
+            : new Intl.DateTimeFormat("en-US", {month: "long", day: "numeric", year: "numeric"}).format(date);
     };
 
     const handleLikeDislike = useCallback(async (action) => {
@@ -63,37 +63,45 @@ const Reply = React.memo(({ reply, canInteract, reviewId, setReplies, depth = 0 
         setDislikeCount((prev) => (prevLikeStatus === "dislike" && action !== "dislike" ? prev - 1 : action === "dislike" ? prev + 1 : prev));
 
         try {
-            console.log(`Attempting to ${action} reply at depth ${depth}:`, _id);
+            console.log(`Attempting to ${action} reply:`, _id);
             const response = await api[action === "like" ? "likeReply" : "dislikeReply"](_id);
-            console.log(`${action} response at depth ${depth}:`, response.data);
-            const { likes, dislikes } = response.data;
+            console.log(`${action} response:`, response.data);
+            const {likes, dislikes} = response.data;
 
-            // Update the parent state immutably with detailed logging
-            setReplies((prevReplies) => {
-                console.log("Updating replies state for:", _id);
-                const updateNestedReplies = (repliesArray) => {
-                    return repliesArray.map(r => {
+            // Update parent state to reflect changes across all levels
+            setReplies(prevReplies => {
+                if (!parentReplyId) { // Level 1 reply
+                    return prevReplies.map(r => {
                         if (r._id === _id) {
-                            console.log(`Found reply ${_id} at depth ${depth}, updating likes: ${likes}, dislikes: ${dislikes}`);
-                            return { ...r, likes, dislikes };
-                        }
-                        if (r.replies && r.replies.length > 0) {
-                            return { ...r, replies: updateNestedReplies(r.replies) };
+                            return {...r, likes, dislikes};
                         }
                         return r;
                     });
-                };
-                const updatedReplies = updateNestedReplies(prevReplies);
-                console.log("Updated replies state:", updatedReplies);
-                return updatedReplies;
+                }
+                // Level 2 reply: update within top-level parent's replies array
+                return prevReplies.map(r => {
+                    if (r.replies.some(child => child._id === _id)) {
+                        return {
+                            ...r,
+                            replies: r.replies.map(child =>
+                                child._id === _id ? {...child, likes, dislikes} : child
+                            )
+                        };
+                    }
+                    return r;
+                });
             });
+
+            setLikeCount(likes);
+            setDislikeCount(dislikes);
+            setLikeStatus(action);
         } catch (error) {
-            console.error(`Error ${action}ing reply at depth ${depth}:`, error);
+            console.error(`Error ${action}ing reply:`, error);
             setLikeStatus(prevLikeStatus);
             setLikeCount(prevLikeCount);
             setDislikeCount(prevDislikeCount);
         }
-    }, [canInteract, likeStatus, likeCount, dislikeCount, _id, api, setReplies, depth]);
+    }, [canInteract, likeStatus, likeCount, dislikeCount, _id, api, parentReplyId, setReplies]);
 
     const handleReply = useCallback(() => {
         if (!canInteract) {
@@ -121,13 +129,17 @@ const Reply = React.memo(({ reply, canInteract, reviewId, setReplies, depth = 0 
             return;
         }
         try {
-            console.log("Submitting reply:", { reviewId, content: replyContent.trim(), parentReplyId: _id });
-            const response = await api.createReply({ reviewId, content: replyContent.trim(), parentReplyId: parentReplyId || _id });
+            console.log("Submitting reply:", {reviewId, content: replyContent.trim(), parentReplyId: _id});
+            const response = await api.createReply({
+                reviewId,
+                content: replyContent.trim(),
+                parentReplyId: parentReplyId || _id
+            });
             console.log("Reply response:", response.data);
             setReplies(prevReplies => {
                 return prevReplies.map(r => {
                     if (r._id === (parentReplyId || _id) || r.replies.some(subReply => subReply._id === (parentReplyId || _id))) {
-                        return { ...r, replies: [...r.replies, response.data] };
+                        return {...r, replies: [...r.replies, response.data]};
                     }
                     return r;
                 });
@@ -151,10 +163,10 @@ const Reply = React.memo(({ reply, canInteract, reviewId, setReplies, depth = 0 
             <div className={cn("rounded-medium bg-content1 p-4 shadow-small w-full")}>
                 <div className="flex items-start">
                     <User
-                        avatarProps={{ src: user.avatar || '', size: "sm" }}
+                        avatarProps={{src: user.avatar || '', size: "sm"}}
                         name={user.username || "Anonymous"}
                         description={simplifiedDateFormat(createdAt)}
-                        classNames={{ name: "text-sm font-medium", description: "text-xs text-gray-500" }}
+                        classNames={{name: "text-sm font-medium", description: "text-xs text-gray-500"}}
                     />
                 </div>
                 <p className="mt-1 text-default-600 text-sm">{content}</p>
@@ -164,7 +176,7 @@ const Reply = React.memo(({ reply, canInteract, reviewId, setReplies, depth = 0 
                             variant="light"
                             className="text-xs text-gray-500 p-0 min-w-0"
                             size="sm"
-                            startContent={<IconMessage stroke={1.5} size={16} />}
+                            startContent={<IconMessage stroke={1.5} size={16}/>}
                             onPress={handleReply}
                             isDisabled={!canInteract}
                         >
@@ -202,14 +214,14 @@ const Reply = React.memo(({ reply, canInteract, reviewId, setReplies, depth = 0 
                         <Button
                             variant="light"
                             color="danger"
-                            startContent={<IconSquareX stroke={1.5} />}
+                            startContent={<IconSquareX stroke={1.5}/>}
                             onPress={handleCancelReply}
                         >
                             {cancelConfirmation ? "Are you sure?" : "Cancel"}
                         </Button>
                         <Button
                             color="primary"
-                            startContent={<IconMessageForward stroke={1.5} />}
+                            startContent={<IconMessageForward stroke={1.5}/>}
                             onPress={handleSubmitReply}
                         >
                             Submit

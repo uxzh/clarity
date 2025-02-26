@@ -1,22 +1,21 @@
-import React, { useState, useCallback, useEffect, useContext } from "react";
-import { Button, Textarea, Tooltip, User } from "@nextui-org/react";
-import { Popover, PopoverTrigger, PopoverContent } from "@nextui-org/react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
+import { Button, Textarea, Tooltip } from "@nextui-org/react";
 import {
+    IconCheck,
     IconMessage,
-    IconThumbUp,
-    IconThumbDown,
     IconMessageForward,
     IconSquareX,
+    IconThumbDown,
+    IconThumbUp,
     IconTrashX,
-    IconCheck,
 } from "@tabler/icons-react";
 import { cn } from "./cn";
 import Review from "./review";
 import { AuthContext } from "../../../../contexts/AuthContext";
-import RepliesList from "../../replies/RepliesList";
+import Reply from "../../replies/Reply";
+import RepliesList from "../../replies/RepliesList"; // Replace RepliesList with Reply
 
-// Component for like/dislike buttons
-const LikeDislikeButton = ({ action, count, isActive, onPress, onHover }) => (
+const LikeDislikeButton = ({action, count, isActive, onPress, onHover}) => (
     <Button
         isIconOnly
         variant="light"
@@ -36,9 +35,9 @@ const LikeDislikeButton = ({ action, count, isActive, onPress, onHover }) => (
     >
         <div className="flex items-center">
             {action === "like" ? (
-                <IconThumbUp stroke={2} />
+                <IconThumbUp stroke={2}/>
             ) : (
-                <IconThumbDown stroke={2} />
+                <IconThumbDown stroke={2}/>
             )}
             <span className="ml-1">{count}</span>
         </div>
@@ -46,8 +45,7 @@ const LikeDislikeButton = ({ action, count, isActive, onPress, onHover }) => (
 );
 
 const CardReview = React.forwardRef(
-    ({ className, onDelete, ...review }, ref) => {
-        // Destructure review props
+    ({className, onDelete, ...review}, ref) => {
         const {
             _id,
             likedByUser = 0,
@@ -56,7 +54,6 @@ const CardReview = React.forwardRef(
             user: author,
         } = review;
 
-        // State for like/dislike functionality
         const [likeStatus, setLikeStatus] = useState(
             likedByUser === 1 ? "like" : likedByUser === -1 ? "dislike" : "none"
         );
@@ -65,7 +62,6 @@ const CardReview = React.forwardRef(
         const [hoveredButton, setHoveredButton] = useState(null);
         const [lastInteraction, setLastInteraction] = useState(null);
 
-        // State for reply functionality
         const [isReplying, setIsReplying] = useState(false);
         const [replyContent, setReplyContent] = useState("");
         const [cancelConfirmation, setCancelConfirmation] = useState(false);
@@ -73,15 +69,14 @@ const CardReview = React.forwardRef(
         const [deleteConfirmation, setDeleteConfirmation] = useState(false);
         const [deleteTimer, setDeleteTimer] = useState(null);
         const [replies, setReplies] = useState([]);
+        const [showReplies, setShowReplies] = useState(false);
 
-        // Get user and API from context
-        const { api, user } = useContext(AuthContext);
+        const toggleReplies = () => setShowReplies(prev => !prev);
 
-        // Check if user can interact (logged in, not blocked, email verified)
+        const {api, user} = useContext(AuthContext);
         const canInteract =
             user?.isLoggedIn && !user?.isBlocked && user?.emailVerified;
 
-        // Updated user comparison logic
         const isUserReview = Boolean(
             user?.isLoggedIn &&
             user?._id &&
@@ -101,12 +96,10 @@ const CardReview = React.forwardRef(
 
                 setLikeStatus((prevStatus) => {
                     if (prevStatus === action) {
-                        // If same action, remove like/dislike
                         setLikes((prev) => (action === "like" ? prev - 1 : prev));
                         setDislikes((prev) => (action === "dislike" ? prev - 1 : prev));
                         return "none";
                     } else {
-                        // If different action, update likes/dislikes accordingly
                         if (prevStatus === "like") setLikes((prev) => prev - 1);
                         if (prevStatus === "dislike") setDislikes((prev) => prev - 1);
                         if (action === "like") setLikes((prev) => prev + 1);
@@ -118,8 +111,21 @@ const CardReview = React.forwardRef(
             },
             [user, canInteract]
         );
+        // Fetch replies on mount
+        useEffect(() => {
+            const fetchReplies = async () => {
+                try {
+                    console.log("Fetching replies for reviewId:", _id);
+                    const response = await api.getRepliesByReviewId({ reviewId: _id });
+                    console.log("Fetched replies:", response.data);
+                    setReplies(response.data.reverse());
+                } catch (error) {
+                    console.error("Error fetching replies:", error);
+                }
+            };
+            fetchReplies().then(r => r);
+        }, [_id, api]);
 
-        // Debounced API call for like/dislike
         const debouncedApiCall = useCallback(async () => {
             const apiFunc =
                 likeStatus === "none"
@@ -133,7 +139,6 @@ const CardReview = React.forwardRef(
             }
         }, [likeStatus, _id, api]);
 
-        // Effect to trigger debounced API call
         useEffect(() => {
             if (lastInteraction) {
                 const timer = setTimeout(debouncedApiCall, 1000);
@@ -141,7 +146,6 @@ const CardReview = React.forwardRef(
             }
         }, [lastInteraction, debouncedApiCall]);
 
-        // Handle reply button click
         const handleReply = () => {
             if (!canInteract) {
                 if (process.env.NODE_ENV === 'development') {
@@ -153,7 +157,6 @@ const CardReview = React.forwardRef(
             setReplyContent(`@${author.username || "Anonymous"} `);
         };
 
-        // Handle cancel reply
         const handleCancelReply = () => {
             if (cancelConfirmation) {
                 setIsReplying(false);
@@ -165,7 +168,6 @@ const CardReview = React.forwardRef(
             }
         };
 
-        // Handle submit reply
         const handleSubmitReply = async () => {
             if (!canInteract) {
                 if (process.env.NODE_ENV === 'development') {
@@ -179,12 +181,10 @@ const CardReview = React.forwardRef(
                 setValidationError("Reply must be at least 1 character long");
                 return;
             }
-            // Logic for submitting reply to server
             if (process.env.NODE_ENV === 'development') {
                 console.log("Submitting reply:", replyContent);
             }
             try {
-                // Submit reply to server
                 const response = await api.createReply({
                     reviewId: _id,
                     content: replyContent.trim(),
@@ -202,7 +202,6 @@ const CardReview = React.forwardRef(
             setValidationError("");
         };
 
-        // Handle delete with confirmation
         const handleDelete = async () => {
             if (!deleteConfirmation) {
                 setDeleteConfirmation(true);
@@ -230,7 +229,6 @@ const CardReview = React.forwardRef(
             }
         };
 
-        // Cleanup timer on unmount
         useEffect(() => {
             return () => {
                 if (deleteTimer) {
@@ -239,13 +237,12 @@ const CardReview = React.forwardRef(
             };
         }, [deleteTimer]);
 
-        // Reply button component
         const replyButton = (
             <Button
                 variant=""
                 className="font-semibold transform scale-95 opacity-70 transition-all duration-200 hover:scale-100 hover:opacity-100"
                 size="sm"
-                startContent={<IconMessage stroke={1.5} />}
+                startContent={<IconMessage stroke={1.5}/>}
                 onPress={handleReply}
                 isDisabled={!canInteract}
             >
@@ -255,7 +252,6 @@ const CardReview = React.forwardRef(
 
         return (
             <>
-                {/* Main review card */}
                 <div
                     ref={ref}
                     className={cn(
@@ -264,7 +260,6 @@ const CardReview = React.forwardRef(
                     )}
                 >
                     <Review {...review} />
-                    {/* Action buttons */}
                     <div className="absolute bottom-0 left-0 right-0 flex justify-between items-center p-2">
                         <div className="flex gap-2">
                             {isUserReview && (
@@ -278,9 +273,9 @@ const CardReview = React.forwardRef(
                                     onPress={handleDelete}
                                 >
                                     {deleteConfirmation ? (
-                                        <IconCheck stroke={2} />
+                                        <IconCheck stroke={2}/>
                                     ) : (
-                                        <IconTrashX stroke={2} />
+                                        <IconTrashX stroke={2}/>
                                     )}
                                 </Button>
                             )}
@@ -305,9 +300,7 @@ const CardReview = React.forwardRef(
                             <LikeDislikeButton
                                 action="dislike"
                                 count={dislikes}
-                                isActive={
-                                    likeStatus === "dislike" || hoveredButton === "dislike"
-                                }
+                                isActive={likeStatus === "dislike" || hoveredButton === "dislike"}
                                 onPress={() => handleLikeDislike("dislike")}
                                 onHover={(isHovered) =>
                                     setHoveredButton(isHovered ? "dislike" : null)
@@ -316,7 +309,6 @@ const CardReview = React.forwardRef(
                         </div>
                     </div>
                 </div>
-                {/* Reply card */}
                 {isReplying && (
                     <div className="mt-2 rounded-medium bg-content1 p-5 shadow-small relative">
                         <Textarea
@@ -331,14 +323,14 @@ const CardReview = React.forwardRef(
                             <Button
                                 variant="light"
                                 color="danger"
-                                startContent={<IconSquareX stroke={1.5} />}
+                                startContent={<IconSquareX stroke={1.5}/>}
                                 onPress={handleCancelReply}
                             >
                                 {cancelConfirmation ? "Are you sure?" : "Cancel"}
                             </Button>
                             <Button
                                 color="primary"
-                                startContent={<IconMessageForward stroke={1.5} />}
+                                startContent={<IconMessageForward stroke={1.5}/>}
                                 onPress={handleSubmitReply}
                             >
                                 Submit
@@ -346,25 +338,41 @@ const CardReview = React.forwardRef(
                         </div>
                     </div>
                 )}
-                {/* Replies list */}
-                <div
-                    ref={ref}
-                    className={cn(
-                        "replies-list space-y-4 p-4",
-                        className
-                    )}
-                >
-                    <RepliesList
-                        reviewId={_id}
-                        replies={replies}
-                        setReplies={setReplies}
-                        canInteract={canInteract}
-                    />
+                <div className="mt-2 flex flex-col gap-2">
+                    {replies.map(reply => (
+                        <Reply
+                            key={reply._id}
+                            reply={reply}
+                            canInteract={canInteract}
+                            reviewId={_id}
+                            setReplies={setReplies}
+                            depth={0}
+                        />
+                    ))}
                 </div>
+                    {showReplies && (
+                        <div className={cn("replies-list space-y-4 p-4", className)}>
+                            <RepliesList
+                                reviewId={_id}
+                                replies={replies}
+                                setReplies={setReplies}
+                                canInteract={canInteract}
+                            />
+                        </div>
+                    )}
+                    <Button
+                        variant="light"
+                        className="text-xs text-gray-500 p-0 min-w-0 pl-8"
+                        size="sm"
+                        onPress={toggleReplies}
+                    >
+                        View {replies.length} more {replies.length === 1 ? "reply" : "replies"}
+                    </Button>
             </>
         );
     }
 );
+
 
 CardReview.displayName = "CardReview";
 
