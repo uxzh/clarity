@@ -6,8 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="76a37aa3-5070-499e-b53d-6617c672e14e" name="Changes" comment="Implemented a solution in case the user is not authorized and clicks on the button &quot;Write a Review&quot;, the modal authorization window is displayed">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/dao/repliesDAO.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/dao/repliesDAO.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ui/replies/Reply.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/replies/Reply.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/controllers/repliesController.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/controllers/repliesController.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

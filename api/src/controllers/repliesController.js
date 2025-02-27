@@ -72,6 +72,57 @@ class RepliesController {
         }
     }
 
+    static async getRepliesByReview(req, res) {
+        try {
+            const { id } = req.params;
+            const replies = await RepliesDAO.getManyByField({
+                field: "reviewId",
+                value: id,
+                sort: "createdAt",
+                page: parseInt(req.query.page) || 0,
+                perPage: parseInt(req.query.perPage) || 20,
+            });
+
+            if (replies.error) {
+                return res.status(500).send({ error: "Error fetching replies" });
+            }
+
+            const allReplyIds = [];
+            const collectIds = (replyArray) => {
+                if (!Array.isArray(replyArray)) return;
+                replyArray.forEach(reply => {
+                    allReplyIds.push(new ObjectId(reply._id));
+                    if (reply.replies && reply.replies.length > 0) {
+                        collectIds(reply.replies);
+                    }
+                });
+            };
+            collectIds(replies);
+
+            const likeCounts = await LikesDAO.getManyCountByTargetIds(allReplyIds, 'reply');
+            const likeMap = new Map(likeCounts.map(l => [l._id.toString(), {
+                likes: l.isLike,
+                dislikes: l.count - l.isLike
+            }]));
+
+            const addLikesToReplies = (replyArray) => {
+                if (!Array.isArray(replyArray)) return [];
+                return replyArray.map(reply => ({
+                    ...reply,
+                    likes: likeMap.get(reply._id.toString())?.likes || 0,
+                    dislikes: likeMap.get(reply._id.toString())?.dislikes || 0,
+                    replies: reply.replies ? addLikesToReplies(reply.replies) : []
+                }));
+            };
+
+            const repliesWithLikes = addLikesToReplies(replies);
+            res.status(200).send(repliesWithLikes);
+        } catch (e) {
+            console.error(`Error in getRepliesByReview: ${e}`);
+            res.status(500).send({ error: "Error fetching replies" });
+        }
+    }
+
     static async updateReply(req, res) {
         try {
             const { id } = req.params;
@@ -120,52 +171,6 @@ class RepliesController {
         }
     }
 
-    static async getRepliesByReview(req, res) {
-        try {
-            const { id } = req.params;
-            const replies = await RepliesDAO.getManyByField({
-                field: "reviewId",
-                value: id,
-                sort: "createdAt",
-                page: parseInt(req.query.page) || 0,
-                perPage: parseInt(req.query.perPage) || 20,
-            });
-
-            const allReplyIds = [];
-            const collectIds = (replyArray) => {
-                replyArray.forEach(reply => {
-                    allReplyIds.push(new ObjectId(reply._id));
-                    if (reply.replies && reply.replies.length > 0) {
-                        reply.replies.forEach(nested => allReplyIds.push(new ObjectId(nested._id)));
-                    }
-                });
-            };
-            collectIds(replies);
-
-            const likeCounts = await LikesDAO.getManyCountByTargetIds(allReplyIds, 'reply');
-            const likeMap = new Map(likeCounts.map(l => [l._id.toString(), { likes: l.isLike, dislikes: l.count - l.isLike }]));
-
-            const addLikesToReplies = (replyArray) => {
-                return replyArray.map(reply => ({
-                    ...reply,
-                    likes: likeMap.get(reply._id.toString())?.likes || 0,
-                    dislikes: likeMap.get(reply._id.toString())?.dislikes || 0,
-                    replies: reply.replies ? reply.replies.map(nested => ({
-                        ...nested,
-                        likes: likeMap.get(nested._id.toString())?.likes || 0,
-                        dislikes: likeMap.get(nested._id.toString())?.dislikes || 0
-                    })) : []
-                }));
-            };
-
-            const repliesWithLikes = addLikesToReplies(replies);
-            res.status(200).send(repliesWithLikes);
-        } catch (e) {
-            console.error(`Error in getRepliesByReview: ${e}`);
-            res.status(500).send({ error: "Error fetching replies" });
-        }
-    }
-
     static async likeReply(req, res) {
         try {
             const { id } = req.params;
@@ -178,19 +183,13 @@ class RepliesController {
 
             const existingLike = await LikesDAO.getLikeByUserAndTarget(userId, id);
             if (existingLike && !existingLike.error) {
-                return res.status(400).send({ error: "Like already exists" });
-            }
-
-            const like = {
-                targetId: id,
-                targetType: "reply",
-                userId,
-                isLike: true
-            };
-
-            const result = await LikesDAO.createOne(like);
-            if (!result || result.error) {
-                return res.status(500).send({ error: "Error liking reply" });
+                if (existingLike.isLike) {
+                    await LikesDAO.deleteLikeByUserAndTarget(userId, id);
+                } else {
+                    await LikesDAO.updateOne({ targetId: id, targetType: "reply", userId, isLike: true });
+                }
+            } else {
+                await LikesDAO.createOne({ targetId: id, targetType: "reply", userId, isLike: true });
             }
 
             const likeCounts = await LikesDAO.getManyCountByTargetIds([new ObjectId(id)], 'reply');
@@ -219,19 +218,13 @@ class RepliesController {
 
             const existingLike = await LikesDAO.getLikeByUserAndTarget(userId, id);
             if (existingLike && !existingLike.error) {
-                return res.status(400).send({ error: "Like already exists" });
-            }
-
-            const like = {
-                targetId: id,
-                targetType: "reply",
-                userId,
-                isLike: false
-            };
-
-            const result = await LikesDAO.createOne(like);
-            if (!result || result.error) {
-                return res.status(500).send({ error: "Error disliking reply" });
+                if (!existingLike.isLike) {
+                    await LikesDAO.deleteLikeByUserAndTarget(userId, id);
+                } else {
+                    await LikesDAO.updateOne({ targetId: id, targetType: "reply", userId, isLike: false });
+                }
+            } else {
+                await LikesDAO.createOne({ targetId: id, targetType: "reply", userId, isLike: false });
             }
 
             const likeCounts = await LikesDAO.getManyCountByTargetIds([new ObjectId(id)], 'reply');
