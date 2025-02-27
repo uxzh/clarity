@@ -183,14 +183,22 @@ class RepliesController {
 
             const existingLike = await LikesDAO.getLikeByUserAndTarget(userId, id);
             if (existingLike && !existingLike.error) {
+                // If user has already liked/disliked, remove their vote
+                await LikesDAO.deleteLikeByUserAndTarget(userId, id);
                 if (existingLike.isLike) {
-                    await LikesDAO.deleteLikeByUserAndTarget(userId, id);
-                } else {
-                    await LikesDAO.updateOne({ targetId: id, targetType: "reply", userId, isLike: true });
+                    // If it was a like, no further action needed after deletion
+                    const likeCounts = await LikesDAO.getManyCountByTargetIds([new ObjectId(id)], 'reply');
+                    const counts = likeCounts[0] || { isLike: 0, count: 0 };
+                    return res.status(200).send({
+                        _id: id,
+                        likes: counts.isLike,
+                        dislikes: counts.count - counts.isLike
+                    });
                 }
-            } else {
-                await LikesDAO.createOne({ targetId: id, targetType: "reply", userId, isLike: true });
             }
+
+            // Add new like
+            await LikesDAO.createOne({ targetId: id, targetType: "reply", userId, isLike: true });
 
             const likeCounts = await LikesDAO.getManyCountByTargetIds([new ObjectId(id)], 'reply');
             const counts = likeCounts[0] || { isLike: 0, count: 0 };
@@ -218,14 +226,22 @@ class RepliesController {
 
             const existingLike = await LikesDAO.getLikeByUserAndTarget(userId, id);
             if (existingLike && !existingLike.error) {
+                // If user has already liked/disliked, remove their vote
+                await LikesDAO.deleteLikeByUserAndTarget(userId, id);
                 if (!existingLike.isLike) {
-                    await LikesDAO.deleteLikeByUserAndTarget(userId, id);
-                } else {
-                    await LikesDAO.updateOne({ targetId: id, targetType: "reply", userId, isLike: false });
+                    // If it was a dislike, no further action needed after deletion
+                    const likeCounts = await LikesDAO.getManyCountByTargetIds([new ObjectId(id)], 'reply');
+                    const counts = likeCounts[0] || { isLike: 0, count: 0 };
+                    return res.status(200).send({
+                        _id: id,
+                        likes: counts.isLike,
+                        dislikes: counts.count - counts.isLike
+                    });
                 }
-            } else {
-                await LikesDAO.createOne({ targetId: id, targetType: "reply", userId, isLike: false });
             }
+
+
+            await LikesDAO.createOne({ targetId: id, targetType: "reply", userId, isLike: false });
 
             const likeCounts = await LikesDAO.getManyCountByTargetIds([new ObjectId(id)], 'reply');
             const counts = likeCounts[0] || { isLike: 0, count: 0 };

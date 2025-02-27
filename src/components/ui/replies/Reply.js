@@ -49,7 +49,7 @@ const Reply = React.memo(
         } = reply;
         const { api, user: currentUser } = useContext(AuthContext);
 
-        const [likeStatus, setLikeStatus] = useState("none");
+        const [likeStatus, setLikeStatus] = useState("none"); // Tracks current user's vote
         const [likeCount, setLikeCount] = useState(likes);
         const [dislikeCount, setDislikeCount] = useState(dislikes);
         const [hoveredButton, setHoveredButton] = useState(null);
@@ -58,13 +58,6 @@ const Reply = React.memo(
         const [cancelConfirmation, setCancelConfirmation] = useState(false);
         const [validationError, setValidationError] = useState("");
         const [showReplies, setShowReplies] = useState(false);
-
-        // Debug log to verify incoming data
-        console.log(`Reply at depth ${depth}:`, {
-            id: _id,
-            author: author,
-            parentReplyId
-        });
 
         const simplifiedDateFormat = (dateString) => {
             if (!dateString) return "Unknown Date";
@@ -85,32 +78,29 @@ const Reply = React.memo(
                     return;
                 }
 
+                const isLikeAction = action === "like";
                 const prevLikeStatus = likeStatus;
                 const prevLikeCount = likeCount;
                 const prevDislikeCount = dislikeCount;
 
-                setLikeStatus((prev) => (prev === action ? "none" : action));
-                setLikeCount((prev) =>
-                    prevLikeStatus === "like" && action !== "like"
-                        ? prev - 1
-                        : action === "like"
-                            ? prev + 1
-                            : prev
-                );
-                setDislikeCount((prev) =>
-                    prevLikeStatus === "dislike" && action !== "dislike"
-                        ? prev - 1
-                        : action === "dislike"
-                            ? prev + 1
-                            : prev
-                );
+                // Optimistic UI update: Toggle only the user's vote, not overriding totals
+                if (prevLikeStatus === action) {
+                    // Undo the current user's vote
+                    setLikeStatus("none");
+                    setLikeCount((prev) => prev - (isLikeAction ? 1 : 0));
+                    setDislikeCount((prev) => prev - (!isLikeAction ? 1 : 0));
+                } else {
+                    // Add or switch the user's vote
+                    setLikeStatus(action);
+                    setLikeCount((prev) => prev + (isLikeAction ? 1 : (prevLikeStatus === "like" ? -1 : 0)));
+                    setDislikeCount((prev) => prev + (!isLikeAction ? 1 : (prevLikeStatus === "dislike" ? -1 : 0)));
+                }
 
                 try {
-                    const response = await api[
-                        action === "like" ? "likeReply" : "dislikeReply"
-                        ](_id);
+                    const response = await api[isLikeAction ? "likeReply" : "dislikeReply"](_id);
                     const { likes, dislikes } = response.data;
 
+                    // Update state with server totals
                     setReplies((prevReplies) => {
                         if (!parentReplyId) {
                             return prevReplies.map((r) =>
@@ -127,7 +117,7 @@ const Reply = React.memo(
 
                     setLikeCount(likes);
                     setDislikeCount(dislikes);
-                    setLikeStatus(action);
+                    setLikeStatus(prevLikeStatus === action ? "none" : action);
                 } catch (error) {
                     console.error(`Error ${action}ing reply:`, error);
                     setLikeStatus(prevLikeStatus);
