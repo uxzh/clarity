@@ -9,7 +9,7 @@ import {
   Input,
   Avatar,
   useDisclosure,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { v4 as uuidv4 } from "uuid";
 import { debounce } from "lodash";
 import { IconSquareCheck } from "@tabler/icons-react";

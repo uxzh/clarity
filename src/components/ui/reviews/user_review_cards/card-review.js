@@ -1,5 +1,5 @@
 import React, {useCallback, useContext, useEffect, useState} from "react";
-import {Button, Textarea, Tooltip} from "@nextui-org/react";
+import {Button, Textarea, Tooltip} from "@heroui/react";
 import {
     IconCheck,
     IconMessage,

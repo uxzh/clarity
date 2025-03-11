@@ -9,7 +9,7 @@ import {
   Textarea,
   Select,
   SelectItem,
-} from "@nextui-org/react";
+} from "@heroui/react";
 
 export const ReviewEditModal = ({ isOpen, onClose, review, onSave }) => {
   const handleSubmit = (e) => {

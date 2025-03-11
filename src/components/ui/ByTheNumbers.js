@@ -7,7 +7,7 @@ import {
   PopoverContent,
   PopoverTrigger,
   Slider,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { useState } from "react";
 import Image1 from "../../lib/bgs/numbers-dont-lie.png";
 

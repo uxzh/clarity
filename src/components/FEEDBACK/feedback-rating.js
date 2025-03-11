@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { IconStar, IconStarFilled, IconStarHalf, IconStarHalfFilled } from "@tabler/icons-react";
-import { RadioGroup } from "@nextui-org/react";
+import { RadioGroup } from "@heroui/react";
 import { cn } from "./cn";
 
 const StarRating = ({ classNames, ...props }) => {

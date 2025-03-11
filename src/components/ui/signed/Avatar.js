@@ -5,7 +5,7 @@ import {
   DropdownMenu,
   DropdownItem,
   Avatar as NextUIAvatar,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { useAuthContext } from "../../../contexts/AuthContext";
 import ProfilePopup from "./ProfilePopup";
 

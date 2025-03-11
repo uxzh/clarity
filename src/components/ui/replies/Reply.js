@@ -1,5 +1,5 @@
 // New Reply component (can be in the same file or separate)
-import {Button, User} from "@nextui-org/react";
+import {Button, User} from "@heroui/react";
 import React, {useState} from "react";
 import {formatDate} from "../../../utils/dateFormatter";
 import {cn} from "../../FEEDBACK/cn";

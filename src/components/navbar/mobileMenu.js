@@ -1,7 +1,7 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Icon } from "@iconify/react";
-import { Badge, Chip } from "@nextui-org/react";
+import { Badge, Chip } from "@heroui/react";
 
 const MobileMenu = () => {
   const location = useLocation();

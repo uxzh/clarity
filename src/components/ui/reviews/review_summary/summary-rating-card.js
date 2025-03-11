@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {IconStar, IconStarFilled} from "@tabler/icons-react";
-import {Button, Progress, useDisclosure} from "@nextui-org/react";
+import {Button, Progress, useDisclosure} from "@heroui/react";
 import {cn} from "./cn";
 import FeedbackModal from "../../../FEEDBACK/feedbackModal";
 import useAuth from "../../../../hooks/useAuth";

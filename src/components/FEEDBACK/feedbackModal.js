@@ -10,7 +10,7 @@ import {
   ModalHeader,
   Spacer,
   Textarea,
-} from "@nextui-org/react";
+} from "@heroui/react";
 
 import FeedbackRating from "./feedback-rating";
 import { AuthContext } from "../../contexts/AuthContext";

@@ -13,7 +13,7 @@ import {
   Select,
   SelectItem,
   Avatar,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import * as yup from "yup";
 import { useAuthContext } from "../../../contexts/AuthContext";
 import { useAdminContext } from "../contexts/AdminContext";

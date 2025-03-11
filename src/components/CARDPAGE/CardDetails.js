@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import { Tabs, Tab } from "@nextui-org/react";
+import { Tabs, Tab } from "@heroui/react";
 import Reviews from "./Reviews";
 import Cashback from "./Cashback";
 import Perks from "./Perks";

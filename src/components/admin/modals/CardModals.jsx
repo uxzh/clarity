@@ -14,7 +14,7 @@ import {
   TableColumn,
   TableRow,
   TableCell,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { formatDate } from "../../../utils/dateFormatter";
 
 export const CardDetailsModal = ({ isOpen, onClose, card }) => {

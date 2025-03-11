@@ -1,4 +1,4 @@
-import { Button, Link } from "@nextui-org/react";
+import { Button, Link } from "@heroui/react";
 import MainButton from "../components/buttons/MainButton";
 import Lottie from "react-lottie";
 import animationData from "../components/lotties/404.json";

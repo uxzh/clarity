@@ -1,7 +1,7 @@
 import React from "react";
 import TopNavbar from "../components/navbar/activeNavbar";
 import Footer from "../components/footer/footer";
-import { Card, CardHeader, CardBody, CardFooter } from "@nextui-org/react";
+import { Card, CardHeader, CardBody, CardFooter } from "@heroui/react";
 
 const LegalStuff = () => {
   return (

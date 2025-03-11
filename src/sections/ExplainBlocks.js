@@ -1,5 +1,5 @@
 import React from "react";
-import { Image } from "@nextui-org/react";
+import { Image } from "@heroui/react";
 import cardsInHands from "../lib/img/credit_cards_in_hands.png";
 import phoneCashback from "../lib/img/phone_received_cashback.png";
 import cardsTrophey from "../lib/img/cards_trophey.png";

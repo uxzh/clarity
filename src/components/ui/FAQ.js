@@ -5,7 +5,7 @@ import {
   Button,
   Link,
   Spacer,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import "../../CSS/FAQ.css";
 
 export default function FAQ() {

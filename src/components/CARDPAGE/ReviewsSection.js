@@ -1,5 +1,5 @@
 import { Icon } from "@iconify/react";
-import { Button, Input, Select, SelectItem, Card, Pagination } from "@nextui-org/react";
+import { Button, Input, Select, SelectItem, Card, Pagination } from "@heroui/react";
 import React, { useMemo, useState } from "react";
 import CardReview from "../ui/reviews/user_review_cards/card-review";
 import SummaryFromTheWeb from "./from-the-web/summary";

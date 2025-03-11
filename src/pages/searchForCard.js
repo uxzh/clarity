@@ -6,7 +6,7 @@ import React, {
   useRef,
 } from "react";
 import { useNavigate } from "react-router-dom";
-import { Link, Autocomplete, AutocompleteItem } from "@nextui-org/react";
+import { Link, Autocomplete, AutocompleteItem } from "@heroui/react";
 import TopNavbar from "../components/navbar/activeNavbar";
 import Footer from "../components/footer/footer";
 import Background from "../components/SEARCHCARD/background";

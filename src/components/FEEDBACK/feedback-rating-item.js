@@ -3,7 +3,7 @@ import {
   VisuallyHidden,
   useRadio,
   useRadioGroupContext,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { IconStar, IconStarFilled, IconStarHalf } from "@tabler/icons-react";
 
 import { cn } from "./cn";

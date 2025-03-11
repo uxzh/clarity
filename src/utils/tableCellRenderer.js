@@ -1,4 +1,4 @@
-import { Button } from "@nextui-org/react";
+import { Button } from "@heroui/react";
 import { Status } from "../components/admin/Status";
 import { CopyText } from "../components/admin/copy-text";
 import { IconAlertCircleFilled } from "@tabler/icons-react";

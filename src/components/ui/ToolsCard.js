@@ -1,4 +1,4 @@
-import { Button, Card, CardBody, Image } from "@nextui-org/react";
+import { Button, Card, CardBody, Image } from "@heroui/react";
 import React from "react";
 
 export default function ToolsCard({ src, isBlack = false, title }) {

@@ -1,4 +1,4 @@
-import { Card } from "@nextui-org/react";
+import { Card } from "@heroui/react";
 import { useEffect } from "react";
 import { useAdminContext } from "./contexts/AdminContext";
 import { useAuthContext } from "../../contexts/AuthContext";

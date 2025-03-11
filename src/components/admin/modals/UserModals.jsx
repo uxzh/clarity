@@ -15,7 +15,7 @@ import {
   TableCell,
   User,
   Chip,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { formatDate } from "../../../utils/dateFormatter";
 
 export const UserHistoryModal = ({ isOpen, onClose, user }) => {

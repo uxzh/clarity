@@ -1,4 +1,4 @@
-import { Card, Text, Switch, Button, Badge } from "@nextui-org/react";
+import { Card, Text, Switch, Button, Badge } from "@heroui/react";
 
 function FinanceDashboard() {
   return <div></div>;

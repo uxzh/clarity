@@ -1,4 +1,4 @@
-import { Image } from "@nextui-org/react";
+import { Image } from "@heroui/react";
 import "../../CSS/Partners.css";
 import { useEffect, useState } from "react";
 import Amex from "../../lib/icons/amex.png";

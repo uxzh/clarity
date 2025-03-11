@@ -1,5 +1,5 @@
 import React from "react";
-import { Chip } from "@nextui-org/react";
+import { Chip } from "@heroui/react";
 
 export const Status = ({ status }) => {
   const getColorByStatus = (status) => {

@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Link } from "@nextui-org/react";
+import { Button, Link } from "@heroui/react";
 import { ButtonFlickeringLight } from "../components/buttons/HeroButton";
 import CheckmarksHero from "./../components/ui/checkmarksHero";
 import "../CSS/Hero.css";

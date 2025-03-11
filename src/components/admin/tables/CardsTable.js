@@ -7,7 +7,7 @@ import {
   TableRow,
   TableCell,
   Button,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import {
   CardDetailsModal,
   CardEditModal,

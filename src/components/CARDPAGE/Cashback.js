@@ -1,5 +1,5 @@
 import React from "react";
-import { Card } from "@nextui-org/react";
+import { Card } from "@heroui/react";
 import { Icon } from "@iconify/react";
 
 const cashbackCategories = [
