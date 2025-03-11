@@ -101,7 +101,7 @@ function ReviewSearch() {
     }
   }, []);
 
-  const renderCard = (card, title) => {
+  const renderCard = (card, title, link) => {
     if (!card) return null;
 
     return (
@@ -136,7 +136,7 @@ function ReviewSearch() {
             <CardItem
               translateZ={20}
               as={Link}
-              href={`/review?cardId=${encodeURIComponent(card._id)}`}
+              href={link}
               className="px-6 py-2 rounded-xl bg-black dark:bg-white dark:text-black text-white text-sm font-bold"
             >
               Go to Card
@@ -155,7 +155,7 @@ function ReviewSearch() {
       <TopNavbar />
       <div className="flex-grow flex flex-col items-center justify-start relative">
         <Background
-          className="absolute top-0 left-0 right-0 max-h-[10vh] z-5"
+          className="absolute top-0 left-0 right=0 max-h-[10vh] z-5"
           style={{ maxHeight: "2vh !important" }}
         />
         <div className="relative z-10 w-full max-w-6xl mx-auto px-0 sm:px-4 pt-20">
@@ -257,9 +257,9 @@ function ReviewSearch() {
           <div className="text-center">Loading...</div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-8 mt-2 px-4 w-full max-w-6xl mx-auto">
-            {renderCard(topCards?.bestRatingCard, "Best Rated Card")}
-            {renderCard(topCards?.worstRatingCard, "Most Controversial Card")}
-            {renderCard(topCards?.mostReviewedCard, "Most Discussed Card")}
+            {renderCard(topCards?.bestRatingCard, "Best Rated Card", `/review?cardId=${encodeURIComponent(topCards?.bestRatingCard?._id)}`)}
+            {renderCard(topCards?.worstRatingCard, "Best Student Card", "/review?cardId=66bcc4fe50f7137997304e07")}
+            {renderCard(topCards?.mostReviewedCard, "Best Travel Card", "/review?cardId=66bcc4fe50f7137997304e53")}
           </div>
         )}
       </div>
