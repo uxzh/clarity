@@ -26,7 +26,7 @@ class ReviewsDAO {
     static getMany({
                        sort = "createdAt",
                        page = 0,
-                       perPage = 20,
+                       perPage = 1000,
                    }) {
         try {
             return reviews.aggregate([

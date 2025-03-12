@@ -144,8 +144,8 @@ const Reply = React.memo(
                 return;
             }
             setIsReplying(true);
-            setReplyContent(`@${author.username || "Anonymous"} `);
-        }, [canInteract, author.username]);
+            setReplyContent(`@${author?.username || "Anonymous"} `);
+        }, [canInteract, author?.username]);
 
         const handleCancelReply = () => {
             if (cancelConfirmation) {
@@ -180,18 +180,31 @@ const Reply = React.memo(
                 console.log("Nested reply response:", response.data);
 
                 setReplies((prevReplies) => {
-                    const updatedReplies = prevReplies.map((r) => {
-                        if (r._id === _id) {
-                            if (r.replies.some((sub) => sub._id === response.data._id)) {
-                                return r;
+                    // Recursive function to update replies at any depth
+                    const updateRepliesRecursively = (replies) => {
+                        return replies.map((r) => {
+                            if (r._id === _id) {
+                                // Check if this reply already has the new reply
+                                if (r.replies && r.replies.some((sub) => sub._id === response.data._id)) {
+                                    return r;
+                                }
+                                // Add the new reply to this reply's replies array
+                                return {
+                                    ...r,
+                                    replies: [response.data, ...(r.replies || [])],
+                                };
+                            } else if (r.replies && r.replies.length > 0) {
+                                // Recursively check nested replies
+                                return {
+                                    ...r,
+                                    replies: updateRepliesRecursively(r.replies),
+                                };
                             }
-                            return {
-                                ...r,
-                                replies: [response.data, ...r.replies],
-                            };
-                        }
-                        return r;
-                    });
+                            return r;
+                        });
+                    };
+
+                    const updatedReplies = updateRepliesRecursively(prevReplies);
                     console.log("Updated replies state:", updatedReplies);
                     return updatedReplies;
                 });
@@ -210,12 +223,16 @@ const Reply = React.memo(
         };
 
         return (
-            <div className={cn("reply relative mt-2", parentReplyId ? "pl-8" : "pl-2")}>
+            <div className={cn("reply relative mt-2", 
+                depth === 0 ? "pl-8" : 
+                depth === 1 ? "pl-16" : 
+                depth === 2 ? "pl-24" : 
+                "pl-24")}>
                 <div className={cn("rounded-medium bg-content1 p-4 shadow-small w-full")}>
                     <div className="flex items-start">
                         <User
-                            avatarProps={{ src: author.avatar || "", size: "sm" }}
-                            name={author.username || "Anonymous"}
+                            avatarProps={{ src: author?.avatar || "", size: "sm" }}
+                            name={author?.username ? `@${author.username}` : "Anonymous"}
                             description={simplifiedDateFormat(createdAt)}
                             classNames={{
                                 name: "text-sm font-medium",
@@ -254,7 +271,10 @@ const Reply = React.memo(
                     </div>
                 </div>
                 {isReplying && (
-                    <div className={cn("mt-2 rounded-medium bg-content1 p-3 shadow-small relative pl-8")}>
+                    <div className={cn("mt-2 rounded-medium bg-content1 p-3 shadow-small relative", 
+                        depth === 0 ? "pl-8" : 
+                        depth === 1 ? "pl-16" : 
+                        "pl-24")}>
                         <Textarea
                             fullWidth
                             placeholder="Write your reply here..."
@@ -288,7 +308,10 @@ const Reply = React.memo(
                         {!showReplies && (
                             <Button
                                 variant="light"
-                                className="text-xs text-gray-500 p-0 min-w-0 pl-8"
+                                className={cn("text-xs text-gray-500 p-0 min-w-0", 
+                                    depth === 0 ? "pl-8" : 
+                                    depth === 1 ? "pl-16" : 
+                                    "pl-24")}
                                 size="sm"
                                 onPress={toggleReplies}
                             >
@@ -309,7 +332,10 @@ const Reply = React.memo(
                                 ))}
                                 <Button
                                     variant="light"
-                                    className="text-xs text-gray-500 p-0 min-w-0 pl-8"
+                                    className={cn("text-xs text-gray-500 p-0 min-w-0", 
+                                        depth === 0 ? "pl-8" : 
+                                        depth === 1 ? "pl-16" : 
+                                        "pl-24")}
                                     size="sm"
                                     onPress={toggleReplies}
                                 >

@@ -33,12 +33,8 @@ class RepliesController {
 
             let result;
             if (parentReplyId) {
-                let topLevelId = parentReplyId;
-                const parentReply = await RepliesDAO.getOneById(parentReplyId);
-                if (parentReply.parentReplyId) {
-                    topLevelId = parentReply.parentReplyId;
-                }
-                result = await RepliesDAO.addNestedReply(topLevelId, reply);
+                // Use the actual parent reply ID, allowing for unlimited nesting
+                result = await RepliesDAO.addNestedReply(parentReplyId, reply);
             } else {
                 reply.replies = [];
                 result = await RepliesDAO.createOne(reply);

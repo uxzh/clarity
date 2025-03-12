@@ -6,7 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="76a37aa3-5070-499e-b53d-6617c672e14e" name="Changes" comment="Implemented a solution in case the user is not authorized and clicks on the button &quot;Write a Review&quot;, the modal authorization window is displayed">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ui/replies/RepliesList.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/replies/RepliesList.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/controllers/repliesController.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/controllers/repliesController.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/dao/repliesDAO.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/dao/repliesDAO.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/dao/reviewsDAO.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/dao/reviewsDAO.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/ui/replies/Reply.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/replies/Reply.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -157,8 +159,38 @@
     <option name="version" value="3" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
+    <option name="OPEN_GENERIC_TABS">
+      <map>
+        <entry key="268fe34b-fb9f-4c02-a830-a3f1fd57cb11" value="TOOL_WINDOW" />
+      </map>
+    </option>
     <option name="TAB_STATES">
       <map>
+        <entry key="268fe34b-fb9f-4c02-a830-a3f1fd57cb11">
+          <value>
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="HEAD" />
+                      </list>
+                    </value>
+                  </entry>
+                  <entry key="roots">
+                    <value>
+                      <list>
+                        <option value="$PROJECT_DIR$" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+              <option name="SHOW_ONLY_AFFECTED_CHANGES" value="true" />
+            </State>
+          </value>
+        </entry>
         <entry key="MAIN">
           <value>
             <State />

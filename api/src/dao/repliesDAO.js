@@ -35,19 +35,37 @@ class RepliesDAO {
                 _id: new ObjectId(),
                 reviewId: new ObjectId(replyData.reviewId),
                 userId: new ObjectId(replyData.userId),
+                replies: [] // Add empty replies array for nested replies
             };
             const parentReply = await this.getOneById(parentReplyId);
             if (!parentReply || parentReply.error) {
                 return { error: "Parent reply not found" };
             }
-            let topLevelId = parentReplyId;
-            if (parentReply.parentReplyId) {
-                topLevelId = parentReply.parentReplyId;
+
+            let result;
+            // Check if this is a top-level reply or a nested reply
+            if (!parentReply.parentReplyId) {
+                // If parent is a top-level reply, add directly to its replies array
+                result = await replies.updateOne(
+                    { _id: new ObjectId(parentReplyId) },
+                    { $push: { replies: newReply } }
+                );
+            } else {
+                // If parent is a nested reply, find the top-level reply that contains it
+                const topLevelReply = await replies.findOne(
+                    { "replies._id": new ObjectId(parentReplyId) }
+                );
+
+                if (!topLevelReply) {
+                    return { error: "Top level reply not found" };
+                }
+
+                // Add the new reply to the nested reply's replies array
+                result = await replies.updateOne(
+                    { "replies._id": new ObjectId(parentReplyId) },
+                    { $push: { "replies.$.replies": newReply } }
+                );
             }
-            const result = await replies.updateOne(
-                { _id: new ObjectId(topLevelId) },
-                { $push: { replies: newReply } }
-            );
             if (result.modifiedCount === 0) {
                 return { error: "Failed to add nested reply" };
             }
@@ -79,7 +97,7 @@ class RepliesDAO {
         }
     }
 
-    static async getManyByField({ field, value, sort = "createdAt", page = 0, perPage = 20 }) {
+    static async getManyByField({ field, value, sort = "createdAt", page = 0, perPage = 1000 }) {
         try {
             const pipeline = [
                 { $match: { [field]: new ObjectId(value) } },
