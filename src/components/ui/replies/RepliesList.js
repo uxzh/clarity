@@ -14,6 +14,7 @@ const RepliesList = ({ reviewId,context, canInteract, replies, setReplies }) => 
             setLoading(true);
             try {
                 const response = await api.getRepliesByReviewId({ reviewId, context });
+                console.log('[DEBUG_LOG] Replies API response:', response.data);
                 setReplies(response.data.reverse());
             } catch (err) {
                 setError(err.message);

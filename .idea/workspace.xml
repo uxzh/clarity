@@ -6,6 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="76a37aa3-5070-499e-b53d-6617c672e14e" name="Changes" comment="Implemented a solution in case the user is not authorized and clicks on the button &quot;Write a Review&quot;, the modal authorization window is displayed">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ui/replies/RepliesList.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/replies/RepliesList.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/ui/replies/Reply.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/replies/Reply.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -116,7 +117,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-d6986cc7102b-76f8388c3a79-JavaScript-WS-243.24978.60" />
+        <option value="bundled-jdk-9823dce3aa75-a94e463ab2e7-intellij.indexing.shared.core-IU-243.25659.59" />
+        <option value="bundled-js-predefined-d6986cc7102b-1632447f56bf-JavaScript-IU-243.25659.59" />
       </set>
     </attachedChunks>
   </component>
@@ -146,6 +148,8 @@
       <workItem from="1738166882702" duration="4348000" />
       <workItem from="1740534299616" duration="1814000" />
       <workItem from="1740628702096" duration="979000" />
+      <workItem from="1741307270666" duration="622000" />
+      <workItem from="1741802824305" duration="337000" />
     </task>
     <servers />
   </component>

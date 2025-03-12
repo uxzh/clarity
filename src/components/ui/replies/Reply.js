@@ -38,7 +38,7 @@ const LikeDislikeButton = ({ action, count, isActive, onPress, onHover }) => (
 const Reply = React.memo(
     ({ reply, canInteract, reviewId, setReplies, depth = 0 }) => {
         const {
-            user: author = {},
+            user,
             _id,
             content,
             createdAt,
@@ -47,6 +47,16 @@ const Reply = React.memo(
             replies = [],
             parentReplyId,
         } = reply;
+
+        const author = user || {};
+
+        console.log('[DEBUG_LOG] Reply author data:', {
+            authorObject: author,
+            authorKeys: Object.keys(author),
+            username: author.username,
+            avatar: author.avatar,
+            _id: author._id
+        });
         const { api, user: currentUser } = useContext(AuthContext);
 
         const [likeStatus, setLikeStatus] = useState("none"); // Tracks current user's vote
