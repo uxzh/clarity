@@ -60,10 +60,10 @@ class RepliesDAO {
                     return { error: "Top level reply not found" };
                 }
 
-                // Add the new reply to the nested reply's replies array
+                // Add the new reply to the top-level reply's replies array
                 result = await replies.updateOne(
-                    { "replies._id": new ObjectId(parentReplyId) },
-                    { $push: { "replies.$.replies": newReply } }
+                    { _id: topLevelReply._id },
+                    { $push: { replies: newReply } }
                 );
             }
             if (result.modifiedCount === 0) {
@@ -99,6 +99,7 @@ class RepliesDAO {
 
     static async getManyByField({ field, value, sort = "createdAt", page = 0, perPage = 1000 }) {
         try {
+            // First, get all top-level replies with their user info
             const pipeline = [
                 { $match: { [field]: new ObjectId(value) } },
                 {
@@ -109,43 +110,7 @@ class RepliesDAO {
                         as: "user"
                     }
                 },
-                { $unwind: "$user" },
-                { $unwind: { path: "$replies", preserveNullAndEmptyArrays: true } },
-                {
-                    $lookup: {
-                        from: models.users,
-                        localField: "replies.userId",
-                        foreignField: "_id",
-                        as: "replies.user"
-                    }
-                },
-                {
-                    $unwind: {
-                        path: "$replies.user",
-                        preserveNullAndEmptyArrays: true
-                    }
-                },
-                {
-                    $group: {
-                        _id: "$_id",
-                        reviewId: { $first: "$reviewId" },
-                        userId: { $first: "$userId" },
-                        content: { $first: "$content" },
-                        createdAt: { $first: "$createdAt" },
-                        updatedAt: { $first: "$updatedAt" },
-                        parentReplyId: { $first: "$parentReplyId" },
-                        user: { $first: "$user" },
-                        replies: {
-                            $push: {
-                                $cond: {
-                                    if: { $eq: ["$replies", {}] },
-                                    then: "$$REMOVE",
-                                    else: "$replies"
-                                }
-                            }
-                        }
-                    }
-                },
+                { $unwind: { path: "$user", preserveNullAndEmptyArrays: true } },
                 {
                     $project: {
                         _id: 1,
@@ -155,16 +120,10 @@ class RepliesDAO {
                         createdAt: 1,
                         updatedAt: 1,
                         parentReplyId: 1,
+                        replies: 1,
                         "user._id": 1,
                         "user.username": 1,
-                        "user.avatar": 1,
-                        replies: {
-                            $cond: {
-                                if: { $eq: ["$replies", [{}]] },
-                                then: [],
-                                else: "$replies"
-                            }
-                        }
+                        "user.avatar": 1
                     }
                 },
                 { $sort: { [sort]: -1 } },
@@ -172,7 +131,55 @@ class RepliesDAO {
                 { $limit: perPage }
             ];
 
-            return await replies.aggregate(pipeline).toArray();
+            const topLevelReplies = await replies.aggregate(pipeline).toArray();
+
+            // Function to recursively add user info to nested replies
+            const addUserInfoToReplies = async (repliesArray) => {
+                if (!repliesArray || repliesArray.length === 0) return [];
+
+                const result = [];
+
+                for (const reply of repliesArray) {
+                    // If reply has nested replies, process them recursively
+                    if (reply.replies && reply.replies.length > 0) {
+                        // Get user info for each nested reply
+                        const nestedRepliesWithUsers = [];
+
+                        for (const nestedReply of reply.replies) {
+                            // Fetch user info for this nested reply
+                            const userInfo = await getDB().collection(models.users).findOne(
+                                { _id: new ObjectId(nestedReply.userId) },
+                                { projection: { _id: 1, username: 1, avatar: 1 } }
+                            );
+
+                            // Add user info to the nested reply
+                            const replyWithUser = {
+                                ...nestedReply,
+                                user: userInfo || {}
+                            };
+
+                            // Process any deeper nested replies
+                            if (nestedReply.replies && nestedReply.replies.length > 0) {
+                                replyWithUser.replies = await addUserInfoToReplies(nestedReply.replies);
+                            }
+
+                            nestedRepliesWithUsers.push(replyWithUser);
+                        }
+
+                        result.push({
+                            ...reply,
+                            replies: nestedRepliesWithUsers
+                        });
+                    } else {
+                        result.push(reply);
+                    }
+                }
+
+                return result;
+            };
+
+            // Process all top-level replies to add user info to their nested replies
+            return await addUserInfoToReplies(topLevelReplies);
         } catch (e) {
             console.error(`Unable to get replies: ${e}`);
             return { error: e };
@@ -225,11 +232,11 @@ class RepliesDAO {
                     );
                 }
             }, transactionOptions);
-            session.endSession();
+            await session.endSession();
             return result;
         } catch (e) {
             console.error(`Unable to delete reply: ${e}`);
-            session.endSession();
+            await session.endSession();
             return { error: e };
         }
     }
