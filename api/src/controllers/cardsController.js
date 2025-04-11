@@ -85,10 +85,36 @@ class CardsController {
         }
     }
 
+    // actual dynamic
     static async getTopCards(req, res) {
         try {
             const cards = await CardsDAO.getTopCards()
             res.status(200).send(cards);
+        } catch (e) {
+            console.error(e)
+            res.status(500).send({error: "Error fetching top cards"});
+        }
+    }
+
+    // get static top cards
+    static async getTopStaticCards(req, res) {
+        try {
+            const cardIDs = {
+                free: "66bcc4fe50f7137997304e07",
+                student: "66bcc4fe50f7137997304de0",
+                travel: "66bcc4fe50f7137997304e53"
+            }
+            const cards = await CardsDAO.getTopStaticCards(cardIDs)
+            const cardsMap = {}
+            for (const card of cards) {
+                for (const [cardType, cardId] of Object.entries(cardIDs)) {
+                    if (card._id == cardId) {
+                        cardsMap[cardType] = card
+                    }
+                }
+            }
+
+            res.status(200).send(cardsMap);
         } catch (e) {
             console.error(e)
             res.status(500).send({error: "Error fetching top cards"});

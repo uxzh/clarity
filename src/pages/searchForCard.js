@@ -257,9 +257,17 @@ function ReviewSearch() {
           <div className="text-center">Loading...</div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-8 mt-2 px-4 w-full max-w-6xl mx-auto">
-            {renderCard(topCards?.bestRatingCard, "Best Rated Card")}
-            {renderCard(topCards?.worstRatingCard, "Most Controversial Card")}
-            {renderCard(topCards?.mostReviewedCard, "Most Discussed Card")}
+            {topCards?.bestRatingCard ?
+              <>
+              {renderCard(topCards?.bestRatingCard, "Best Rated Card")}
+              {renderCard(topCards?.worstRatingCard, "Most Controversial Card")}
+              {renderCard(topCards?.mostReviewedCard, "Most Discussed Card")}
+              </> : <>
+              {renderCard(topCards?.free, "Best free Card")}
+              {renderCard(topCards?.student, "Best Student Card")}
+              {renderCard(topCards?.travel, "Most Travel Card")}
+              </>
+            }
           </div>
         )}
       </div>

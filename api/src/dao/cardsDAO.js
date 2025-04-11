@@ -245,6 +245,29 @@ class CardsDAO {
         }
     }
 
+    static async getTopStaticCards(cardIDs) {
+        const { free, student, travel } = cardIDs
+        try {
+            const agg = [
+            {
+                '$match': {
+                '_id': {
+                    '$in': [
+                    new ObjectId(free),
+                    new ObjectId(student),
+                    new ObjectId(travel)
+                    ]
+                }
+                }
+            }
+            ];
+            return await cards.aggregate(agg).toArray();
+        } catch (e) {
+            console.error(`Unable to get top static cards: ${e}`);
+            return { error: e };
+        }
+    }
+
     static async getDefaultSearchCards(
         {
             page = 0,
