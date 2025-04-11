@@ -112,6 +112,19 @@ class Api {
 
     }
 
+    // wallet
+    async getWalletCards() {
+        return this.axios.get(`/wallet`);
+    }
+
+    async addCardToWallet(cardId) {
+        return this.axios.post(`/wallet/${cardId}`);
+    }
+
+    async addCardToWallet(cardId) {
+        return this.axios.delete(`/wallet/${cardId}`);
+    }
+
     // admin
     getTotals = async () => await this.axios.get(`/admin/totals`);
 }
