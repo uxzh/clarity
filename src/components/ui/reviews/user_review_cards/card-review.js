@@ -347,13 +347,7 @@ const CardReview = React.forwardRef(
                     </div>
                 )}
                 {/* Replies list */}
-                <div
-                    ref={ref}
-                    className={cn(
-                        "replies-list space-y-4 p-4",
-                        className
-                    )}
-                >
+                <div>
                     <RepliesList
                         reviewId={_id}
                         replies={replies}

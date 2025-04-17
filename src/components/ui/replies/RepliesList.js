@@ -57,7 +57,7 @@ const RepliesList = ({reviewId, context, canInteract, replies, setReplies}) => {
     if (error) return <p>Error loading replies: {error}</p>;
 
     return (
-        <div className="replies-list space-y-2 mt-2 text-default-500">
+        <div className={`replies-list space-y-2 mt-2 text-default-500 ${allReplies.length > 0 ? 'p-4' : ''}`}>
             {allReplies.length === 0 ? null : (
                 allReplies.map((reply) => (
                     <Reply
