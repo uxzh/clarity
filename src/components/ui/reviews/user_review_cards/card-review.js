@@ -2,7 +2,7 @@ import React, { useState, useCallback, useEffect, useContext } from "react";
 import { Button, Textarea, Tooltip, User } from "@nextui-org/react";
 import { Popover, PopoverTrigger, PopoverContent } from "@nextui-org/react";
 import {
-    IconMessage,
+    IconMessages,
     IconThumbUp,
     IconThumbDown,
     IconMessageForward,
@@ -260,10 +260,10 @@ const CardReview = React.forwardRef(
                 variant=""
                 className="font-semibold transform scale-95 opacity-70 transition-all duration-200 hover:scale-100 hover:opacity-100"
                 size="sm"
-                startContent={<IconMessage stroke={1.5} />}
+                startContent={<IconMessages stroke={2} />}
                 onPress={() => setShowReplies((prev) => !prev)}
             >
-                {showReplies ? "Hide Replies" : "Show Replies"}
+                {replies.length === 0 ? null : showReplies ? `Hide Replies` : `Show ${replies.length} ${replies.length === 1 ? 'Reply' : 'Replies'}`}
             </Button>
         );
 
@@ -305,7 +305,7 @@ const CardReview = React.forwardRef(
                                     {replyButton}
                                 </Tooltip>
                             )}
-                            {showRepliesButton}
+                            {replies.length > 0 && showRepliesButton}
                         </div>
                         <div className="flex gap-2 items-center">
                             <LikeDislikeButton
