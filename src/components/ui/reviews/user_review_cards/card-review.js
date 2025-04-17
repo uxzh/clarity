@@ -73,6 +73,7 @@ const CardReview = React.forwardRef(
         const [deleteConfirmation, setDeleteConfirmation] = useState(false);
         const [deleteTimer, setDeleteTimer] = useState(null);
         const [replies, setReplies] = useState([]);
+        const [showReplies, setShowReplies] = useState(false); // P1b7e
 
         // Get user and API from context
         const { api, user } = useContext(AuthContext);
@@ -253,6 +254,19 @@ const CardReview = React.forwardRef(
             </Button>
         );
 
+        // Show replies button component
+        const showRepliesButton = (
+            <Button
+                variant=""
+                className="font-semibold transform scale-95 opacity-70 transition-all duration-200 hover:scale-100 hover:opacity-100"
+                size="sm"
+                startContent={<IconMessage stroke={1.5} />}
+                onPress={() => setShowReplies((prev) => !prev)}
+            >
+                {showReplies ? "Hide Replies" : "Show Replies"}
+            </Button>
+        );
+
         return (
             <>
                 {/* Main review card */}
@@ -291,6 +305,7 @@ const CardReview = React.forwardRef(
                                     {replyButton}
                                 </Tooltip>
                             )}
+                            {showRepliesButton}
                         </div>
                         <div className="flex gap-2 items-center">
                             <LikeDislikeButton
@@ -347,14 +362,16 @@ const CardReview = React.forwardRef(
                     </div>
                 )}
                 {/* Replies list */}
-                <div>
-                    <RepliesList
-                        reviewId={_id}
-                        replies={replies}
-                        setReplies={setReplies}
-                        canInteract={canInteract}
-                    />
-                </div>
+                {showReplies && (
+                    <div>
+                        <RepliesList
+                            reviewId={_id}
+                            replies={replies}
+                            setReplies={setReplies}
+                            canInteract={canInteract}
+                        />
+                    </div>
+                )}
             </>
         );
     }
