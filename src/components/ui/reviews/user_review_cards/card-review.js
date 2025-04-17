@@ -1,20 +1,22 @@
-import React, {useCallback, useContext, useEffect, useState} from "react";
-import {Button, Textarea, Tooltip} from "@nextui-org/react";
+import React, { useState, useCallback, useEffect, useContext } from "react";
+import { Button, Textarea, Tooltip, User } from "@nextui-org/react";
+import { Popover, PopoverTrigger, PopoverContent } from "@nextui-org/react";
 import {
-    IconCheck,
     IconMessage,
+    IconThumbUp,
+    IconThumbDown,
     IconMessageForward,
     IconSquareX,
-    IconThumbDown,
-    IconThumbUp,
     IconTrashX,
+    IconCheck,
 } from "@tabler/icons-react";
-import {cn} from "./cn";
+import { cn } from "./cn";
 import Review from "./review";
-import {AuthContext} from "../../../../contexts/AuthContext";
+import { AuthContext } from "../../../../contexts/AuthContext";
+import RepliesList from "../../replies/RepliesList";
 
 // Component for like/dislike buttons
-const LikeDislikeButton = ({action, count, isActive, onPress, onHover}) => (
+const LikeDislikeButton = ({ action, count, isActive, onPress, onHover }) => (
     <Button
         isIconOnly
         variant="light"
@@ -34,9 +36,9 @@ const LikeDislikeButton = ({action, count, isActive, onPress, onHover}) => (
     >
         <div className="flex items-center">
             {action === "like" ? (
-                <IconThumbUp stroke={2}/>
+                <IconThumbUp stroke={2} />
             ) : (
-                <IconThumbDown stroke={2}/>
+                <IconThumbDown stroke={2} />
             )}
             <span className="ml-1">{count}</span>
         </div>
@@ -44,7 +46,7 @@ const LikeDislikeButton = ({action, count, isActive, onPress, onHover}) => (
 );
 
 const CardReview = React.forwardRef(
-    ({className, onDelete, ...review}, ref) => {
+    ({ className, onDelete, ...review }, ref) => {
         // Destructure review props
         const {
             _id,
@@ -70,21 +72,15 @@ const CardReview = React.forwardRef(
         const [validationError, setValidationError] = useState("");
         const [deleteConfirmation, setDeleteConfirmation] = useState(false);
         const [deleteTimer, setDeleteTimer] = useState(null);
+        const [replies, setReplies] = useState([]);
+        const [showReplies, setShowReplies] = useState(false); // P1b7e
 
         // Get user and API from context
-        const {api, user} = useContext(AuthContext);
+        const { api, user } = useContext(AuthContext);
 
         // Check if user can interact (logged in, not blocked, email verified)
         const canInteract =
             user?.isLoggedIn && !user?.isBlocked && user?.emailVerified;
-
-        // Debug logging to see full user object
-        // useEffect(() => {
-        //     if (process.env.NODE_ENV === 'development') {
-        //         console.log("Full user object:", user);
-        //         console.log("Full author object:", author);
-        //     }
-        // }, [user, author]);
 
         // Updated user comparison logic
         const isUserReview = Boolean(
@@ -93,22 +89,6 @@ const CardReview = React.forwardRef(
             (author?._id === user._id || review.userId === user._id)
         );
 
-        // Debug logging
-        // useEffect(() => {
-        //     if (user?.isLoggedIn) {
-        //         if (process.env.NODE_ENV === 'development') {
-        //             console.log("Review ownership check:", {
-        //                 userLoggedIn: user.isLoggedIn,
-        //                 userId: user._id,
-        //                 authorId: author?._id,
-        //                 reviewUserId: review.userId,
-        //                 isMatch: isUserReview,
-        //             });
-        //         }
-        //     }
-        // }, [user, author, review.userId, isUserReview]);
-
-        // Handle like/dislike action
         const handleLikeDislike = useCallback(
             (action) => {
                 if (!canInteract) {
@@ -213,6 +193,7 @@ const CardReview = React.forwardRef(
                 if (process.env.NODE_ENV === 'development') {
                     console.log("Reply submitted:", response);
                 }
+                setReplies((prevReplies) => [...prevReplies, response.data]);
             } catch (error) {
                 console.error("Error submitting reply:", error);
             }
@@ -265,11 +246,24 @@ const CardReview = React.forwardRef(
                 variant=""
                 className="font-semibold transform scale-95 opacity-70 transition-all duration-200 hover:scale-100 hover:opacity-100"
                 size="sm"
-                startContent={<IconMessage stroke={1.5}/>}
+                startContent={<IconMessage stroke={1.5} />}
                 onPress={handleReply}
                 isDisabled={!canInteract}
             >
                 Reply
+            </Button>
+        );
+
+        // Show replies button component
+        const showRepliesButton = (
+            <Button
+                variant=""
+                className="font-semibold transform scale-95 opacity-70 transition-all duration-200 hover:scale-100 hover:opacity-100"
+                size="sm"
+                startContent={<IconMessage stroke={1.5} />}
+                onPress={() => setShowReplies((prev) => !prev)}
+            >
+                {showReplies ? "Hide Replies" : "Show Replies"}
             </Button>
         );
 
@@ -298,9 +292,9 @@ const CardReview = React.forwardRef(
                                     onPress={handleDelete}
                                 >
                                     {deleteConfirmation ? (
-                                        <IconCheck stroke={2}/>
+                                        <IconCheck stroke={2} />
                                     ) : (
-                                        <IconTrashX stroke={2}/>
+                                        <IconTrashX stroke={2} />
                                     )}
                                 </Button>
                             )}
@@ -311,6 +305,7 @@ const CardReview = React.forwardRef(
                                     {replyButton}
                                 </Tooltip>
                             )}
+                            {showRepliesButton}
                         </div>
                         <div className="flex gap-2 items-center">
                             <LikeDislikeButton
@@ -351,19 +346,30 @@ const CardReview = React.forwardRef(
                             <Button
                                 variant="light"
                                 color="danger"
-                                startContent={<IconSquareX stroke={1.5}/>}
+                                startContent={<IconSquareX stroke={1.5} />}
                                 onPress={handleCancelReply}
                             >
                                 {cancelConfirmation ? "Are you sure?" : "Cancel"}
                             </Button>
                             <Button
                                 color="primary"
-                                startContent={<IconMessageForward stroke={1.5}/>}
+                                startContent={<IconMessageForward stroke={1.5} />}
                                 onPress={handleSubmitReply}
                             >
                                 Submit
                             </Button>
                         </div>
+                    </div>
+                )}
+                {/* Replies list */}
+                {showReplies && (
+                    <div>
+                        <RepliesList
+                            reviewId={_id}
+                            replies={replies}
+                            setReplies={setReplies}
+                            canInteract={canInteract}
+                        />
                     </div>
                 )}
             </>

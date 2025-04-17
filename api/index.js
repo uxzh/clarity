@@ -1,5 +1,4 @@
 require("dotenv").config();
-
 const app = require('./app');
 const UsersDAO = require('./src/dao/usersDAO');
 const CardsDAO = require('./src/dao/cardsDAO');
@@ -7,6 +6,7 @@ const ReviewsDAO = require('./src/dao/reviewsDAO');
 const LikesDAO = require('./src/dao/likesDAO');
 const RepliesDAO = require('./src/dao/repliesDAO');
 const { getDB } = require('./src/lib/connectToDB');
+const WalletDAO = require("./src/dao/walletDAO");
 
 const run = async () => {
   console.log('run')
@@ -17,6 +17,7 @@ const run = async () => {
   await ReviewsDAO.injectDB(db); 
   await RepliesDAO.injectDB(db);
   await LikesDAO.injectDB(db);
+  await WalletDAO.injectDB(db);
 
   if (process.env.NODE_ENV === 'development') {
     const PORT = process.env.PORT;

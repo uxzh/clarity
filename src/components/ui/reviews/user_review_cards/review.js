@@ -1,6 +1,6 @@
 import React from "react";
 import {User} from "@nextui-org/react";
-import {IconStar, IconStarFilled, IconStarHalf, IconStarHalfFilled} from "@tabler/icons-react";
+import {IconStar, IconStarFilled, IconStarHalf} from "@tabler/icons-react";
 
 // Helper function to format date
 const formatDate = (dateString) => {
@@ -19,19 +19,13 @@ const formatDate = (dateString) => {
 const StarRating = ({rating}) => (
     <div className="flex items-center gap-1">
         {[...Array(5)].map((_, i) => {
-            if (i <= rating - 1) {
+            if (i < rating) {
                 return (
-                    <IconStarFilled
-                        key={i}
-                        className="text-lg sm:text-xl text-primary"
-                    />
+                    <IconStarFilled key={i} className="text-lg sm:text-xl text-primary"/>
                 );
             } else if (i === Math.floor(rating) && rating % 1 !== 0) {
                 return (
-                    <IconStarHalfFilled
-                        key={i}
-                        className="text-lg sm:text-xl text-primary"
-                    />
+                    <IconStarHalf key={i} className="text-lg sm:text-xl text-primary"/>
                 );
             } else {
                 return (

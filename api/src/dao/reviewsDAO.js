@@ -26,7 +26,7 @@ class ReviewsDAO {
     static getMany({
                        sort = "createdAt",
                        page = 0,
-                       perPage = 20,
+                       perPage = 1000,
                    }) {
         try {
             return reviews.aggregate([
@@ -251,7 +251,7 @@ class ReviewsDAO {
                             {
                                 $group: {
                                     _id: "$rating",
-                                    count: { $sum: 1 }
+                                    count: {$sum: 1}
                                 }
                             }
                         ]
@@ -260,7 +260,7 @@ class ReviewsDAO {
                 {
                     $project: {
                         reviews: 1,
-                        totalReviewCount: { $arrayElemAt: ["$totalReviewCount.count", 0] },
+                        totalReviewCount: {$arrayElemAt: ["$totalReviewCount.count", 0]},
                         ratingDistribution: 1
                     }
                 }

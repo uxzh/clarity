@@ -1,16 +1,25 @@
 import React from "react";
 import TopNavbar from "../components/navbar/activeNavbar";
+import SecondaryNavbar from "../components/navbar/secondaryNavbar";
 import Footer from "../components/footer/footer";
-import { Card, CardHeader, CardBody, CardFooter } from "@nextui-org/react";
+import { Card, CardHeader, CardBody, CardFooter, Navbar } from "@nextui-org/react";
+import { motion } from "framer-motion";
 
 const LegalStuff = () => {
   return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      trasition={{ duration: 0.3 }}
+    >
     <div>
       <TopNavbar />
+      <SecondaryNavbar />
       <div className="container mx-auto p-4 space-y-4">
         <Card>
           <CardHeader>
-            <h1>Legal Stuff</h1>
+            <h1>Terms Of Service</h1>
           </CardHeader>
           <CardBody>
             <p>
@@ -167,6 +176,7 @@ const LegalStuff = () => {
       </div>
       <Footer />
     </div>
+    </motion.div>
   );
 };
 

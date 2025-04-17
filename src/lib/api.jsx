@@ -7,18 +7,18 @@ class Api {
     getTopCards = async () => await this.axios.get(`/cards/top-cards`);
 
     getCard = async ({
-        id,
-        page = 0,
-        perPage = 20,
-    }) => await this.axios.get(`/cards/${id}?page=${page}&perPage=${perPage}`);
+                         id,
+                         page = 0,
+                         perPage = 20,
+                     }) => await this.axios.get(`/cards/${id}?page=${page}&perPage=${perPage}`);
 
     getReviewsByCard = async ({
-        cardId,
-        sort = "createAt",
-        sortDirection = -1,
-        page = 0,
-        perPage = 20
-    }) => await this.axios.get(`/cards/${cardId}/reviews?page=${page}&perPage=${perPage}&sort=${sort}&sortDirection=${sortDirection}`);
+                                  cardId,
+                                  sort = "createAt",
+                                  sortDirection = -1,
+                                  page = 0,
+                                  perPage = 20
+                              }) => await this.axios.get(`/cards/${cardId}/reviews?page=${page}&perPage=${perPage}&sort=${sort}&sortDirection=${sortDirection}`);
 
     getCards = async ({page = 0, perPage = 20, search = ""}) =>
         await this.axios.get(
@@ -90,13 +90,40 @@ class Api {
         await this.axios.delete(`/reviews/${id}/like`);
 
     // replies
-    getRepliesByReviewId = async ({reviewId, page = 0, perPage = 20}) =>
+    getRepliesByReviewId = async ({reviewId, context}) =>
         await this.axios.get(
-            `/reviews/${reviewId}/replies?page=${page}&perPage=${perPage}`
+            `/api/v1/replies/${reviewId}/replies/`
         );
 
-    createReply = async ({reviewId, content}) =>
-        await this.axios.post(`/replies`, {reviewId, content});
+    async createReply({reviewId, content, parentReplyId = null}) {
+        return this.axios.post('/replies/', {reviewId, content, parentReplyId});
+    }
+
+    async likeReply(replyId) {
+        return this.axios.post(`/replies/${replyId}/like`);
+    }
+
+    async dislikeReply(replyId) {
+        return this.axios.post(`/replies/${replyId}/dislike`);
+    }
+
+    async deleteReplyLike(replyId) {
+        return this.axios.delete(`/replies/${replyId}/like`);
+
+    }
+
+    // wallet
+    async getWalletCards() {
+        return this.axios.get(`/wallet`);
+    }
+
+    async addCardToWallet(cardId) {
+        return this.axios.post(`/wallet/${cardId}`);
+    }
+
+    async addCardToWallet(cardId) {
+        return this.axios.delete(`/wallet/${cardId}`);
+    }
 
     // admin
     getTotals = async () => await this.axios.get(`/admin/totals`);

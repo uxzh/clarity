@@ -1,6 +1,6 @@
 import React, {useCallback, useContext, useEffect, useMemo, useRef, useState,} from "react";
 import {useLocation, useNavigate} from "react-router-dom";
-import {Card, Spacer, Spinner, useDisclosure} from "@nextui-org/react";
+import {Button, Card, Spacer, Spinner, useDisclosure} from "@nextui-org/react";
 import TopNavbar from "../components/navbar/activeNavbar";
 import {FloatingCard} from "../components/ui/floatingCard";
 import Banner from "../components/navbar/banner";
@@ -10,6 +10,7 @@ import CardDetails from "../components/CARDPAGE/CardDetails";
 import FeedbackModal from "../components/FEEDBACK/feedbackModal";
 import ReviewSearch from "./searchForCard";
 import {AuthContext} from "../contexts/AuthContext";
+import { IconCreditCardFilled } from "@tabler/icons-react";
 
 const REVIEWS_PER_PAGE = 20;
 
@@ -269,16 +270,21 @@ function Review() {
                                     </h2>
                                 </div>
                                 <Spacer y={2}/>
-                                {/* <Button
-                  style={{ border: "1px solid #1a202c" }}
-                  target="_blank"
-                  variant="bordered"
-                  fullWidth
-                  className="shadow-[0px_3px_0px_0px_#1a202c] font-bold hover:scale-105"
-                  startContent={<IconCreditCardFilled stroke={1} />}
-                >
-                  Apply
-                </Button> */}
+                                {
+                                    cardData.referralLink && 
+                                    <a href={cardData.referralLink} target="_blank">
+                                    <Button
+                                        style={{ border: "1px solid #1a202c" }}
+                                        target="_blank"
+                                        variant="bordered"
+                                        fullWidth
+                                        className="shadow-[0px_3px_0px_0px_#1a202c] font-bold hover:scale-105"
+                                        startContent={<IconCreditCardFilled stroke={1} />}
+                                        >
+                                        Apply
+                                    </Button>
+                                    </a>
+                                }
                                 <Spacer y={4}/>
                                 <CardDetails
                                     selectedTab={selectedTab}

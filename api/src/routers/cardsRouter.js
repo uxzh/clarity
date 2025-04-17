@@ -30,7 +30,7 @@ router.delete('/:id',
 
 router.get('/top-cards',
     setCacheHeaders(300),
-    CardsController.getTopCards
+    CardsController.getTopStaticCards
 );
 
 router.get('/default-search',

@@ -4,6 +4,7 @@ const UsersDAO = require('../dao/usersDAO');
 const auth = async (req, res, next) => {
     try {
         const {authorization} = req.headers;
+        
         if (!authorization) {
             req.user = null;
             return next();

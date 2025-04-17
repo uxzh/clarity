@@ -38,7 +38,7 @@ class UsersController {
     static async getUser(req, res) {
         try {
             const {id} = req.params;
-            if (req.user.id === id) {
+            if (req.user._id === id) {
                 return res.status(200).send(req.user);
             }
             const user = await UsersDAO.getOneById(id);

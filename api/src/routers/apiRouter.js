@@ -10,6 +10,7 @@ router.use('/auth', require('./authRouter'));
 router.use('/users', require('./usersRouter'));
 router.use('/reviews', require('./reviewsRouter'));
 router.use('/replies', require('./repliesRouter'));
+router.use('/wallet', require('./walletRouter'));
 router.use('/admin', require('./adminRouter'));
 
 module.exports = router;
