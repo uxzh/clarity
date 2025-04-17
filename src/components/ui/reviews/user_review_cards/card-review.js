@@ -246,7 +246,7 @@ const CardReview = React.forwardRef(
                 variant=""
                 className="font-semibold transform scale-95 opacity-70 transition-all duration-200 hover:scale-100 hover:opacity-100"
                 size="sm"
-                startContent={<IconMessage stroke={1.5} />}
+                startContent={<IconMessages stroke={1.5} />}
                 onPress={handleReply}
                 isDisabled={!canInteract}
             >
