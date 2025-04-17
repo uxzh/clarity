@@ -1,20 +1,22 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Reply from './Reply';
 import Api from '../../../lib/api';
+import { IconMessages } from '@tabler/icons-react';
 
 const api = new Api(axios);
 
-const RepliesList = ({reviewId, context, canInteract, replies, setReplies}) => {
+const RepliesList = ({ reviewId, context, canInteract, replies, setReplies }) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [allReplies, setAllReplies] = useState([]);
+    const [showReplies, setShowReplies] = useState(false);
 
     useEffect(() => {
         const fetchReplies = async () => {
             setLoading(true);
             try {
-                const response = await api.getRepliesByReviewId({reviewId, context});
+                const response = await api.getRepliesByReviewId({ reviewId, context });
                 console.log('[DEBUG_LOG] Replies API response:', response.data);
                 setReplies(response.data);
             } catch (err) {
@@ -35,7 +37,7 @@ const RepliesList = ({reviewId, context, canInteract, replies, setReplies}) => {
         const flattenReplies = (repliesArray) => {
             const flat = [];
             repliesArray.forEach((reply) => {
-                flat.push({...reply, replies: []});
+                flat.push({ ...reply, replies: [] });
                 if (reply.replies && reply.replies.length > 0) {
                     flat.push(...flattenReplies(reply.replies));
                 }
@@ -71,6 +73,17 @@ const RepliesList = ({reviewId, context, canInteract, replies, setReplies}) => {
                         depth={reply.parentReplyId ? 1 : 0}
                     />
                 ))
+            )}
+            {allReplies.length > 0 && (
+                <button
+                    className="flex items-center mt-2 text-primary"
+                    onClick={() => setShowReplies(!showReplies)}
+                >
+                    <IconMessages stroke={2} />
+                    <span className="ml-2">
+                        {showReplies ? 'Hide Replies' : `Show ${allReplies.length} ${allReplies.length === 1 ? 'Reply' : 'Replies'}`}
+                    </span>
+                </button>
             )}
         </div>
     );
