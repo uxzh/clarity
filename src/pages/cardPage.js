@@ -79,7 +79,7 @@ function Review() {
     }, [fetchData]);
 
     // TODO: remove polling and fix updating state on adding or deleting review
-    
+
     // Setup polling
     // useEffect(() => {
     //     if (!cardId) return;
@@ -177,7 +177,7 @@ function Review() {
                 page: currentPage - 1,
                 perPage: REVIEWS_PER_PAGE
             })
-            
+
             setReviews(data);
         } catch (error) {
             setReviews([]);
@@ -249,6 +249,7 @@ function Review() {
                             handlePageChange={handlePageChange}
                             totalReviewCount={cardData?.totalReviewCount}
                             lastUpdateTime={lastUpdateTime}
+                            cardId={cardId}
                         />
                     </section>
                     <section
@@ -271,7 +272,7 @@ function Review() {
                                 </div>
                                 <Spacer y={2}/>
                                 {
-                                    cardData.referralLink && 
+                                    cardData.referralLink &&
                                     <a href={cardData.referralLink} target="_blank">
                                     <Button
                                         style={{ border: "1px solid #1a202c" }}

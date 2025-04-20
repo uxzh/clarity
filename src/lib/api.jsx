@@ -127,6 +127,9 @@ class Api {
 
     // admin
     getTotals = async () => await this.axios.get(`/admin/totals`);
+
+    // AI Summary
+    getCardAISummary = async (cardId) => await this.axios.get(`/ai-summary/card/${cardId}`);
 }
 
 export default Api;

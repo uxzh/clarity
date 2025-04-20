@@ -3,6 +3,7 @@ import { Button, Input, Select, SelectItem, Card, Pagination } from "@nextui-org
 import React, { useMemo, useState } from "react";
 import CardReview from "../ui/reviews/user_review_cards/card-review";
 import SummaryFromTheWeb from "./from-the-web/summary";
+import AISummaryCard from "../ui/reviews/review_summary/AISummaryCard";
 
 const ReviewsSection = React.memo(
   ({
@@ -17,6 +18,7 @@ const ReviewsSection = React.memo(
     handlePageChange,
     handleSelectionChange,
     handleGoBack,
+    cardId,
   }) => {
     return (
       <div className="flex flex-col gap-4">
@@ -71,6 +73,7 @@ const ReviewsSection = React.memo(
         {reviews.length > 0 ? (
           <>
             <SummaryFromTheWeb reviewFromTheWeb={reviewFromTheWeb} />
+            <AISummaryCard cardId={cardId} className="mt-4 mb-2" />
             {reviews.map((review, index) => (
               <CardReview key={index} {...review} />
             ))}
@@ -94,6 +97,8 @@ const ReviewsSection = React.memo(
             </p>
             <h2 className="mb-2 font-bold">Here's the summary from the web</h2>
             <SummaryFromTheWeb reviewFromTheWeb={reviewFromTheWeb} />
+            <h2 className="mb-2 mt-4 font-bold">AI-Generated Summary</h2>
+            <AISummaryCard cardId={cardId} className="mt-2 mb-2" />
             <p className="text-md mb-6 mt-4 text-gray-600 ">
               Your feedback helps others make wiser decisions.
             </p>
