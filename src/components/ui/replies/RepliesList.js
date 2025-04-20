@@ -1,11 +1,9 @@
-import React, {useEffect, useState} from 'react';
-import axios from 'axios';
+import React, {useEffect, useState, useContext} from 'react';
 import Reply from './Reply';
-import Api from '../../../lib/api';
-
-const api = new Api(axios);
+import {AuthContext} from '../../../contexts/AuthContext';
 
 const RepliesList = ({reviewId, context, canInteract, replies, setReplies}) => {
+    const { api } = useContext(AuthContext);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [allReplies, setAllReplies] = useState([]);

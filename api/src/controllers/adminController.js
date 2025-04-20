@@ -9,7 +9,6 @@ class AdminController {
                 models.users,
                 models.cards,
                 models.reviews,
-                models.replies,
                 models.likes
             ];
             const totals = {};
