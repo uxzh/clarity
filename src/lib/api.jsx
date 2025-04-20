@@ -92,7 +92,7 @@ class Api {
     // replies
     getRepliesByReviewId = async ({reviewId, context}) =>
         await this.axios.get(
-            `/api/v1/replies/${reviewId}/replies/`
+            `/replies/review/${reviewId}`
         );
 
     async createReply({reviewId, content, parentReplyId = null}) {
