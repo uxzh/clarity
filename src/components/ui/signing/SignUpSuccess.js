@@ -8,7 +8,7 @@ import {
   Spacer,
   Modal,
   ModalContent,
-} from "@nextui-org/react";
+} from "@heroui/react";
 
 export default function SignUpSuccess({ isOpen, onClose }) {
   return (

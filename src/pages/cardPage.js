@@ -1,6 +1,6 @@
 import React, {useCallback, useContext, useEffect, useMemo, useRef, useState,} from "react";
 import {useLocation, useNavigate} from "react-router-dom";
-import {Button, Card, Spacer, Spinner, useDisclosure} from "@nextui-org/react";
+import {Button, Card, Spacer, Spinner, useDisclosure} from "@heroui/react";
 import TopNavbar from "../components/navbar/activeNavbar";
 import {FloatingCard} from "../components/ui/floatingCard";
 import Banner from "../components/navbar/banner";

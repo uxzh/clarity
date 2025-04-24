@@ -1,5 +1,5 @@
 import React from "react";
-import {Accordion, AccordionItem, Button, Link, Spacer,} from "@nextui-org/react";
+import {Accordion, AccordionItem, Button, Link, Spacer,} from "@heroui/react";
 import "../../CSS/FAQ.css";
 
 export default function FAQ() {

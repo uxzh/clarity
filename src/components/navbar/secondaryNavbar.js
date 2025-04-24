@@ -3,7 +3,7 @@ import {
     NavbarContent,
     NavbarItem,
     Link,
-} from "@nextui-org/react";
+} from "@heroui/react";
 
 const SecondaryNavbar = () => {
     return (

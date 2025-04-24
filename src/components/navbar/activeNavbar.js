@@ -7,7 +7,7 @@ import {
   Link,
   Badge,
   Skeleton,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { useLocation } from "react-router-dom";
 import { ReactComponent as Clarity } from "../../lib/logo2.svg";
 import MobileMenu from "./mobileMenu";

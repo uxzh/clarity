@@ -9,7 +9,7 @@ import {
   User,
   Tooltip,
   Chip,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import {
   UserHistoryModal,
   UserEditModal,

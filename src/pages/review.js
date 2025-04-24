@@ -8,7 +8,7 @@ import {
   Image,
   CardFooter,
   Button,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { IconPlus } from "@tabler/icons-react";
 
 const creditCardData = [

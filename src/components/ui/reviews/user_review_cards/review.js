@@ -1,5 +1,5 @@
 import React from "react";
-import {User} from "@nextui-org/react";
+import {User} from "@heroui/react";
 import {IconStar, IconStarFilled, IconStarHalf} from "@tabler/icons-react";
 
 // Helper function to format date

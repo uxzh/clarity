@@ -9,7 +9,7 @@ import {
   NavbarMenuItem,
   Link,
   Button,
-} from "@nextui-org/react";
+} from "@heroui/react";
 //import logo as svg
 import { ReactComponent as Clarity } from "../../lib/logo2.svg";
 

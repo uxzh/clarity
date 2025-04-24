@@ -1,5 +1,5 @@
 import { cn } from "./cn.ts";
-import { Image } from "@nextui-org/react";
+import { Image } from "@heroui/react";
 import React, {
   createContext,
   useState,

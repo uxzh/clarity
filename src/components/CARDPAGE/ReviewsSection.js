@@ -1,5 +1,12 @@
 import { Icon } from "@iconify/react";
-import { Button, Input, Select, SelectItem, Card, Pagination } from "@nextui-org/react";
+import {
+  Button,
+  Input,
+  Select,
+  SelectItem,
+  Card,
+  Pagination,
+} from "@heroui/react";
 import React, { useMemo, useState } from "react";
 import CardReview from "../ui/reviews/user_review_cards/card-review";
 import SummaryFromTheWeb from "./from-the-web/summary";
@@ -37,15 +44,18 @@ const ReviewsSection = React.memo(
           </div>
           {reviews.length > 0 && (
             <div className="flex items-center justify-between w-full">
-              <Input
-                variant="flat"
-                isClearable
-                aria-label="Search"
-                className="w-[60%] md:w-72 ml-[-18px] pr-2"
-                labelPlacement="outside"
-                placeholder="Search reviews"
-                startContent={<Icon icon="solar:magnifer-linear" />}
-              />
+              <div style={{ visibility: "hidden" }}>
+                <Input
+                  variant="flat"
+                  isClearable
+                  aria-label="Search"
+                  className="w-[60%] md:w-72 ml-[-18px] pr-2"
+                  labelPlacement="outside"
+                  placeholder="Search reviews"
+                  startContent={<Icon icon="solar:magnifer-linear" />}
+                />
+              </div>
+
               <Select
                 variant="flat"
                 aria-label="Sort by"

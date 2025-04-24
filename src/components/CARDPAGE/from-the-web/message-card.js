@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Avatar, Badge, Button } from "@nextui-org/react";
+import { Avatar, Badge, Button } from "@heroui/react";
 import { Icon } from "@iconify/react";
 
 import { cn } from "./cn";

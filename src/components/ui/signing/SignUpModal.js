@@ -11,7 +11,7 @@ import {
   Checkbox,
   Spinner,
   Tooltip,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { AnimatePresence, m, domAnimation, LazyMotion } from "framer-motion";
 import { Icon } from "@iconify/react";
 import { AuthContext } from "../../../contexts/AuthContext";

@@ -1,5 +1,5 @@
 import React, {useCallback, useContext, useState} from "react";
-import {Button, Textarea, User} from "@nextui-org/react";
+import {Button, Textarea, User} from "@heroui/react";
 import {IconMessage, IconMessageForward, IconSquareX, IconThumbDown, IconThumbUp,} from "@tabler/icons-react";
 import {AuthContext} from "../../../contexts/AuthContext";
 import {cn} from "./cn";

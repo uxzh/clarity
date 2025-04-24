@@ -1,5 +1,5 @@
 import React from "react";
-import {Card, Col, Rating, Row, Text} from "@nextui-org/react";
+import {Card, Col, Rating, Row, Text} from "@heroui/react";
 
 export default function CreditCardReviews() {
     const reviews = [

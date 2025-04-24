@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect, useContext } from "react";
-import { Button, Textarea, Tooltip, User } from "@nextui-org/react";
-import { Popover, PopoverTrigger, PopoverContent } from "@nextui-org/react";
+import { Button, Textarea, Tooltip, User } from "@heroui/react";
+import { Popover, PopoverTrigger, PopoverContent } from "@heroui/react";
 import {
     IconMessage,
     IconThumbUp,

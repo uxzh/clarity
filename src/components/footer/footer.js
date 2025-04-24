@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Button, Link, Spacer } from "@nextui-org/react";
+import { Button, Link, Spacer } from "@heroui/react";
 import { Icon } from "@iconify/react";
 import { ReactComponent as Logo } from "../../lib/logo2.svg";
 import { IconBug } from "@tabler/icons-react";

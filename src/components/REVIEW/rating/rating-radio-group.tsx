@@ -1,9 +1,9 @@
 "use client";
 
-import type { RadioGroupProps } from "@nextui-org/react";
+import type { RadioGroupProps } from "@heroui/react";
 
 import React, { useState } from "react";
-import { RadioGroup } from "@nextui-org/react";
+import { RadioGroup } from "@heroui/react";
 
 import { cn } from "./cn.ts";
 

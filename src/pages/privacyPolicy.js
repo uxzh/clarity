@@ -2,7 +2,7 @@ import React from "react";
 import TopNavbar from "../components/navbar/activeNavbar";
 import SecondaryNavbar from "../components/navbar/secondaryNavbar";
 import Footer from "../components/footer/footer";
-import { Card, CardHeader, CardBody, CardFooter } from "@nextui-org/react";
+import { Card, CardHeader, CardBody, CardFooter } from "@heroui/react";
 import { motion } from "framer-motion";
 
 const PrivacyPolicy = () => {

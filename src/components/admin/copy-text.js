@@ -1,6 +1,6 @@
 // components/admin/copy-text.jsx
 import React, { useState } from "react";
-import { Button, Tooltip } from "@nextui-org/react";
+import { Button, Tooltip } from "@heroui/react";
 import { Icon } from "@iconify/react";
 
 export const CopyText = ({ children }) => {

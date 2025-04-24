@@ -5,7 +5,7 @@ import {
   CardBody,
   Image,
   Skeleton,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { IconDotsVertical } from "@tabler/icons-react";
 
 export default function CreditCard({
