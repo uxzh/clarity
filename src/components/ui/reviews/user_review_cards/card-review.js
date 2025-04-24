@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useEffect, useContext } from "react";
+<<<<<<< HEAD
 import { Button, Textarea, Tooltip, User } from "@heroui/react";
 import { Popover, PopoverTrigger, PopoverContent } from "@heroui/react";
 import {
@@ -9,6 +10,7 @@ import {
     IconSquareX,
     IconTrashX,
     IconCheck,
+    IconMessages,
 } from "@tabler/icons-react";
 import { cn } from "./cn";
 import Review from "./review";
@@ -73,7 +75,9 @@ const CardReview = React.forwardRef(
         const [deleteConfirmation, setDeleteConfirmation] = useState(false);
         const [deleteTimer, setDeleteTimer] = useState(null);
         const [replies, setReplies] = useState([]);
-        const [showReplies, setShowReplies] = useState(false); // P1b7e
+        const [replyCount, setReplyCount] = useState(0);
+        const [showReplies, setShowReplies] = useState(false);
+        const [isLoadingReplies, setIsLoadingReplies] = useState(false);
 
         // Get user and API from context
         const { api, user } = useContext(AuthContext);
@@ -194,6 +198,7 @@ const CardReview = React.forwardRef(
                     console.log("Reply submitted:", response);
                 }
                 setReplies((prevReplies) => [...prevReplies, response.data]);
+                setReplyCount((prevCount) => prevCount + 1);
             } catch (error) {
                 console.error("Error submitting reply:", error);
             }
@@ -240,13 +245,39 @@ const CardReview = React.forwardRef(
             };
         }, [deleteTimer]);
 
+        // Fetch replies when component mounts
+        const fetchReplies = useCallback(async () => {
+            if (!_id) return;
+
+            try {
+                setIsLoadingReplies(true);
+                const response = await api.getRepliesByReviewId({reviewId: _id});
+                const repliesData = response.data || [];
+                setReplies(repliesData);
+                setReplyCount(repliesData.length);
+                if (process.env.NODE_ENV === 'development') {
+                    console.log("Fetched replies:", repliesData);
+                }
+            } catch (error) {
+                console.error("Error fetching replies:", error);
+            } finally {
+                setIsLoadingReplies(false);
+            }
+        }, [_id, api]);
+
+   // Load replies on component mount
+ useEffect(() => {
+     fetchReplies().catch(error => {
+         console.error("Error in fetchReplies effect:", error);
+     });
+ }, [fetchReplies]);
         // Reply button component
         const replyButton = (
             <Button
                 variant=""
                 className="font-semibold transform scale-95 opacity-70 transition-all duration-200 hover:scale-100 hover:opacity-100"
                 size="sm"
-                startContent={<IconMessage stroke={1.5} />}
+                startContent={<IconMessage stroke={1.5}/>}
                 onPress={handleReply}
                 isDisabled={!canInteract}
             >
@@ -260,11 +291,11 @@ const CardReview = React.forwardRef(
                 variant=""
                 className="font-semibold transform scale-95 opacity-70 transition-all duration-200 hover:scale-100 hover:opacity-100"
                 size="sm"
-                startContent={<IconMessage stroke={1.5} />}
+                startContent={<IconMessages stroke={1.5}/>}
                 onPress={() => setShowReplies((prev) => !prev)}
+                isLoading={isLoadingReplies}
             >
-                {showReplies ? "Hide Replies" : "Show Replies"}
-            </Button>
+                {showReplies ? `Hide ${replyCount} ${replyCount === 1 ? 'Reply' : 'Replies'}` : isLoadingReplies ? "Loading..." : `Show ${replyCount} ${replyCount === 1 ? 'Reply' : 'Replies'}`}            </Button>
         );
 
         return (
@@ -292,9 +323,9 @@ const CardReview = React.forwardRef(
                                     onPress={handleDelete}
                                 >
                                     {deleteConfirmation ? (
-                                        <IconCheck stroke={2} />
+                                        <IconCheck stroke={2}/>
                                     ) : (
-                                        <IconTrashX stroke={2} />
+                                        <IconTrashX stroke={2}/>
                                     )}
                                 </Button>
                             )}
@@ -305,7 +336,7 @@ const CardReview = React.forwardRef(
                                     {replyButton}
                                 </Tooltip>
                             )}
-                            {showRepliesButton}
+                            {replyCount > 0 && showRepliesButton}
                         </div>
                         <div className="flex gap-2 items-center">
                             <LikeDislikeButton
@@ -346,14 +377,14 @@ const CardReview = React.forwardRef(
                             <Button
                                 variant="light"
                                 color="danger"
-                                startContent={<IconSquareX stroke={1.5} />}
+                                startContent={<IconSquareX stroke={1.5}/>}
                                 onPress={handleCancelReply}
                             >
                                 {cancelConfirmation ? "Are you sure?" : "Cancel"}
                             </Button>
                             <Button
                                 color="primary"
-                                startContent={<IconMessageForward stroke={1.5} />}
+                                startContent={<IconMessageForward stroke={1.5}/>}
                                 onPress={handleSubmitReply}
                             >
                                 Submit
@@ -369,6 +400,8 @@ const CardReview = React.forwardRef(
                             replies={replies}
                             setReplies={setReplies}
                             canInteract={canInteract}
+                            isLoading={isLoadingReplies}
+                            onRefresh={fetchReplies}
                         />
                     </div>
                 )}
@@ -376,6 +409,8 @@ const CardReview = React.forwardRef(
         );
     }
 );
+
+
 
 CardReview.displayName = "CardReview";
 
