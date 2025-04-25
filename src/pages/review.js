@@ -27,6 +27,7 @@ const creditCardData = [
       shopping: 1,
       utilities: 1,
     },
+    cardId: "1",
   },
   {
     imageLink:
@@ -43,6 +44,7 @@ const creditCardData = [
       shopping: 1.5,
       utilities: 0.8,
     },
+    cardId: "2",
   },
   {
     imageLink:
@@ -59,6 +61,7 @@ const creditCardData = [
       shopping: 2.5,
       utilities: 1.1,
     },
+    cardId: "3",
   },
   {
     imageLink:
@@ -75,6 +78,7 @@ const creditCardData = [
       shopping: 1.3,
       utilities: 1.6,
     },
+    cardId: "4",
   },
   {
     imageLink:
@@ -91,6 +95,7 @@ const creditCardData = [
       shopping: 1.6,
       utilities: 0.9,
     },
+    cardId: "5",
   },
 ];
 
@@ -126,6 +131,7 @@ export default function App() {
             cashbackPercentage={creditCardData.cashbackPercentage}
             bankName={creditCardData.bankName}
             cardName={creditCardData.cardName}
+            cardId={creditCardData.cardId}
           />
         </div>
         {index === sortedCreditCardData.length - 1 && (
