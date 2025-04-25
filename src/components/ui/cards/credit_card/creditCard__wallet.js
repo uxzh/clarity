@@ -7,6 +7,7 @@ import {
   Skeleton,
 } from "@heroui/react";
 import { IconDotsVertical } from "@tabler/icons-react";
+import { useNavigate } from "react-router-dom";
 
 export default function CreditCard({
   imageLink,
@@ -14,7 +15,14 @@ export default function CreditCard({
   bankName,
   cardName,
   index,
+  cardId,
 }) {
+  const navigate = useNavigate();
+
+  const handleImageClick = () => {
+    navigate(`/review?cardId=${encodeURIComponent(cardId)}`);
+  };
+
   return (
     <div className="flex justify-center items-center">
       <Badge
@@ -29,7 +37,11 @@ export default function CreditCard({
       >
         <Card className="w-[86vw] max-w-md sm:w-[80vw] sm:max-w-lg">
           <CardBody className="flex flex-row items-center">
-            <Image className="max-w-20 rounded-md mr-2" src={imageLink} />
+            <Image
+              className="max-w-20 rounded-md mr-2"
+              src={imageLink}
+              onClick={handleImageClick}
+            />
             <div className="flex-1 min-w-0 items-center">
               <h3 className="font-bold truncate sm:text-lg">{cardName}</h3>
               <p className="text-gray-500 truncate sm:text-base">{bankName}</p>
