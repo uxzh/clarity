@@ -1,22 +1,22 @@
-import React, { useState, useCallback, useEffect, useContext } from "react";
-import { Button, Textarea, Tooltip, User } from "@nextui-org/react";
+import React, {useCallback, useContext, useEffect, useState} from "react";
+import {Button, Textarea, Tooltip} from "@nextui-org/react";
 import {
-    IconMessage,
-    IconThumbUp,
-    IconThumbDown,
-    IconMessageForward,
-    IconSquareX,
-    IconTrashX,
     IconCheck,
+    IconMessage,
+    IconMessageForward,
     IconMessages,
+    IconSquareX,
+    IconThumbDown,
+    IconThumbUp,
+    IconTrashX,
 } from "@tabler/icons-react";
-import { cn } from "./cn";
+import {cn} from "./cn";
 import Review from "./review";
-import { AuthContext } from "../../../../contexts/AuthContext";
+import {AuthContext} from "../../../../contexts/AuthContext";
 import RepliesList from "../../replies/RepliesList";
 
 // Component for like/dislike buttons
-const LikeDislikeButton = ({ action, count, isActive, onPress, onHover }) => (
+const LikeDislikeButton = ({action, count, isActive, onPress, onHover}) => (
     <Button
         isIconOnly
         variant="light"
@@ -36,9 +36,9 @@ const LikeDislikeButton = ({ action, count, isActive, onPress, onHover }) => (
     >
         <div className="flex items-center">
             {action === "like" ? (
-                <IconThumbUp stroke={2} />
+                <IconThumbUp stroke={2}/>
             ) : (
-                <IconThumbDown stroke={2} />
+                <IconThumbDown stroke={2}/>
             )}
             <span className="ml-1">{count}</span>
         </div>
@@ -46,7 +46,7 @@ const LikeDislikeButton = ({ action, count, isActive, onPress, onHover }) => (
 );
 
 const CardReview = React.forwardRef(
-    ({ className, onDelete, ...review }, ref) => {
+    ({className, onDelete, ...review}, ref) => {
         // Destructure review props
         const {
             _id,
@@ -78,7 +78,7 @@ const CardReview = React.forwardRef(
         const [isLoadingReplies, setIsLoadingReplies] = useState(false);
 
         // Get user and API from context
-        const { api, user } = useContext(AuthContext);
+        const {api, user} = useContext(AuthContext);
 
         // Check if user can interact (logged in, not blocked, email verified)
         const canInteract =
@@ -263,12 +263,12 @@ const CardReview = React.forwardRef(
             }
         }, [_id, api]);
 
-   // Load replies on component mount
- useEffect(() => {
-     fetchReplies().catch(error => {
-         console.error("Error in fetchReplies effect:", error);
-     });
- }, [fetchReplies]);
+        // Load replies on component mount
+        useEffect(() => {
+            fetchReplies().catch(error => {
+                console.error("Error in fetchReplies effect:", error);
+            });
+        }, [fetchReplies]);
         // Reply button component
         const replyButton = (
             <Button
@@ -407,7 +407,6 @@ const CardReview = React.forwardRef(
         );
     }
 );
-
 
 
 CardReview.displayName = "CardReview";
