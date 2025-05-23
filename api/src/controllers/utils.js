@@ -11,6 +11,11 @@ const getReviewsByCardIdWithLikes = async ({
     page
 }) => {
     try {
+        // Validate if id is a valid ObjectId
+        if (!ObjectId.isValid(id)) {
+            return {error: "Invalid card ID format"};
+        }
+
         // TODO: optimize db queries
         const {reviews, totalReviewCount, ratingDistribution} = (await ReviewsDAO.getManyByField({
             field: "cardId",

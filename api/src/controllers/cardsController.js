@@ -66,7 +66,7 @@ class CardsController {
     static async getReviewsByCard(req, res) {
         try {
             const {id} = req.params;
-            const {reviews} = await getReviewsByCardIdWithLikes({
+            const result = await getReviewsByCardIdWithLikes({
                 id,
                 user: req.user,
                 sort: req.query.sort,
@@ -74,10 +74,14 @@ class CardsController {
                 perPage: parseInt(req.query.perPage) || 20,
                 page: parseInt(req.query.page) || 0,
             });
-            const {error} = reviews;
-            if (error) {
-                return res.status(404).send(error)
+
+            // Check if result contains an error
+            if (result.error) {
+                return res.status(404).send({error: result.error});
             }
+
+            // If no error, extract reviews
+            const {reviews} = result;
             res.status(200).send(reviews);
         } catch (e) {
             console.error(e)
