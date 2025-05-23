@@ -12,5 +12,6 @@ router.use('/reviews', require('./reviewsRouter'));
 router.use('/replies', require('./repliesRouter'));
 router.use('/wallet', require('./walletRouter'));
 router.use('/admin', require('./adminRouter'));
+router.use('/ai-summary', require('./aiSummaryRouter'));
 
 module.exports = router;
