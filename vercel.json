@@ -1,6 +1,7 @@
 {
   "rewrites": [
-    { "source": "/api/(.*)", "destination": "/api" }
+    { "source": "/api/(.*)", "destination": "/api" },
+    { "source": "/bolt/(.*)", "destination": "https://your-bolt-project.vercel.app/$1" }
   ],
   "crons": [
     {
